@@ -1,4 +1,4 @@
-package BaseClass;
+package Application;
 
 public abstract class Piece {
 	private char sign;

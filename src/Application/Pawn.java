@@ -1,4 +1,4 @@
-package BaseClass;
+package Application;
 
 public class Pawn extends Piece {
 	public Pawn (Boolean isWhite) {

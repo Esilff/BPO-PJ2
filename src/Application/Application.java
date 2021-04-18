@@ -1,6 +1,6 @@
-package BaseClass;
+package Application;
 
-public class Application_BPO2 {
+public class Application {
 
 	public static void main(String[] args) {
 		

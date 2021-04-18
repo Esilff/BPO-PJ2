@@ -1,17 +1,19 @@
-//Classe qui va se charger de gérer l'affichage du plateau de jeu
+package Application;
+
+//Classe qui va se charger de gÃ©rer l'affichage du plateau de jeu
 import java.util.ArrayList;
 
 public class Plateau {
 	//Proprietes -------------------------------------------------------------------
 	
-	/*Plateau de jeu, soit un simple tableau de case à deux dimensions*/
+	/*Plateau de jeu, soit un simple tableau de case Ã  deux dimensions*/
 	
 	private Case[][] plateau = new Case[8][8];
 	
 	//Methodes ---------------------------------------------------------------------
 	
 	/* Constructeur du plateau
-	 * Se charge d'initialiser chaque case du plateau afin que celui-ci puisse être affiché sans piece
+	 * Se charge d'initialiser chaque case du plateau afin que celui-ci puisse Ãªtre affichÃ© sans piece
 	 * */
 	
 	public Plateau () {
@@ -23,7 +25,7 @@ public class Plateau {
 	}
 	
 	/* Affichage de la ligne des lettres
-	 * @return une ligne de 8 lettres espacées
+	 * @return une ligne de 8 lettres espacÃ©es
 	 * */
 	
 	public String lettersLine () {
@@ -45,7 +47,7 @@ public class Plateau {
 	}
 	
 	/* Affichage de la ligne horizontale
-	 * @return une ligne composée d'un enchainement de trois tirets espacés 
+	 * @return une ligne composÃ©e d'un enchainement de trois tirets espacÃ©s
 	 * */
 	
 	public String horizontalLine () {
@@ -88,7 +90,7 @@ public class Plateau {
 		return s.toString();
 	}
 	
-	/* Met en place les méthodes précédentes afin d'afficher le plateau de jeu
+	/* Met en place les mÃ©thodes prÃ©cÃ©dentes afin d'afficher le plateau de jeu
 	 * @return le plateau de jeu
 	 * */
 	

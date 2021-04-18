@@ -1,3 +1,4 @@
+package Application;
 
 public class Case {
 	private String piece;
