@@ -1,4 +1,4 @@
-package Pions;
+package Piece;
 
 public abstract class Piece {
 	private String name;

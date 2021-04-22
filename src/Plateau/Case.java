@@ -1,12 +1,12 @@
 package Plateau;
-import Pions.Piece;
-import Pions.VoidPiece;
+import Piece.Piece;
+import Piece.EmptyPiece;
 
 public class Case {
 	private Piece piece;
 	
 	public Case() {
-		piece = new VoidPiece();
+		piece = new EmptyPiece();
 	}
 	
 	public void setPiece (Piece piece) {

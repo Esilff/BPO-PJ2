@@ -1,4 +1,4 @@
-package Pions;
+package Piece;
 
 public class Tower extends Piece{
 	public Tower (Boolean state) {

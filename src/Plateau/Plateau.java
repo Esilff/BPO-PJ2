@@ -1,25 +1,24 @@
 package Plateau;
-//Classe qui va se charger de gérer l'affichage du plateau de jeu
-import java.util.ArrayList;
+//Classe qui va se charger de gï¿½rer l'affichage du plateau de jeu
 
-import Pions.Pawn;
-import Pions.Tower;
-import Pions.Cavalier;
-import Pions.Fou;
-import Pions.Reine;
-import Pions.Roi;
+import Piece.Pawn;
+import Piece.Tower;
+import Piece.Knight;
+import Piece.Bishop;
+import Piece.Queen;
+import Piece.King;
 
 public class Plateau {
 	//Proprietes -------------------------------------------------------------------
 	
-	/*Plateau de jeu, soit un simple tableau de case à deux dimensions*/
+	/*Plateau de jeu, soit un simple tableau de case ï¿½ deux dimensions*/
 	
 	private Case[][] plateau = new Case[8][8];
 	
 	//Methodes ---------------------------------------------------------------------
 	
 	/* Constructeur du plateau
-	 * Se charge d'initialiser chaque case du plateau afin que celui-ci puisse être affiché sans piece
+	 * Se charge d'initialiser chaque case du plateau afin que celui-ci puisse ï¿½tre affichï¿½ sans piece
 	 * */
 	
 	public Plateau () {
@@ -28,7 +27,7 @@ public class Plateau {
 	}
 	
 	/* Affichage de la ligne des lettres
-	 * @return une ligne de 8 lettres espacées
+	 * @return une ligne de 8 lettres espacï¿½es
 	 * */
 	
 	
@@ -52,7 +51,7 @@ public class Plateau {
 	}
 	
 	/* Affichage de la ligne horizontale
-	 * @return une ligne composée d'un enchainement de trois tirets espacés 
+	 * @return une ligne composï¿½e d'un enchainement de trois tirets espacï¿½s 
 	 * */
 	
 	public String horizontalLine () {
@@ -95,7 +94,7 @@ public class Plateau {
 		return s.toString();
 	}
 	
-	/* Met en place les méthodes précédentes afin d'afficher le plateau de jeu
+	/* Met en place les mï¿½thodes prï¿½cï¿½dentes afin d'afficher le plateau de jeu
 	 * @return le plateau de jeu
 	 * */
 	
@@ -137,22 +136,22 @@ public class Plateau {
 						plateau[i][j].setPiece(new Tower(false));
 						break;
 					case 1 :
-						plateau[i][j].setPiece(new Cavalier(false));
+						plateau[i][j].setPiece(new Knight(false));
 						break;
 					case 2 :
-						plateau[i][j].setPiece(new Fou(false));
+						plateau[i][j].setPiece(new Bishop(false));
 						break;
 					case 3 :
-						plateau[i][j].setPiece(new Roi(false));
+						plateau[i][j].setPiece(new King(false));
 						break;
 					case 4 :
-						plateau[i][j].setPiece(new Reine(false));
+						plateau[i][j].setPiece(new Queen(false));
 						break;
 					case 5 :
-						plateau[i][j].setPiece(new Fou(false));
+						plateau[i][j].setPiece(new Bishop(false));
 						break;
 					case 6 :
-						plateau[i][j].setPiece(new Cavalier(false));
+						plateau[i][j].setPiece(new Knight(false));
 						break;
 					case 7 :
 						plateau[i][j].setPiece(new Tower(false));
@@ -165,22 +164,22 @@ public class Plateau {
 						plateau[i][j].setPiece(new Tower(true));
 						break;
 					case 1 :
-						plateau[i][j].setPiece(new Cavalier(true));
+						plateau[i][j].setPiece(new Knight(true));
 						break;
 					case 2 :
-						plateau[i][j].setPiece(new Fou(true));
+						plateau[i][j].setPiece(new Bishop(true));
 						break;
 					case 3 :
-						plateau[i][j].setPiece(new Roi(true));
+						plateau[i][j].setPiece(new King(true));
 						break;
 					case 4 :
-						plateau[i][j].setPiece(new Reine(true));
+						plateau[i][j].setPiece(new Queen(true));
 						break;
 					case 5 :
-						plateau[i][j].setPiece(new Fou(true));
+						plateau[i][j].setPiece(new Bishop(true));
 						break;
 					case 6 :
-						plateau[i][j].setPiece(new Cavalier(true));
+						plateau[i][j].setPiece(new Knight(true));
 						break;
 					case 7 :
 						plateau[i][j].setPiece(new Tower(true));
