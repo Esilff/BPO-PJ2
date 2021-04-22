@@ -174,12 +174,8 @@ public class Chessboard {
 	 */
 	private void fillLineWith(int line, Piece toFill) {
 		for (int column = 0; column < BOARD_SIZE; column++) {
-			if (column == 0) {
-				setPiece(line, column, toFill);
-			} else {
-				// on ne veut pas avoir la même pièce physique sur toute la ligne; il faut avoir des copies.
-				setPiece(line, column, toFill.clone());
-			}
+			// on ne veut pas avoir la même pièce physique sur toute la ligne; il faut avoir des copies.
+			setPiece(line, column, toFill.clone());
 		}
 	}
 }
