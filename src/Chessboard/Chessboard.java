@@ -1,114 +1,88 @@
 package Chessboard;
 
-// TODO : import Piece.* si nécessaire
-import Piece.Piece; // Une pièce quelconque
+// On a besoin de toutes les pièces
+import Piece.*;
 
-import Piece.Pawn; // Pion
-import Piece.Tower; // Tour
-import Piece.Knight; // Cavalier
-import Piece.Bishop; // Fou
-import Piece.Queen; // Reine
-import Piece.King; // Roi
-import Piece.EmptyPiece; // Case vide
 
 /**
  * Chessboard : Classe s'occupant du plateau de jeu. Dispose de fonctions d'entrées
  * sortie et d'un système d'affichage console.
  */
 public class Chessboard {
-	//Proprietes -------------------------------------------------------------------
-
 	/**
 	 * La taille de l'échéquier. Constante valant 8, __ne dois pas changer__ !!
 	 */
-	private final int BOARD_SIZE = 8;
+	public static final int BOARD_SIZE = 8;
 
 	/** raw chessboard, tableau 2D 8x8 qui contient des pions */
 	private Piece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
 	
-	//Methodes ---------------------------------------------------------------------
+	//  ---------------------------------------------------------------------
 	
-	/* Constructeur du plateau
-	 * Se charge d'initialiser chaque case du plateau afin que celui-ci puisse �tre affich� sans piece
-	 * */
-	
+	/** Constructeur du plateau */
 	public Chessboard() {
 		this.resetBoard();
 	}
-	
-	/** TODO */
-	//Plus joli qu'un long syso 'v'
-	public String lettersLine () {
-		Boolean isFirst = true;
-		StringBuilder s = new StringBuilder();
-		s.append("    ");
-			for (int i = 0; i < 8; i++) {
-				if (isFirst) {
-					s.append((char)(i + 97));
-					isFirst = false;
-				}
-				else {
-					s.append("   " + (char)(i + 97) );
-				}
-			}
-		s.append("    ");
-		s.append("\n");
-		return s.toString();
-	}
-	
-	/** TODO*/
-	
-	public String horizontalLine () {
-		Boolean isFirst = true;
-		StringBuilder s = new StringBuilder();
-		s.append("   ");
-		for (int i= 0; i < 8; i++) {
-			if (isFirst) {
-				s.append("---");
-				isFirst = false;
-			}
-			else {
-				s.append(" ---");
-			}
-		}
-		s.append("   ");
-		s.append("\n");
-		return s.toString();
-	}
-	
-	/** TODO */
 
-	public String numberLine (int number) {
-		Boolean isFirst = true;
-		StringBuilder s = new StringBuilder();
-		s.append(number + " | ");
-		for (int i = 0; i < 8; i++) {
-			if (isFirst) {
-				s.append(board[i][number - 1].getSign());
-				isFirst = false;
-			}
-			else {
-				s.append(" | " + board[i][number - 1].getSign());
-			}
-		}
-		s.append(" | " + number);
-		s.append("\n");
-		return s.toString();
-	}
-	
-	/** TODO */
-	
+	// METHODES D'AFFICHAGE ---------------------------------------------------------------------
+
+	/** Génère l'affichage du plateau de jeu
+	 * @return la String générée représentant le plateau de jeu
+	 */
 	public String toString () {
-		String s = lettersLine();
-		for (int i = 8; i > 0; i--) {
-			s += horizontalLine();
-			s += numberLine(i);
+		StringBuilder retval = new StringBuilder();
+		append_horizGraduation(retval);
+		for (int i = BOARD_SIZE; i > 0; i--) {
+			append_horizSeparator(retval);
+			append_boardLine(i, retval);
 		}
-		s += horizontalLine();
-		s += lettersLine();
-		return s;
+		append_horizSeparator(retval);
+		append_horizGraduation(retval);
+		return retval.toString();
 	}
 
+	/**
+	 * Méthode interne qui ajoute une graduation horizontale de plateau au sein d'un buffer de type StringBuilder
+	 * passée en paramètre. Typiquement la String "    a   b   c   d   e   f   g   h    " si BOARD_SIZE vaut 8
+	 * @param sb la StringBuilder dans laquelle l'entrée sera ajoutée
+	 */
+	private static void append_horizGraduation(StringBuilder sb) {
+		sb.append(" ");
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			sb.append("   ")
+			  .append( (char)('a' + i) );
+		}
+		sb.append("    \n");
+	}
+
+	/**
+	 * Méthode interne qui ajoute une ligne horizontale de plateau au sein d'un bugger de type StringBuilder passé en
+	 * paramètre. Typiquement la String "   --- --- --- --- --- --- --- ---   " si BOARD_SIZE vaut 8
+	 * @param sb la StringBuilder dans laquelle l'entrée sera ajoutée
+	 */
+	private static void append_horizSeparator(StringBuilder sb) {
+		sb.append("  ");
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			sb.append(" ---");
+		}
+		sb.append("   \n");
+	}
+
+	/** Méthode interne qui ajoute l'affichage d'une ligne réelle (ie. contenant des pièces) au sein d'un buffer de
+	 * type StringBuilder. Exemple d'affichage : "8 | t | c | f | r | q | f | c | t | 8"
+	 * @param lineIndex l'identifiant (naturel) de la ligne, valeur entre 1 et 8 en particulier.
+	 * @param sb la StringBuilder dans laquelle l'entrée sera ajoutée
+	 */
+	private void append_boardLine(int lineIndex, StringBuilder sb) {
+		sb.append(lineIndex);
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			sb.append(" | ")
+					.append(getPiece(lineIndex - 1, 0).getSign());
+		}
+		sb.append(" | ").append(lineIndex).append("\n");
+	}
+
+	// METHODES DE MANIPULATION  ---------------------------------------------------------------------
 	/**
 	 * Classe utilitaire pour (re-)définir une case de this.board. La config étant peu conventionnelle (line-colonne),
 	 * cela permettra de ne pas se tromper grâce aux indications de l'IDE (ou juste rendre le code + maintenable).
@@ -118,9 +92,23 @@ public class Chessboard {
 	 */
 	private void setPiece(int line, int column, Piece piece) {
 		this.board[column][line] = piece;
-		// TODO : surcharge de constructeur permettant de faire setPiece("b7", new Tower...) si nécessaire
+		// TODO possible : surcharge de constructeur permettant de faire setPiece("b7", new Tower...) si nécessaire
 	}
 
+	/**
+	 * Classe utilitaire pour récupérer une case dans this.board. La config étant peu conventionnelle (line-colonne),
+	 * cela permettra de ne pas se tromper grâce aux indications de l'IDE (ou juste rendre le code + maintenable).
+	 * @param line la ligne où se trouve la pièce
+	 * @param column la colonne où se trouve la pièce
+	 * @return La pièce correspondante. Vu qu'on accède scénaristiquement à la pièce physique, on retourne donc la pièce
+	 * telle-quelle (par référence au lieu d'un clone)
+	 * @see this.setPiece pour définir au lieu de récupérer
+	 */
+	private Piece getPiece(int line, int column) {
+		return this.board[column][line];
+	}
+
+	// METHODES D'INITIALISATION ---------------------------------------------------------------------
 	/**
 	 * ResetBoard : Réinitialise le plateau __avec__ les placement initiaux de pions :
 	 * [TCFRQFCT] - La première ligne est la rangée initiale de pièces blanc
