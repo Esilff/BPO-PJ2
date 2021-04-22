@@ -7,4 +7,11 @@ public class EmptyPiece extends Piece{
 	public void play () {
 		
 	}
+
+	/**
+	 * @See Piece.Piece.clone()
+	 */
+	public EmptyPiece clone() {
+		return new EmptyPiece();
+	}
 }

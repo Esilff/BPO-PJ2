@@ -1,11 +1,11 @@
-import Plateau.Plateau;
+import Chessboard.Chessboard;
 
 public class Application {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Plateau plateau = new Plateau();
-		System.out.println(plateau.toString());
+		Chessboard chessboard = new Chessboard();
+		System.out.println(chessboard.toString());
 		
 	}
 
