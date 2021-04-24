@@ -127,20 +127,6 @@ public class Chessboard {
 	}
 
 	/**
-	 * Surcharge de setPiece(String coord, Piece piece), sauf que le second argument est remplacé par la désignation
-	 * 	d'une pièce existante. ATTENTION : Ce n'est pas un déplacement effectif ! La référence de la pièce est dupliquée
-	 * 	aux coordonées de destination, il faut donc penser à remplacer la coordonée de départ par une pièce vide.
-	 * @param destination La coordonée de destination à définir
-	 * @param source La position de la pièce source, dont la __référence__ sera copiée aux coords de destination
-	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
-	 */
-	private boolean setPiece(String destination, String source) {
-		// TODO : unused - à voir si on l'utilisera dans le futur
-		Piece piece = this.getPiece(source);
-		return this.setPiece(destination, piece);
-	}
-
-	/**
 	 * Classe utilitaire pour récupérer une case dans this.board. La config étant peu conventionnelle (line-colonne),
 	 * cela permettra de ne pas se tromper grâce aux indications de l'IDE (ou juste rendre le code + maintenable).
 	 * @param line la ligne où se trouve la pièce
