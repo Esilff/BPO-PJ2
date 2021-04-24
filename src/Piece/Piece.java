@@ -23,8 +23,6 @@ public abstract class Piece {
 	}
 
 	protected abstract void play ();
-
-
 	
 	/**
 	 * Permet de créer une nouvelle instance d'un sous-type de pièce.
@@ -38,4 +36,6 @@ public abstract class Piece {
 		}
 		return sign.toLowerCase();
 	}
+
+
 }
