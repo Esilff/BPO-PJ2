@@ -1,4 +1,7 @@
 package Piece;
+
+import Chessboard.vect2D;
+
 public class EmptyPiece extends Piece{
 	public EmptyPiece() {
 		super(" ", IS_WHITE, IS_GRAPHICAL);
@@ -6,6 +9,11 @@ public class EmptyPiece extends Piece{
 	
 	public void play () {
 		
+	}
+
+	@Override
+	public boolean isValidMove(vect2D currentPos, vect2D target) {
+		return false; // indéplacable
 	}
 
 	/**

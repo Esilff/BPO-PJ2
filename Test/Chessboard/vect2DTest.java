@@ -17,7 +17,7 @@ public class vect2DTest extends TestCase {
     public void testVectorOfDots() {
         vect2D A = new vect2D(1,2);
         vect2D B = new vect2D(6,7);
-        vect2D vec_AB = vect2D.vectorOfDots(A, B);
+        vect2D vec_AB = vect2D.translationFrom_argA_to_argB(A, B);
         assertEquals(5, vec_AB.x);
         assertEquals(5, vec_AB.x);
     }
@@ -71,6 +71,7 @@ public class vect2DTest extends TestCase {
         vect2D satanicCoord = vect2D.createFromChessCoord("666");
         vect2D justAstring = vect2D.createFromChessCoord("Un test est aussi ennuyant à lire qu'à écrire");
 
+        // TODO : utiliser assert vect2D.isEqual()
         assertEquals(INVALID_VECT.toString(), letterOutOfBounds.toString());
         assertEquals(INVALID_VECT.toString(), numberOutOfBounds.toString());
         assertEquals(INVALID_VECT.toString(), youForgotTheNumber.toString());

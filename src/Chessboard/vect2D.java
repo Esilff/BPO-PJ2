@@ -32,7 +32,7 @@ public class vect2D {
      * @param B Le vecteur représentant la position du point de destination depuis l'origine.
      * @return le vecteur $$ \vec{AB} $$ soit le vecteur (B.x - A.x, B.y - A.y)
      */
-    public static vect2D vectorOfDots(vect2D A, vect2D B) {
+    public static vect2D translationFrom_argA_to_argB(vect2D A, vect2D B) {
         return new vect2D(B.x - A.x, B.y - A.y);
     }
 
