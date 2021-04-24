@@ -1,8 +1,13 @@
 package Piece;
 
+import Chessboard.vect2D;
+
+/**
+ * Bishop : classe représentant la pièce du fou. Se déplace en diagonale.
+ */
 public class Bishop extends Piece{
-	public Bishop(Boolean state) {
-		super ("F", state);
+	public Bishop(Boolean isWhite) {
+		super ("F", isWhite);
 	}
 
 

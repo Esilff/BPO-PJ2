@@ -1,7 +1,7 @@
 package Piece;
 public class EmptyPiece extends Piece{
 	public EmptyPiece() {
-		super(" ", true);
+		super(" ", IS_WHITE, IS_GRAPHICAL);
 	}
 	
 	public void play () {

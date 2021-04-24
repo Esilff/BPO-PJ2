@@ -1,8 +1,8 @@
 package Piece;
 
 public class King extends Piece{
-	public King(Boolean state) {
-		super("R", state);
+	public King(Boolean isWhite) {
+		super("R", isWhite);
 	}
 	
 	public void play() {

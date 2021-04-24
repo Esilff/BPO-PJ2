@@ -1,20 +1,31 @@
 package Piece;
 
+import Chessboard.vect2D;
+
+/**
+ * Piece : Il s'agit d'une classe abstraite représentant une pièce d'échec (ou un élément graphique vide).
+ */
 public abstract class Piece {
-	private String name; // suppr
-	private String sign;
+	private final String sign;
 
-	// une pièce ne peut changer subitement de couleur en cours de partie...
-	protected final Boolean isWhite;
+	// une pièce ne peut changer subitement de forme en cours de partie...
+	protected final Boolean isWhite, isGraphical;
+	// valeurs actives plus haut
+	public final static Boolean IS_WHITE = true, IS_GRAPHICAL = true;
 
-	// suppr
-	public Piece (String sign,Boolean isWhite) {
+	public Piece (String sign,Boolean isWhite, Boolean isGraphical) {
 		this.sign = sign;
 		this.isWhite = isWhite;
+		this.isGraphical = isGraphical;
 	}
-	
+	public Piece (String sign,Boolean isWhite) {
+		this(sign, isWhite, !IS_GRAPHICAL);
+	}
+
 	protected abstract void play ();
 
+
+	
 	/**
 	 * Permet de créer une nouvelle instance d'un sous-type de pièce.
 	 * @return La pièce clonée
