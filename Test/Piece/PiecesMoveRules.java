@@ -130,4 +130,18 @@ public class PiecesMoveRules {
         String out = testPiece(new King(IS_WHITE), vect2D.createFromChessCoord("d4"));
         assertEquals(expected, out);
     }
+    @Test
+    public void graphical_PawnMove() {
+        String expected =
+                "□ ▤ □ ▤ □ ▤ □ ▤ \n" +
+                "▤ □ ▤ □ ▤ □ ▤ □ \n" +
+                "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
+                "▤ □ ▣ ▣ ▣ □ ▤ □ \n" +
+                "□ ▤ □ ☺ □ ▤ □ ▤ \n" +
+                "▤ □ ▤ □ ▤ □ ▤ □ \n" +
+                "□ ▤ □ ▤ □ ▤ □ ▤ \n" +
+                "▤ □ ▤ □ ▤ □ ▤ □ \n";
+        String out = testPiece(new Pawn(IS_WHITE), vect2D.createFromChessCoord("d4"));
+        assertEquals(expected, out);
+    }
 }
