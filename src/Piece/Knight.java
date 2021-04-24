@@ -3,12 +3,7 @@ package Piece;
 import Chessboard.vect2D;
 
 public class Knight extends Piece{
-	public final static vect2D[] ALLOWED_MOVES = new vect2D[]{
-		new vect2D(-1, 2),  new vect2D(1, 2), // TOP LEFT, 	TOP RIGHT
-		new vect2D(-1, -2), new vect2D(1, -2) // BOTTOM LEFT,	BOTTOM RIGHT (L)
-	};
-
-
+	public final static vect2D DEFAULT_L = new vect2D(2, 1), REVERSED_L = new vect2D(1, 2);
 	public Knight(Boolean isWhite) {
 		super("C", isWhite);
 	}
@@ -47,13 +42,8 @@ public class Knight extends Piece{
 		if (vect2D.isEqual(relative_move, vect2D.INVALID_VECT)) {
 			return false; // n'a pas pu calculer ou préconditions non résolues
 		}
-
-		for (vect2D allowed: ALLOWED_MOVES) {
-			if (vect2D.isEqual(allowed, relative_move)) {
-				return true;
-			}
-		}
-
-		return false;
+		relative_move.x = Math.abs(relative_move.x);
+		relative_move.y = Math.abs(relative_move.y);
+		return vect2D.isEqual(DEFAULT_L, relative_move) || vect2D.isEqual(REVERSED_L, relative_move);
 	}
 }

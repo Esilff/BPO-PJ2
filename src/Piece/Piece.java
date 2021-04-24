@@ -1,6 +1,6 @@
 package Piece;
 
-import Chessboard.Chessboard;
+import static Chessboard.Chessboard.BOARD_RECT;
 import Chessboard.vect2D;
 
 /**
@@ -45,12 +45,11 @@ public abstract class Piece {
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return vect2D.INVALID_VECT si les préconditions NE SONT PAS respectées. Si elles sont respectées, cette méthode
 	 *  retourne le vecteur de déplacement entre les deux points passés en paramètres
-	 * @see vect2D.translationFrom_argA_to_argB
+	 * @see vect2D#translationFrom_argA_to_argB(vect2D A, vect2D B)
 	 */
-	@SuppressWarnings("JavadocReference") // TODO : régler ça
 	public static vect2D isValidMove_computeTranslation(vect2D currentPos, vect2D target) {
-		if (vect2D.isOutOfBounds(Chessboard.BOARD_RECT, currentPos) ||
-			vect2D.isOutOfBounds(Chessboard.BOARD_RECT, target) ||
+		if (vect2D.isOutOfBounds(BOARD_RECT, currentPos) ||
+			vect2D.isOutOfBounds(BOARD_RECT, target) ||
 			vect2D.isEqual(currentPos, target) ) {
 			return vect2D.INVALID_VECT;
 		}
@@ -68,17 +67,5 @@ public abstract class Piece {
 			return sign.toUpperCase();
 		}
 		return sign.toLowerCase();
-	}
-
-	/**
-	 * Utilitaire graphique permettant de vérifier les déplacements possibles d'une pièce
-	 * USAGE : À DES FINS DE TESTS UNIQUEMENT
-	 * @param toTest la picèce à tester
-	 * @param buffer StringBuilder dans laquelle la sortie sera ajoutée
-	 */
-	public static void testPiece(Piece toTest, vect2D piecePosition, StringBuilder buffer) {
-		final char ME = '☺', EMPTY_WHITE = '□', EMPTY_BLACK='▤', NOT_EMPTY='■';
-		final int BOARD_SIZE = 8;
-		// TODO : finir
 	}
 }

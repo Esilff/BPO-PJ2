@@ -51,8 +51,9 @@ public class vect2DTest extends TestCase {
     public void testCreateFromChessCoord() {
         // Tests conçus pour cette valeur !!
         assertEquals(8, Chessboard.BOARD_SIZE);
-        // et fonctionnement dépend de ça, ce sera plus facile de tester les valeurs
+        // et fonctionnement dépend de ces deux fonctionnalités, ce sera plus facile de tester les valeurs
         testTestToString();
+        testIsEqual();
 
         vect2D a0 = vect2D.createFromChessCoord("a1");
         vect2D h8 = vect2D.createFromChessCoord("h8");
@@ -71,12 +72,11 @@ public class vect2DTest extends TestCase {
         vect2D satanicCoord = vect2D.createFromChessCoord("666");
         vect2D justAstring = vect2D.createFromChessCoord("Un test est aussi ennuyant à lire qu'à écrire");
 
-        // TODO : utiliser assert vect2D.isEqual()
-        assertEquals(INVALID_VECT.toString(), letterOutOfBounds.toString());
-        assertEquals(INVALID_VECT.toString(), numberOutOfBounds.toString());
-        assertEquals(INVALID_VECT.toString(), youForgotTheNumber.toString());
-        assertEquals(INVALID_VECT.toString(), youForgotYourBrain.toString());
-        assertEquals(INVALID_VECT.toString(), satanicCoord.toString());
-        assertEquals(INVALID_VECT.toString(), justAstring.toString());
+        assert vect2D.isEqual(INVALID_VECT, letterOutOfBounds);
+        assert vect2D.isEqual(INVALID_VECT, numberOutOfBounds);
+        assert vect2D.isEqual(INVALID_VECT, youForgotTheNumber);
+        assert vect2D.isEqual(INVALID_VECT, youForgotYourBrain);
+        assert vect2D.isEqual(INVALID_VECT, satanicCoord);
+        assert vect2D.isEqual(INVALID_VECT, justAstring);
     }
 }

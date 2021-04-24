@@ -3,6 +3,8 @@ package Piece;
 import Chessboard.vect2D;
 
 public class King extends Piece{
+	private static final int ALLOWED_NBR_OF_STEPS = 1;
+
 	public King(Boolean isWhite) {
 		super("R", isWhite);
 	}
@@ -43,7 +45,7 @@ public class King extends Piece{
 		}
 		relative_move.x = Math.abs(relative_move.x);
 		relative_move.y = Math.abs(relative_move.y);
-		// TODO : constante 1
-		return !vect2D.isOutOfBounds(new vect2D(1,1), relative_move);
+		return relative_move.x <= ALLOWED_NBR_OF_STEPS
+			&& relative_move.y <= ALLOWED_NBR_OF_STEPS;
 	}
 }

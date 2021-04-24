@@ -10,13 +10,15 @@ import Piece.*;
  * et d'un système d'affichage console.
  */
 public class Chessboard {
-	/** Définis la disposition initiale à utiliser au démarrage du programme */
+	/** Définis la disposition initiale à utiliser au démarrage du programme
+	 *  cf. this.defaultChess_template() et fonctions associées pour plus de compréhension
+	 */
 	public enum INIT_LAYOUT {
 		DEFAULT_CHESS,
 		EMPTY,
 		FINALE_2R1T
 	}
-	private static final INIT_LAYOUT TEMPLATE_TO_USE_AT_STARTUP = INIT_LAYOUT.FINALE_2R1T;
+	private static final INIT_LAYOUT TEMPLATE_TO_USE_AT_STARTUP = INIT_LAYOUT.DEFAULT_CHESS;
 
 	/** La taille de l'échéquier. Constante valant 8, __ne dois pas changer__ sous peine de mauvaises surprises !!*/
 	public static final int BOARD_SIZE = 8;
@@ -133,7 +135,7 @@ public class Chessboard {
 	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
 	 */
 	private boolean setPiece(String destination, String source) {
-		// TODO : unused - à utiliser pour faire des déplacements effectifs
+		// TODO : unused - à voir si on l'utilisera dans le futur
 		Piece piece = this.getPiece(source);
 		return this.setPiece(destination, piece);
 	}
