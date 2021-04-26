@@ -1,13 +1,14 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Chessboard.Chessboard;
 
 public class EmptyPiece extends Piece{
 	public EmptyPiece() {
 		super(" ", IS_WHITE, IS_GRAPHICAL);
 	}
 	
-	public void play () {
+	public void play (Chessboard chessboard, String originCoord, String newCoord) {
 		
 	}
 

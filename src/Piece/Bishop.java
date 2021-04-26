@@ -1,5 +1,6 @@
 package Piece;
 
+import Chessboard.Chessboard;
 import Chessboard.vect2D;
 
 /**
@@ -18,7 +19,7 @@ public class Bishop extends Piece{
 		return new Bishop(this.isWhite);
 	}
 
-	public void play() {
+	public void play(Chessboard chessboard, String originCoord, String newCoord) {
 		
 	}
 

@@ -1,6 +1,7 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Chessboard.Chessboard;
 
 public class Knight extends Piece{
 	public final static vect2D DEFAULT_L = new vect2D(2, 1), REVERSED_L = new vect2D(1, 2);
@@ -8,7 +9,7 @@ public class Knight extends Piece{
 		super("C", isWhite);
 	}
 	
-	public void play() {
+	public void play(Chessboard chessboard, String originCoord, String newCoord) {
 		
 	}
 

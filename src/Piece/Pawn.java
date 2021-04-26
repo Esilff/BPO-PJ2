@@ -1,6 +1,7 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Chessboard.*;
 
 public class Pawn extends Piece {
 	private static final vect2D USUAL_STEP = new vect2D(0, 1),
@@ -10,8 +11,19 @@ public class Pawn extends Piece {
 		super("P", isWhite);
 	}
 	
-	public void play() {
-		
+	public void play(Chessboard chessboard, String originCoord, String newCoord) {
+		vect2D originCoordConv = vect2D.createFromChessCoord(originCoord);
+		vect2D newCoordConv = vect2D.createFromChessCoord(newCoord);
+		if (this.isWhite && originCoordConv.x == 6) {
+			if (newCoordConv.x == originCoordConv.x - 2)  {
+				chessboard.setPiece(newCoord, this);
+			}
+		}
+		else {
+			if (newCoordConv.x == originCoordConv.x - 1)  {
+				chessboard.setPiece(newCoord, this);
+			}
+		}
 	}
 
 	/**

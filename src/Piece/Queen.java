@@ -1,13 +1,14 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Chessboard.Chessboard;
 
 public class Queen extends Piece{
 	public Queen(Boolean isWhite) {
-		super("Q",isWhite);
+		super("D",isWhite);
 	}
 	
-	public void play() {
+	public void play(Chessboard chessboard, String originCoord, String newCoord) {
 		
 	}
 

@@ -1,6 +1,7 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Chessboard.Chessboard;
 
 public class King extends Piece{
 	private static final int ALLOWED_NBR_OF_STEPS = 1;
@@ -9,7 +10,7 @@ public class King extends Piece{
 		super("R", isWhite);
 	}
 	
-	public void play() {
+	public void play(Chessboard chessboard, String originCoord, String newCoord) {
 		
 	}
 

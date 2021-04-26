@@ -36,7 +36,9 @@ public class Chessboard {
 	public Chessboard() {
 		this.resetBoard();
 	}
-
+	
+	
+	
 	// METHODES D'AFFICHAGE ---------------------------------------------------------------------
 
 	/** Génère l'affichage du plateau de jeu
@@ -121,7 +123,7 @@ public class Chessboard {
 	 * @param piece La pièce à placer dans l'échiquier.
 	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
 	 */
-	private boolean setPiece(String coord, Piece piece) {
+	public boolean setPiece(String coord, Piece piece) {
 		vect2D converted = vect2D.createFromChessCoord(coord);
 		return this.setPiece(converted.y, converted.x, piece);
 	}
@@ -139,7 +141,7 @@ public class Chessboard {
 		return this.board[column][line];
 	}
 
-	private Piece getPiece(String coord) {
+	public Piece getPiece(String coord) {
 		vect2D converted = vect2D.createFromChessCoord(coord);
 		return this.getPiece(converted.y, converted.x);
 	}
@@ -221,7 +223,7 @@ public class Chessboard {
 		setPiece(line, 1, new Knight(isWhite) ); // C
 		setPiece(line, 2, new Bishop(isWhite) ); // F
 		setPiece(line, 3, new King(isWhite) );   // R
-		setPiece(line, 4, new Queen(isWhite) );  // Q
+		setPiece(line, 4, new Queen(isWhite) );  // D pour Dame
 		setPiece(line, 5, new Bishop(isWhite) ); // F
 		setPiece(line, 6, new Knight(isWhite) ); // C
 		setPiece(line, 7, new Tower(isWhite) );  // T
