@@ -7,8 +7,8 @@ public class Queen extends Piece{
 	public Queen(Boolean isWhite) {
 		super("D",isWhite);
 	}
-	
-	public void play(Chessboard chessboard, String originCoord, String newCoord) {
+
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
 		
 	}
 

@@ -9,9 +9,9 @@ public class King extends Piece{
 	public King(Boolean isWhite) {
 		super("R", isWhite);
 	}
-	
-	public void play(Chessboard chessboard, String originCoord, String newCoord) {
-		
+
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+
 	}
 
 	/**

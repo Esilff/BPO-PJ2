@@ -19,7 +19,7 @@ public class Bishop extends Piece{
 		return new Bishop(this.isWhite);
 	}
 
-	public void play(Chessboard chessboard, String originCoord, String newCoord) {
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
 		
 	}
 

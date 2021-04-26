@@ -10,6 +10,7 @@ import Piece.*;
  * et d'un système d'affichage console.
  */
 public class Chessboard {
+
 	/** Définis la disposition initiale à utiliser au démarrage du programme
 	 *  cf. this.defaultChess_template() et fonctions associées pour plus de compréhension
 	 */
@@ -18,7 +19,7 @@ public class Chessboard {
 		EMPTY,
 		FINALE_2R1T
 	}
-	private static final INIT_LAYOUT TEMPLATE_TO_USE_AT_STARTUP = INIT_LAYOUT.DEFAULT_CHESS;
+	private final INIT_LAYOUT TEMPLATE_TO_USE_AT_STARTUP;
 
 	/** La taille de l'échéquier. Constante valant 8, __ne dois pas changer__ sous peine de mauvaises surprises !!*/
 	public static final int BOARD_SIZE = 8;
@@ -33,8 +34,12 @@ public class Chessboard {
 	//  ---------------------------------------------------------------------
 	
 	/** Constructeur du plateau */
-	public Chessboard() {
+	public Chessboard(INIT_LAYOUT template_to_use_at_startup) {
+		TEMPLATE_TO_USE_AT_STARTUP = template_to_use_at_startup;
 		this.resetBoard();
+	}
+	public Chessboard() {
+		this(INIT_LAYOUT.DEFAULT_CHESS);
 	}
 	
 	
@@ -107,7 +112,7 @@ public class Chessboard {
 	 * @param piece la pièce à mettre dans la case en question
 	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
 	 */
-	private boolean setPiece(int line, int column, Piece piece) {
+	public boolean setPiece(int line, int column, Piece piece) {
 		try {
 			this.board[column][line] = piece;
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -137,13 +142,24 @@ public class Chessboard {
 	 * telle-quelle (par référence au lieu d'un clone)
 	 * @see this.setPiece pour définir au lieu de récupérer
 	 */
-	private Piece getPiece(int line, int column) {
+	public Piece getPiece(int line, int column) {
 		return this.board[column][line];
 	}
+	public Piece getPiece(vect2D coord) {
+		return getPiece(coord.y, coord.x);
+	}
 
-	public Piece getPiece(String coord) {
-		vect2D converted = vect2D.createFromChessCoord(coord);
-		return this.getPiece(converted.y, converted.x);
+	public void play(String originCoord, String newCoord) throws BadMoveException {
+		// décodage de l'entrée
+		vect2D originCoordConv = vect2D.createFromChessCoord(originCoord);
+		vect2D newCoordConv = vect2D.createFromChessCoord(newCoord);
+		if (   vect2D.isEqual(vect2D.INVALID_VECT, originCoordConv)
+			|| vect2D.isEqual(vect2D.INVALID_VECT, newCoordConv)) {
+			throw new BadMoveException("Coordonnées invalides");
+		}
+		Piece toPlay = getPiece(originCoordConv);
+		// TODO : le joueur actuel ne peut pas bouger les pièces de l'adversaire
+		toPlay.play(this, originCoordConv, newCoordConv);
 	}
 
 	// METHODES D'INITIALISATION ---------------------------------------------------------------------

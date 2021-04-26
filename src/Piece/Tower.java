@@ -7,8 +7,8 @@ public class Tower extends Piece{
 	public Tower (Boolean isWhite) {
 		super("T", isWhite);
 	}
-	
-	public void play(Chessboard chessboard, String originCoord, String newCoord) {
+
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
 		
 	}
 

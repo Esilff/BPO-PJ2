@@ -132,7 +132,7 @@ public class PiecesMoveRules {
     }
     @Test
     public void graphical_PawnMove() {
-        String expected =
+        String expected_w =
                 "□ ▤ □ ▤ □ ▤ □ ▤ \n" +
                 "▤ □ ▤ □ ▤ □ ▤ □ \n" +
                 "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
@@ -141,7 +141,19 @@ public class PiecesMoveRules {
                 "▤ □ ▤ □ ▤ □ ▤ □ \n" +
                 "□ ▤ □ ▤ □ ▤ □ ▤ \n" +
                 "▤ □ ▤ □ ▤ □ ▤ □ \n";
-        String out = testPiece(new Pawn(IS_WHITE), vect2D.createFromChessCoord("d4"));
-        assertEquals(expected, out);
+        String expected_b =
+                "□ ▤ □ ▤ □ ▤ □ ▤ \n" +
+                "▤ □ ▤ □ ▤ □ ▤ □ \n" +
+                "□ ▤ □ ▤ □ ▤ □ ▤ \n" +
+                "▤ □ ▤ □ ▤ □ ▤ □ \n" +
+                "□ ▤ □ ☺ □ ▤ □ ▤ \n" +
+                "▤ □ ▣ ▣ ▣ □ ▤ □ \n" +
+                "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
+                "▤ □ ▤ □ ▤ □ ▤ □ \n";
+        String out_w = testPiece(new Pawn(IS_WHITE), vect2D.createFromChessCoord("d4"));
+        String out_b = testPiece(new Pawn(! IS_WHITE), vect2D.createFromChessCoord("d4"));
+        assertEquals(expected_w, out_w);
+        assertEquals(expected_b, out_b);
+        // TODO : la même chose mais pour les pions noirs
     }
 }

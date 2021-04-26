@@ -8,8 +8,8 @@ public class Knight extends Piece{
 	public Knight(Boolean isWhite) {
 		super("C", isWhite);
 	}
-	
-	public void play(Chessboard chessboard, String originCoord, String newCoord) {
+
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
 		
 	}
 

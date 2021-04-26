@@ -1,5 +1,6 @@
 package Piece;
 
+import static Chessboard.Chessboard.BOARD_RECT;
 import Chessboard.Chessboard;
 import Chessboard.vect2D;
 
@@ -23,7 +24,7 @@ public abstract class Piece {
 		this(sign, isWhite, !IS_GRAPHICAL);
 	}
 
-	public abstract void play (Chessboard chessboard, String originCoord, String newCoord);
+	public abstract void play (Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException;
 
 	/**
 	 * Cette méthode définit la règle de déplacement du pion. Elle a été pensée statique, en prenant en compte que un
