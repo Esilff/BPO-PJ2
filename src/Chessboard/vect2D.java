@@ -32,21 +32,21 @@ public class vect2D {
      * @param B Le vecteur représentant la position du point de destination depuis l'origine.
      * @return le vecteur $$ \vec{AB} $$ soit le vecteur (B.x - A.x, B.y - A.y)
      */
-    public static vect2D distanceBetween(vect2D A, vect2D B) {
+    public static vect2D translationFrom_argA_to_argB(vect2D A, vect2D B) {
         return new vect2D(B.x - A.x, B.y - A.y);
     }
 
     /**
      * Détermine si un point est à l'extérieur des limites d'une boite
-     * Exemple : par rapport à un échiquier (8, 8), le point de position (1,9) est hors du plateau de jeu
+     * Exemple : par rapport à un échiquier, le point de position (1,8) est hors du plateau de jeu, mais pas (1, 7)
      * @param boxSize la taille de la boite, représentée par un Vect2D dont la coordonée x représente sa largeur
      *                et la coordonée y sa hauteur
      * @param dotPosition Le vecteur représentant la position du point à vérifier depuis l'origine.
      * @return vrai si le point est hors des bordures.
      */
     public static boolean isOutOfBounds(vect2D boxSize, vect2D dotPosition) {
-        return dotPosition.x < 0 || dotPosition.x > boxSize.x
-            || dotPosition.y < 0 || dotPosition.y > boxSize.y;
+        return dotPosition.x < 0 || dotPosition.x >= boxSize.x
+            || dotPosition.y < 0 || dotPosition.y >= boxSize.y;
     }
 
     /**

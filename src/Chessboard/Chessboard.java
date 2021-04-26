@@ -10,7 +10,9 @@ import Piece.*;
  * et d'un système d'affichage console.
  */
 public class Chessboard {
-	/** Définis la disposition initiale à utiliser au démarrage du programme */
+	/** Définis la disposition initiale à utiliser au démarrage du programme
+	 *  cf. this.defaultChess_template() et fonctions associées pour plus de compréhension
+	 */
 	public enum INIT_LAYOUT {
 		DEFAULT_CHESS,
 		EMPTY,
@@ -124,20 +126,6 @@ public class Chessboard {
 	public boolean setPiece(String coord, Piece piece) {
 		vect2D converted = vect2D.createFromChessCoord(coord);
 		return this.setPiece(converted.y, converted.x, piece);
-	}
-
-	/**
-	 * Surcharge de setPiece(String coord, Piece piece), sauf que le second argument est remplacé par la désignation
-	 * 	d'une pièce existante. ATTENTION : Ce n'est pas un déplacement effectif ! La référence de la pièce est dupliquée
-	 * 	aux coordonées de destination, il faut donc penser à remplacer la coordonée de départ par une pièce vide.
-	 * @param destination La coordonée de destination à définir
-	 * @param source La position de la pièce source, dont la __référence__ sera copiée aux coords de destination
-	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
-	 */
-	private boolean setPiece(String destination, String source) {
-		// TODO : unused - à utiliser pour faire des déplacements effectifs
-		Piece piece = this.getPiece(source);
-		return this.setPiece(destination, piece);
 	}
 
 	/**

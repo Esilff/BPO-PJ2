@@ -1,5 +1,6 @@
 package Piece;
 
+import Chessboard.vect2D;
 import Chessboard.Chessboard;
 
 public class EmptyPiece extends Piece{
@@ -9,6 +10,11 @@ public class EmptyPiece extends Piece{
 	
 	public void play (Chessboard chessboard, String originCoord, String newCoord) {
 		
+	}
+
+	@Override
+	public boolean isValidMove(vect2D currentPos, vect2D target) {
+		return false; // indéplacable
 	}
 
 	/**
