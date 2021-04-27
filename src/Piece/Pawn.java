@@ -7,6 +7,9 @@ public class Pawn extends Piece {
 	private static final vect2D USUAL_STEP = new vect2D(0, 1),
 								DOUBLE_STEP = new vect2D(0, 2),
 								CAPTURING_STEP = new vect2D(1, 1);
+	
+	private Boolean isPlayed = false;
+	
 	private enum MOVE_TYPE {
 		USUAL_STEP, DOUBLE_STEP, CAPTURING_STEP, INVALID_MOVE
 	};
@@ -27,7 +30,11 @@ public class Pawn extends Piece {
 				else break;
 
 			case DOUBLE_STEP:
-				// TODO : vérif si est sur la bonne rangée + si aucun pion lui gène la route
+				if (target instanceof EmptyPiece && isPlayed) {
+					throw new BadMoveException("Le pion a deja ete joue et ne peut plus avancer de deux cases");
+				}
+				else break;
+				
 			case USUAL_STEP:
 				if (target instanceof EmptyPiece) break;
 				else throw new BadMoveException("Le pion ne peut se déplacer de l'avant sur une case occupée.");
