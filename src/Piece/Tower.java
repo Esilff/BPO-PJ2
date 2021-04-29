@@ -15,6 +15,15 @@ public class Tower extends Piece{
 		if (!isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
+		for (int i = originCoord.y, j = originCoord.x; i != newCoord.y && j != newCoord.x; i++, j++) {
+			if (chessboard.getPiece(i, j).isWhite == this.isWhite && !(chessboard.getPiece(i, j)instanceof EmptyPiece)) {
+				throw new BadMoveException("Le chemin est bloqué par un allie");
+			}
+			if (chessboard.getPiece(i, j).isWhite != this.isWhite && !(chessboard.getPiece(i, j)instanceof EmptyPiece)) {
+				throw new BadMoveException("Le chemin est bloqué par un autre ennemi");
+			}
+			else continue;
+		}
 		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
 		chessboard.setPiece(newCoord.y, newCoord.x, this);
 	}
