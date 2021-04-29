@@ -10,16 +10,12 @@ public class Knight extends Piece{
 	}
 
 	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
-		Boolean moveType = isMovingExactlyWithOneStep(originCoord, newCoord);
-		vect2D boxSize = new vect2D(chessboard.BOARD_SIZE, chessboard.BOARD_SIZE);
 		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
-		if(!isValidMove(originCoord, newCoord)) {
-			throw new BadMoveException("Le coup est invalide");
-		}
-		if (target.isWhite == this.isWhite)
+		if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
 			throw new BadMoveException("Le cavalier ne peut pas être cannibale...");
-		if (vect2D.isOutOfBounds(boxSize, newCoord)) 
-			throw new BadMoveException("Coup interdit.");
+		if (!isValidMove(originCoord, newCoord)) {
+			throw new BadMoveException("Mouvement impossible");
+		}
 		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
 		chessboard.setPiece(newCoord.y, newCoord.x, this);
 	}

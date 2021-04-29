@@ -23,6 +23,7 @@ public class Pawn extends Piece {
 		MOVE_TYPE moveType = recogniseMove(relative_move);
 
 		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
+		Piece targetBis = chessboard.getPiece(newCoord.y - 1, newCoord.x); //A utiliser pour verifier que rien n'est present sur le chemin, lors d'un doubleStep
 		switch (moveType) {
 			case CAPTURING_STEP:
 				if (target instanceof EmptyPiece || target.isWhite == this.isWhite)
@@ -30,9 +31,13 @@ public class Pawn extends Piece {
 				else break;
 
 			case DOUBLE_STEP:
-				if (target instanceof EmptyPiece && isPlayed) {
+				if (target instanceof EmptyPiece && isPlayed) { //Deja joue
 					throw new BadMoveException("Le pion a deja ete joue et ne peut plus avancer de deux cases");
 				}
+				if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
+					throw new BadMoveException("Le pion ne peut manger du vide, ou être cannibale...");
+				if (targetBis.isWhite == this.isWhite && !(targetBis instanceof EmptyPiece))
+					throw new BadMoveException("Le pion ne peut avancer avec un obstacle sur le chemin");
 				else break;
 				
 			case USUAL_STEP:
@@ -46,6 +51,7 @@ public class Pawn extends Piece {
 
 		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
 		chessboard.setPiece(newCoord.y, newCoord.x, this);
+		this.isPlayed = true;
 	}
 
 	/**
