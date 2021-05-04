@@ -152,11 +152,12 @@ public class PawnTest {
         assertEquals(expectedOut, chessboard.toString());
     }
 
+    @Test
     public void testTestClone() {
         Piece original = new Pawn(true);
         Piece hisClone = original.clone();
-        assertEquals(original,hisClone); // Contenu identique
-        assertNotSame(original,hisClone); // ... sauf la référence
-        assert hisClone instanceof Pawn; // et doit être un Pawn, pas un pion non spécifié
+        assertNotSame(original,hisClone);
+        assert hisClone instanceof Pawn;
+        assert ! (hisClone instanceof Tower);
     }
 }

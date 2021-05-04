@@ -11,7 +11,7 @@ import Chessboard.vect2D;
 
 public class PieceTest {
 
-    // METHODES STATIQUES UTILITAIRES ----------------------------------------------------------------------------------
+    // MÉTHODES STATIQUES UTILITAIRES ----------------------------------------------------------------------------------
     // (utilisé à l'extérieur de cette classe)
 
     /**
@@ -47,7 +47,7 @@ public class PieceTest {
      * Elle permet de tester {@link Piece#isValidMove(vect2D, vect2D)} par correspondance graphique (plus visuel dans
      * l'écriture des tests, cf exemples plus bas). N'oublions pas que isValidMove ne teste que la validité du schéma de
      * mouvement, et ne tiens PAS compte de l'état actuel du plateau (excepté les sorties de plateau)
-     * @param toTest la picèce à tester
+     * @param toTest la pièce à tester
      * @param piecePosition la position de la pièce au sein du plateau
      * @return Le résultat graphique généré.
      */
@@ -76,25 +76,6 @@ public class PieceTest {
 
 
     // TEST UNITAIRE DE LA CLASSE PIECE --------------------------------------------------------------------------------
-
-    /**
-     * Cette classe teste visuellement les mouvements horizontaux ou verticaux, ie. {@link Tower#isLinearMove}
-     * @see Tower#isValidMove(vect2D, vect2D)
-     */
-    @Test
-    public void graphical_towerMove() {
-        String expected =
-                "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
-                        "▤ □ ▤ ▣ ▤ □ ▤ □ \n" +
-                        "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
-                        "▤ □ ▤ ▣ ▤ □ ▤ □ \n" +
-                        "▣ ▣ ▣ ☺ ▣ ▣ ▣ ▣ \n" +
-                        "▤ □ ▤ ▣ ▤ □ ▤ □ \n" +
-                        "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
-                        "▤ □ ▤ ▣ ▤ □ ▤ □ \n";
-        String out = graphical_moveDefsTester(new Tower(IS_WHITE), vect2D.createFromChessCoord("d4"));
-        assertEquals(expected, out);
-    }
 
     /**
      * Cette classe teste visuellement les mouvements en diagonale, ie. {@link Bishop#isDiagMove}
