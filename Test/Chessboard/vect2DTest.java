@@ -1,11 +1,13 @@
 package Chessboard;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 import static Chessboard.vect2D.INVALID_VECT;
 
-public class vect2DTest extends TestCase {
+public class vect2DTest {
 
+    @Test
     public void testTestToString() {
         assertEquals("(0, 0)", new vect2D(0, 0).toString());
         assertEquals("(-1, 1)", new vect2D(-1, 1).toString());
@@ -14,14 +16,17 @@ public class vect2DTest extends TestCase {
         assertEquals("(-255, -255)", INVALID_VECT.toString());
     }
 
+    @Test
     public void testVectorOfDots() {
-        vect2D A = new vect2D(1,2);
-        vect2D B = new vect2D(6,7);
-        vect2D vec_AB = vect2D.translationFrom_argA_to_argB(A, B);
-        assertEquals(5, vec_AB.x);
-        assertEquals(5, vec_AB.x);
+        // teste .minus() et getters/setters à la fois
+        vect2D dot_A = new vect2D(1,2);
+        vect2D dot_B = new vect2D(6,6);
+        vect2D vec_AB = dot_B.minus(dot_A);
+        assertEquals(5, vec_AB.getX());
+        assertEquals(4, vec_AB.getY());
     }
 
+    @Test
     public void testIsOutOfBounds() {
         vect2D box = new vect2D(8,8),
             orig = new vect2D(0, 0),
@@ -31,27 +36,30 @@ public class vect2DTest extends TestCase {
             Y_neg = new vect2D(1, -3),
             Y_big = new vect2D(1, 99),
             V_all = new vect2D(-10, -10);
-        assertTrue( vect2D.isOutOfBounds(box, box)  );
-        assertFalse(vect2D.isOutOfBounds(box, orig) );
-        assertFalse(vect2D.isOutOfBounds(box, valid));
-        assertTrue( vect2D.isOutOfBounds(box, X_neg));
-        assertTrue( vect2D.isOutOfBounds(box, X_big));
-        assertTrue( vect2D.isOutOfBounds(box, Y_neg));
-        assertTrue( vect2D.isOutOfBounds(box, Y_big));
-        assertTrue( vect2D.isOutOfBounds(box, V_all));
+        assertTrue( box.isOutOfBounds(box)  );
+        assertFalse(box.isOutOfBounds(orig) );
+        assertFalse(box.isOutOfBounds(valid));
+        assertTrue( box.isOutOfBounds(X_neg));
+        assertTrue( box.isOutOfBounds(X_big));
+        assertTrue( box.isOutOfBounds(Y_neg));
+        assertTrue( box.isOutOfBounds(Y_big));
+        assertTrue( box.isOutOfBounds(V_all));
     }
 
+    @Test
     public void testIsEqual() {
-        assertTrue(vect2D.isEqual(new vect2D(0,0), new vect2D(0,0)));
-        assertTrue(vect2D.isEqual(new vect2D(-10,3), new vect2D(-10,3)));
-        assertFalse(vect2D.isEqual(new vect2D(1,2), new vect2D(3,4)));
-        assertFalse(vect2D.isEqual(new vect2D(9,4), new vect2D(-9,4)));
+        assertTrue(new vect2D(0,0).equals(new vect2D(0,0))     );
+        assertTrue(new vect2D(-10,3).equals(new vect2D(-10,3)) );
+        assertFalse(new vect2D(1,2).equals(new vect2D(3,4)) );
+        assertFalse(new vect2D(9,4).equals(new vect2D(-9,4)));
+        // Pas la peine d'en faire des tonnes non plus, les autres tests plus bas sont là pour ça
     }
 
+    @Test
     public void testCreateFromChessCoord() {
         // Tests conçus pour cette valeur !!
         assertEquals(8, Chessboard.BOARD_SIZE);
-        // et fonctionnement dépend de ces deux fonctionnalités, ce sera plus facile de tester les valeurs
+        // et fonctionnement dépend de ces deux fonctionnalités, ce sera plus lisible
         testTestToString();
         testIsEqual();
 
@@ -72,11 +80,33 @@ public class vect2DTest extends TestCase {
         vect2D satanicCoord = vect2D.createFromChessCoord("666");
         vect2D justAstring = vect2D.createFromChessCoord("Un test est aussi ennuyant à lire qu'à écrire");
 
-        assert vect2D.isEqual(INVALID_VECT, letterOutOfBounds);
-        assert vect2D.isEqual(INVALID_VECT, numberOutOfBounds);
-        assert vect2D.isEqual(INVALID_VECT, youForgotTheNumber);
-        assert vect2D.isEqual(INVALID_VECT, youForgotYourBrain);
-        assert vect2D.isEqual(INVALID_VECT, satanicCoord);
-        assert vect2D.isEqual(INVALID_VECT, justAstring);
+        assert letterOutOfBounds.equals(INVALID_VECT);
+        assert numberOutOfBounds.equals(INVALID_VECT);
+        assert youForgotTheNumber.equals(INVALID_VECT);
+        assert youForgotYourBrain.equals(INVALID_VECT);
+        assert satanicCoord.equals(INVALID_VECT);
+        assert justAstring.equals(INVALID_VECT);
+    }
+
+    @Test
+    public void testGenerate_signum() {
+        // p = positif, n = negatif, z = nul
+        vect2D vpz = new vect2D( 5,  0).generate_signum();
+        vect2D vnp = new vect2D(-6,  7).generate_signum();
+        vect2D vzn = new vect2D( 0, -8).generate_signum();
+        assert vpz.equals(new vect2D( 1,  0));
+        assert vnp.equals(new vect2D(-1,  1));
+        assert vzn.equals(new vect2D( 0, -1));
+
+        // Si les trois premiers fonctionnent, pas normal que les suivants ne fonctionnent pas
+        vect2D vpp = new vect2D( 1,  2).generate_signum();
+        vect2D vnn = new vect2D(-3, -4).generate_signum();
+        vect2D vzz = new vect2D( 0,  0).generate_signum();
+        assert vpp.equals(new vect2D( 1,  1));
+        assert vnn.equals(new vect2D(-1, -1));
+        assert vzz.equals(new vect2D( 0,  0));
+
+        vect2D vHuge = new vect2D(325, -255).generate_signum();
+        assert vHuge.equals(new vect2D(1, -1));
     }
 }
