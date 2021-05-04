@@ -134,6 +134,7 @@ public class TowerTest {
         assertEquals(expectedOut, chessboard.toString());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void testTestClone() {
         Piece original = new Tower(true);

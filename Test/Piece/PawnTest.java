@@ -52,12 +52,12 @@ public class PawnTest {
     public void testPlay_simpleStep() {
         
         Chessboard chessboard = new Chessboard();
-        String moves[] = {
+        String[] moves = {
                 "a2a3", "a7a6", // Allez petit pas devant (tin tin)
                 "a3a2", "a3a4", "a6a7", "a6a5", // petit pas derrière (tin tin tin)... Allez petit pas devant (tin tin)
                 "a4a5", "h2h3", "a5a4", "h2h3"  // Toléka toléka -- coups pas valides car passage bloqué + idle moves
         };
-        boolean validity[] = {true, true,    false, true, false, true,    false, true, false, true};
+        boolean[] validity = {true, true,    false, true, false, true,    false, true, false, true};
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -85,7 +85,7 @@ public class PawnTest {
     @Test
     public void testPlay_doubleStep() {
         Chessboard chessboard = new Chessboard();
-        String moves[] = {
+        String[] moves = {
                 "a2a4", "b7b5", // normal (+2)
                 "a4a6", "a4a5", // recommence + barrage de route (+1)
                 "b5b3", "b5b4", // idem
@@ -93,7 +93,7 @@ public class PawnTest {
                 "b2b4", "h2h3", // route barrée... + (idle move)
                 "a7a5", "h7h5"  //idem
         };
-        boolean validity[] = {true, true,   false, true,   false, true,   true,true,   false, true,   false, true};
+        boolean[] validity = {true, true,   false, true,   false, true,   true,true,   false, true,   false, true};
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -121,13 +121,13 @@ public class PawnTest {
     @Test
     public void testPlay_Eat() {
         Chessboard chessboard = new Chessboard();
-        String moves[] = {
+        String[] moves = {
                 "a2b3", "a2a3", "a7b6", "a7a6", // manger du vide
                 "b2b4", "b7b5", // placement pour tenter de ...
                 "a3b4", "a3a4", "a6b5", "a6a5", // ... les rendre cannibale
                 "a4b5", "a5b4" // là ils peuvent manger
         };
-        boolean validity[] = {false, true, false, true,   true, true,   false, true, false, true,    true, true};
+        boolean[] validity = {false, true, false, true,   true, true,   false, true, false, true,    true, true};
         String expectedOut = "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "8 | t | c | f | r | d | f | c | t | 8\n" +
@@ -152,6 +152,7 @@ public class PawnTest {
         assertEquals(expectedOut, chessboard.toString());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void testTestClone() {
         Piece original = new Pawn(true);
