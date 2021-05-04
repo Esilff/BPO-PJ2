@@ -4,8 +4,8 @@ import Chessboard.Chessboard;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class PawnTest {
-    public void testBadMoves(Chessboard chessboard, String[] moves, boolean[] isMoveValid) {
+public class PieceTest {
+    public static void testBadMoves(Chessboard chessboard, String[] moves, boolean[] isMoveValid) {
         assert moves.length == isMoveValid.length : "Erreur d'écriture de test, String.length != boolean.length";
         for (int i = 0; i < moves.length; i++) {
             String s = moves[i];
