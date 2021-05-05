@@ -30,10 +30,10 @@ public abstract class Piece {
 	 * Cette méthode définit la règle de déplacement du pion. Elle a été pensée statique, en prenant en compte que un
 	 * pion n'a pas besoin de connaitre sa position (c'est plutôt au plateau de le faire). Donc, cette méthode à elle-
 	 * seule ne peut déterminer si le coup est jouable, car il est nécessaire de vérifier d'autres choses (par exemple,
-	 * y a-t-il une pièce sur son chemin ?)
-	 * @param currentPos
-	 * @param target
-	 * @return
+	 * y a-t-il une pièce sur son chemin ou la pièce à cette position correspond-elle au type désiré ?)
+	 * @param currentPos La position absolue actuelle de la pièce.
+	 * @param target La positon absolue cible de la pièce.
+	 * @return true si le mouvement respecte le pattern défini, false sinon. Voir les tests unitaires pour des exemples.
 	 */
 	public abstract boolean isValidMove(vect2D currentPos, vect2D target);
 

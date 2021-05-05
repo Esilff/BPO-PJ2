@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>g
+    <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.u-paris.BPO-Equipe40</groupId>
     <artifactId>BPO-PJ2</artifactId>
@@ -18,6 +18,9 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>Test</testSourceDirectory>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -25,6 +28,7 @@
                 <version>3.2.0</version>
                 <configuration>
                     <outputDirectory>${project.build.directory}/docs</outputDirectory>
+                    <charset>UTF-8</charset>
                 </configuration>
 
                 <executions>

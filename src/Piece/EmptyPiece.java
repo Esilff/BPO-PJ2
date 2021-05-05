@@ -18,7 +18,7 @@ public class EmptyPiece extends Piece{
 	}
 
 	/**
-	 * @See Piece.Piece.clone()
+	 * @see Piece#clone()
 	 */
 	public EmptyPiece clone() {
 		return new EmptyPiece();
