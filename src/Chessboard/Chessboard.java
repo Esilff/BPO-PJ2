@@ -158,7 +158,7 @@ public class Chessboard {
 			throw new BadMoveException("Coordonnées invalides");
 		}
 		Piece toPlay = getPiece(originCoordConv);
-		// TODO : le joueur actuel ne peut pas bouger les pièces de l'adversaire
+		// TODO : le joueur doit pas pouvoir bouger les pièces de l'adversaire
 		toPlay.play(this, originCoordConv, newCoordConv);
 	}
 

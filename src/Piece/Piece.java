@@ -46,7 +46,7 @@ public abstract class Piece {
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return vect2D.INVALID_VECT si les préconditions NE SONT PAS respectées. Si elles sont respectées, cette méthode
 	 *  retourne le vecteur de déplacement entre les deux points passés en paramètres
-	 * @see vect2D#translationFrom_argA_to_argB(vect2D A, vect2D B)
+	 * @see vect2D#difference(vect2D A, vect2D B)
 	 */
 	public static vect2D isValidMove_computeTranslation(vect2D currentPos, vect2D target) {
 		if (vect2D.isOutOfBounds(BOARD_RECT, currentPos) ||
@@ -54,7 +54,7 @@ public abstract class Piece {
 			vect2D.isEqual(currentPos, target) ) {
 			return vect2D.INVALID_VECT;
 		}
-		return vect2D.translationFrom_argA_to_argB(currentPos, target);
+		return vect2D.difference(currentPos, target);
 	}
 
 	/**
