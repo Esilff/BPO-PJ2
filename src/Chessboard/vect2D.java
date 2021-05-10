@@ -19,7 +19,11 @@ public class vect2D {// TODO : renommer en vec2 (comme GLSL)
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
-
+    
+    @Override
+    public vect2D clone() {
+    	return new vect2D(this.x, this.y);
+    }
     /**
      * Applique
      * @return new vec2( this.signum(this.x), this.signum(signe de this.y) )
@@ -70,6 +74,11 @@ public class vect2D {// TODO : renommer en vec2 (comme GLSL)
      */
     public vect2D minus(vect2D B) {
         return new vect2D(this.x - B.x, this.y - B.y);
+    }
+    
+    public void addAndApply(vect2D vect) {
+    	this.x += vect.x;
+    	this.y += vect.y;
     }
 
     /**

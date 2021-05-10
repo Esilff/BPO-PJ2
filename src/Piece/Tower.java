@@ -1,4 +1,4 @@
-package Piece;
+ package Piece;
 
 import Chessboard.vect2D;
 import Chessboard.Chessboard;
@@ -8,25 +8,35 @@ public class Tower extends Piece{
 		super("T", isWhite);
 	}
 
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
+		
 		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
+		if (isWhite != this.isWhite) {
+			throw new BadMoveException("Pion adverse");
+		}
+
 		if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
 			throw new BadMoveException("Le fou ne peut pas être cannibale...");
 		if (!isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
-		for (int i = originCoord.y, j = originCoord.x; i != newCoord.y && j != newCoord.x; i++, j++) {
-			if (chessboard.getPiece(i, j).isWhite == this.isWhite && !(chessboard.getPiece(i, j)instanceof EmptyPiece)) {
-				throw new BadMoveException("Le chemin est bloqué par un allie");
+		vect2D relativeMove = newCoord.minus(originCoord);
+		vect2D step = relativeMove.generate_signum();
+		vect2D i = originCoord.clone();
+		while (true) {
+			i.addAndApply(step);
+			if (newCoord.equals(i) ) {
+				break;
 			}
-			if (chessboard.getPiece(i, j).isWhite != this.isWhite && !(chessboard.getPiece(i, j)instanceof EmptyPiece)) {
-				throw new BadMoveException("Le chemin est bloqué par un autre ennemi");
+			if(!(chessboard.getPiece(i.y,i.x) instanceof EmptyPiece)) {
+				System.out.println("Le chemin est bloqué " + i.toString());
+				throw new BadMoveException("Le chemin est bloque");
 			}
-			else continue;
 		}
 		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
 		chessboard.setPiece(newCoord.y, newCoord.x, this);
 	}
+
 
 	public Tower clone() {
 		return new Tower(this.isWhite);

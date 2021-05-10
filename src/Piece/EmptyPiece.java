@@ -8,7 +8,7 @@ public class EmptyPiece extends Piece{
 		super(" ", IS_WHITE, IS_GRAPHICAL);
 	}
 
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord,Boolean isWhite) throws BadMoveException {
 
 	}
 
@@ -18,7 +18,7 @@ public class EmptyPiece extends Piece{
 	}
 
 	/**
-	 * @see Piece#clone()
+	 * @See Piece.Piece.clone()
 	 */
 	public EmptyPiece clone() {
 		return new EmptyPiece();

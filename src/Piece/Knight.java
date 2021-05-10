@@ -9,19 +9,23 @@ public class Knight extends Piece{
 		super("C", isWhite);
 	}
 
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
 		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
 		if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
 			throw new BadMoveException("Le cavalier ne peut pas être cannibale...");
 		if (!isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
+		if (isWhite != this.isWhite) {
+			throw new BadMoveException("Pion adverse");
+		}
+
 		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
 		chessboard.setPiece(newCoord.y, newCoord.x, this);
 	}
 
 	/**
-	 * @see Piece#clone()
+	 * @See Piece.Piece.clone()
 	 */
 	public Knight clone() {
 		return new Knight(this.isWhite);

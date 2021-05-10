@@ -10,8 +10,12 @@ public class King extends Piece{
 		super("R", isWhite);
 	}
 
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
 		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
+		if (isWhite != this.isWhite) {
+			throw new BadMoveException("Pion adverse");
+		}
+
 		if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
 			throw new BadMoveException("Le roi ne peut pas être cannibale...");
 		if (!isValidMove(originCoord, newCoord)) {
@@ -22,7 +26,7 @@ public class King extends Piece{
 	}
 
 	/**
-	 * @see Piece#clone()
+	 * @See Piece.Piece.clone()
 	 */
 	public King clone() {
 		return new King(this.isWhite);

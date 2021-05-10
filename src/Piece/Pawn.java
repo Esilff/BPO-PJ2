@@ -12,17 +12,13 @@ public class Pawn extends Piece {
 	
 	private enum MOVE_TYPE {
 		USUAL_STEP, DOUBLE_STEP, CAPTURING_STEP, INVALID_MOVE
-	}
+	};
 	public Pawn (Boolean isWhite) {
 		super("P", isWhite);
 	}
 	
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
-		// TODO : TrÃ¨s gros problÃ¨me : cette fonction ne dÃ©tecte pas si la piÃ¨ce en originCoord est du bon type.
-		// Bien que le joueur ne puisse pas effectuer une telle manipulation, c'est possible de contourner si appelÃ©
-		// direct (comme dans les Tests unitaires). RÃ©sultat : une case vide pourrait se balader commme si c'Ã©tait un pion.
-
-		// Reconnaissance du dÃ©placement
+	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
+		// Reconnaissance du déplacement
 		vect2D relative_move = isValidMove_computeTranslation(originCoord, newCoord);
 		MOVE_TYPE moveType = recogniseMove(relative_move);
 
@@ -31,7 +27,7 @@ public class Pawn extends Piece {
 		switch (moveType) {
 			case CAPTURING_STEP:
 				if (target instanceof EmptyPiece || target.isWhite == this.isWhite)
-					throw new BadMoveException("Le pion ne peut manger du vide, ou Ãªtre cannibale...");
+					throw new BadMoveException("Le pion ne peut manger du vide, ou être cannibale...");
 				else break;
 
 			case DOUBLE_STEP:
@@ -39,18 +35,21 @@ public class Pawn extends Piece {
 					throw new BadMoveException("Le pion a deja ete joue et ne peut plus avancer de deux cases");
 				}
 				if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
-					throw new BadMoveException("Le pion ne peut manger du vide, ou Ãªtre cannibale...");
+					throw new BadMoveException("Le pion ne peut manger du vide, ou être cannibale...");
 				if (targetBis.isWhite == this.isWhite && !(targetBis instanceof EmptyPiece))
 					throw new BadMoveException("Le pion ne peut avancer avec un obstacle sur le chemin");
 				else break;
 				
 			case USUAL_STEP:
 				if (target instanceof EmptyPiece) break;
-				else throw new BadMoveException("Le pion ne peut se dÃ©placer de l'avant sur une case occupÃ©e.");
+				else throw new BadMoveException("Le pion ne peut se déplacer de l'avant sur une case occupée.");
 
 			case INVALID_MOVE:
 			default:
 				throw new BadMoveException("Coup interdit.");
+		}
+		if (isWhite != this.isWhite) {
+			throw new BadMoveException("Pion adverse");
 		}
 
 		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
@@ -67,13 +66,13 @@ public class Pawn extends Piece {
 
 	/**
 	 * voir la doc de Piece.isValidMove.
-	 * Le pion peut se dÃ©placer horizontalement d'une case, peut prendre un pion situÃ© dans sa diagonale adjacente, ou
-	 * de deux case si n'a jamais jouÃ©. Cela dÃ©finis la validitÃ© d'un mouvement, mais pas si le coup est effectivement
-	 * jouable (par ex : Ne peut pas se dÃ©placer en diagonale si il n'y a pas de pion Ã  prendre)
-	 * Ducoup, pas sÃ»r que ce soit effectivement utilisÃ©
+	 * Le pion peut se déplacer horizontalement d'une case, peut prendre un pion situé dans sa diagonale adjacente, ou
+	 * de deux case si n'a jamais joué. Cela définis la validité d'un mouvement, mais pas si le coup est effectivement
+	 * jouable (par ex : Ne peut pas se déplacer en diagonale si il n'y a pas de pion à prendre)
+	 * Ducoup, pas sûr que ce soit effectivement utilisé
 	 * @param currentPos le point source
 	 * @param target le point destination
-	 * @return true si le dÃ©placement entre currentPos et target correspond au dÃ©placement d'un pion
+	 * @return true si le déplacement entre currentPos et target correspond au déplacement d'un pion
 	 */
 	@Override
 	public boolean isValidMove(vect2D currentPos, vect2D target) {
@@ -93,27 +92,27 @@ public class Pawn extends Piece {
 	}
 
 	/**
-	 * VÃ©rifie si le dÃ©placement entre deux points est un dÃ©placement d'une case sur l'horizontale
-	 * @param relative_move le vecteur de dÃ©placement relatif au pion
-	 * @return true si le dÃ©placement est sur la case en face de lui
+	 * Vérifie si le déplacement entre deux points est un déplacement d'une case sur l'horizontale
+	 * @param relative_move le vecteur de déplacement relatif au pion
+	 * @return true si le déplacement est sur la case en face de lui
 	 */
 	private boolean isMovingToFrontSquare(vect2D relative_move) {
 		return USUAL_STEP.x == relative_move.x
 			&& (this.isWhite ? USUAL_STEP.y : -USUAL_STEP.y) == relative_move.y;
 	}
 	/**
-	 * VÃ©rifie si le dÃ©placement entre deux points est un dÃ©placement d'une case sur la diagonale
-	 * @param relative_move le vecteur de dÃ©placement relatif au pion
-	 * @return true si le dÃ©placement est celui correspondant Ã  la prise d'une piÃ¨ce par un pion
+	 * Vérifie si le déplacement entre deux points est un déplacement d'une case sur la diagonale
+	 * @param relative_move le vecteur de déplacement relatif au pion
+	 * @return true si le déplacement est celui correspondant à la prise d'une pièce par un pion
 	 */
 	private boolean isPawnCaptureStep(vect2D relative_move) {
 		return CAPTURING_STEP.x == Math.abs(relative_move.x)
 				&& (this.isWhite ? USUAL_STEP.y : -USUAL_STEP.y) == relative_move.y;
 	}
 	/**
-	 * VÃ©rifie si le dÃ©placement entre deux points est un dÃ©placement de deux cases sur l'horizontale
-	 * @param relative_move le vecteur de dÃ©placement relatif au pion
-	 * @return true si il s'agit d'un dÃ©placement de deux cases sur l'horizontale
+	 * Vérifie si le déplacement entre deux points est un déplacement de deux cases sur l'horizontale
+	 * @param relative_move le vecteur de déplacement relatif au pion
+	 * @return true si il s'agit d'un déplacement de deux cases sur l'horizontale
 	 */
 	private boolean isMovingTo2ndFrontSquare(vect2D relative_move) {
 		return DOUBLE_STEP.x == relative_move.x
