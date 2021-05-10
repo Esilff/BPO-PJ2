@@ -22,7 +22,7 @@ public class King extends Piece{
 	}
 
 	/**
-	 * @See Piece.Piece.clone()
+	 * @see Piece#clone()
 	 */
 	public King clone() {
 		return new King(this.isWhite);

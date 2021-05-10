@@ -13,7 +13,7 @@ public class Bishop extends Piece{
 
 
 	/**
-	 * @See Piece.Piece.clone()
+	 * @see Piece#clone()
 	 */
 	public Bishop clone() {
 		return new Bishop(this.isWhite);

@@ -21,19 +21,22 @@ public class Chessboard {
 	}
 	private final INIT_LAYOUT TEMPLATE_TO_USE_AT_STARTUP;
 
-	/** La taille de l'échéquier. Constante valant 8, __ne dois pas changer__ sous peine de mauvaises surprises !!*/
+	/** La taille de l'échiquier. Constante valant 8, __ne dois pas changer__ sous peine de mauvaises surprises !!*/
 	public static final int BOARD_SIZE = 8;
 	public static final char LOWERCASE_A = 'a';
 
 	/** raw chessboard, tableau 2D 8x8 qui contient des pions
-	 * Final : Non redéfinissable mais ce qui est à l'intérieur reste modifiable
+	 * Final : Non re-définissable mais ce qui est à l'intérieur reste modifiable
 	 */
 	private final Piece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
 	public static final vect2D BOARD_RECT = new vect2D(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
 
 	//  ---------------------------------------------------------------------
 	
-	/** Constructeur du plateau */
+	/** Constructeur du plateau
+	 * @param template_to_use_at_startup le template à utiliser.
+	 * @see Chessboard.INIT_LAYOUT
+	 */
 	public Chessboard(INIT_LAYOUT template_to_use_at_startup) {
 		TEMPLATE_TO_USE_AT_STARTUP = template_to_use_at_startup;
 		this.resetBoard();
@@ -138,10 +141,9 @@ public class Chessboard {
 	 * cela permettra de ne pas se tromper grâce aux indications de l'IDE (ou juste rendre le code + maintenable).
 	 * @param line la ligne où se trouve la pièce
 	 * @param column la colonne où se trouve la pièce
-	 * @return La pièce correspondante. Vu qu'on accède scénaristiquement à la pièce physique, on retourne donc la pièce
-	 * telle-quelle (par référence au lieu d'un clone)
-	 * @see this.setPiece pour définir au lieu de récupérer
-	 */
+	 * @return La pièce correspondante.
+	 * @see #setPiece pour définir au lieu de récupérer
+	 */ // todo : encapsulation stricte nécessaire ?
 	public Piece getPiece(int line, int column) {
 		return this.board[column][line];
 	}
@@ -158,7 +160,7 @@ public class Chessboard {
 			throw new BadMoveException("Coordonnées invalides");
 		}
 		Piece toPlay = getPiece(originCoordConv);
-		// TODO : le joueur actuel ne peut pas bouger les pièces de l'adversaire
+		// TODO : le joueur doit pas pouvoir bouger les pièces de l'adversaire
 		toPlay.play(this, originCoordConv, newCoordConv);
 	}
 

@@ -20,7 +20,7 @@ public class Queen extends Piece{
 	}
 
 	/**
-	 * @See Piece.Piece.clone()
+	 * @see Piece#clone()
 	 */
 	public Queen clone() {
 		return new Queen(this.isWhite);

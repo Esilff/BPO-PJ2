@@ -21,7 +21,7 @@ public class Knight extends Piece{
 	}
 
 	/**
-	 * @See Piece.Piece.clone()
+	 * @see Piece#clone()
 	 */
 	public Knight clone() {
 		return new Knight(this.isWhite);

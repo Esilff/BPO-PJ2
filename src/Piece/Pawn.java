@@ -12,12 +12,16 @@ public class Pawn extends Piece {
 	
 	private enum MOVE_TYPE {
 		USUAL_STEP, DOUBLE_STEP, CAPTURING_STEP, INVALID_MOVE
-	};
+	}
 	public Pawn (Boolean isWhite) {
 		super("P", isWhite);
 	}
 	
 	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+		// TODO : Très gros problème : cette fonction ne détecte pas si la pièce en originCoord est du bon type.
+		// Bien que le joueur ne puisse pas effectuer une telle manipulation, c'est possible de contourner si appelé
+		// direct (comme dans les Tests unitaires). Résultat : une case vide pourrait se balader commme si c'était un pion.
+
 		// Reconnaissance du déplacement
 		vect2D relative_move = isValidMove_computeTranslation(originCoord, newCoord);
 		MOVE_TYPE moveType = recogniseMove(relative_move);
