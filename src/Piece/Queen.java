@@ -12,7 +12,7 @@ public class Queen extends Piece{
 		
 		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
 		if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
-			throw new BadMoveException("Le fou ne peut pas être cannibale...");
+			throw new BadMoveException("Le fou ne peut pas Ãªtre cannibale...");
 		if (!isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
@@ -29,7 +29,7 @@ public class Queen extends Piece{
 				break;
 			}
 			if(!(chessboard.getPiece(i.y,i.x) instanceof EmptyPiece)) {
-				System.out.println("Le chemin est bloqué " + i.toString());
+				System.out.println("Le chemin est bloquÃ© " + i.toString());
 				throw new BadMoveException("Le chemin est bloque");
 			}
 		}
@@ -46,10 +46,10 @@ public class Queen extends Piece{
 
 	/**
 	 * voir la doc de Piece.isValidMove.
-	 * La reine cumule les propriétés de la tour (horizontalement/verticalement) et du fou (diagonales)
-	 * @param currentPos la coordonée absolue (sous forme de vecteur) du point source
-	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
-	 * @return true si le déplacement entre currentPos et target est un déplacement horizontal, vertical ou diagonal
+	 * La reine cumule les propriÃ©tÃ©s de la tour (horizontalement/verticalement) et du fou (diagonales)
+	 * @param currentPos la coordonÃ©e absolue (sous forme de vecteur) du point source
+	 * @param target la coordonÃ©e absolue (sous forme de vecteur) du point de destination
+	 * @return true si le dÃ©placement entre currentPos et target est un dÃ©placement horizontal, vertical ou diagonal
 	 */
 	@Override
 	public boolean isValidMove(vect2D currentPos, vect2D target) {

@@ -27,17 +27,19 @@ public class PieceTest {
         boolean white_plays = true;
         for (int i = 0; i < moves.length; i++) {
             String s = moves[i];
+            String throwMsg = "";
             boolean didThrow = false;
             try {
                 chessboard.play(s.substring(0, 2), s.substring(2, 4), white_plays);
                 white_plays = ! white_plays;
             } catch (BadMoveException e) {
                 didThrow = true;
+                throwMsg = e.toString();
             }
             if (isMoveValid[i] == didThrow){ // (V et V) ou (F et F)
                 fail( " Move " + s
                     + " is " + (isMoveValid[i] ? "valid": "not valid")
-                    + " but play() " +  (didThrow ? "thrown BadMoveException": "didn't throw anything")
+                    + " but play() " +  (didThrow ? "thrown "+throwMsg+"": "didn't throw anything")
                     + "\nChessboard state : \n" + chessboard.toString()
                 );
             }

@@ -1,14 +1,18 @@
 package Piece;
 
-import Chessboard.Chessboard;
-import Chessboard.vect2D;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
-import static Piece.Piece.IS_WHITE;
-import static Piece.PieceTest.testBadMoves;
-import static Piece.PieceTest.graphical_moveDefsTester;
-import static org.junit.Assert.*;
+import Chessboard.Chessboard;
+import Chessboard.vect2D;
 
+import static Piece.Piece.IS_WHITE;
+import static Piece.PieceTest.testBadMoves; /** @see PawnTest#testPlay_simpleStep */
+import static Piece.PieceTest.graphical_moveDefsTester; /** @see PawnTest#graphical_PawnMove() */
+
+/**
+ * @author LoganTann
+ */
 public class PawnTest {
 
     /**
@@ -45,7 +49,7 @@ public class PawnTest {
 
     /**
      * Par contre, les tests préfixés par testPlay_ effectuent bien une vérification qui tenant compte de l'état du
-     * plateau et des pièces environnantes (donc, test de {@link Piece#play}
+     * plateau et des pièces environnantes (donc, test de {@link Piece#play})
      * Ce test vérifie le pas simple d'un pion
      */
     @Test
@@ -82,34 +86,49 @@ public class PawnTest {
         testBadMoves(chessboard, moves, validity);
         assertEquals(expectedOut, chessboard.toString());
     }
+
+    /**
+     * Ce test vérifie les doubles pas et les coups interdits qui y sont liés
+     */
     @Test
     public void testPlay_doubleStep() {
         Chessboard chessboard = new Chessboard();
         String[] moves = {
-                "a2a4", "b7b5", // normal (+2)
-                "a4a6", "a4a5", // recommence + barrage de route (+1)
-                "b5b3", "b5b4", // idem
-                "a5a6", "b4b3", // barrage de route en finition (+1)
-                "b2b4", "h2h3", // route barrée... + (idle move)
-                "a7a5", "h7h5"  //idem
+            // double step
+                "a2a4", "b7b5",
+            // Prévention "double step seulement si jamais joué"
+                "a4a6", "a4a5", "b5b3", "b5b4",
+            // prévention "saute mouton"
+                "a5a6", "b4b3",
+                "b2b4", "h2h4", "a7a5", "g7g5",
+            // Prévention target est occupée
+                "h4h5", "g5g4",
+                "h7h5", "h7h6", "g2g4", "g2g6"
         };
-        boolean[] validity = {true, true,   false, true,   false, true,   true,true,   false, true,   false, true};
+        boolean[] validity = {
+                true, true, // Double step habituel (v)
+                false, true, false, true, // [re double step (x) + préparation de la suite (v)] * 2
+                // barrage de route en finition (+1) * 2 & [Saute mouton (x) + préparation de la suite (v)] * 2
+                true,true,   false, true, false, true,
+                // barrage de target en finition (+1) * 2 & [target occupé (x) + on avance simple (v)] * 2
+                true,true,   false, true, false, true
+        };
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "8 | t | c | f | r | d | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "7 | p |   | p | p | p | p | p |   | 7\n" +
+                "7 | p |   | p | p | p | p |   |   | 7\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "6 | P |   |   |   |   |   |   |   | 6\n" +
+                "6 | P |   |   |   |   |   |   | p | 6\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "5 |   |   |   |   |   |   |   | p | 5\n" +
+                "5 |   |   |   |   |   |   |   | P | 5\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "4 |   |   |   |   |   |   |   |   | 4\n" +
+                "4 |   |   |   |   |   |   | p |   | 4\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "3 |   | p |   |   |   |   |   | P | 3\n" +
+                "3 |   | p |   |   |   |   | P |   | 3\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "2 |   | P | P | P | P | P | P |   | 2\n" +
+                "2 |   | P | P | P | P | P |   |   | 2\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "1 | T | C | F | R | D | F | C | T | 1\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -118,6 +137,10 @@ public class PawnTest {
         testBadMoves(chessboard, moves, validity);
         assertEquals(expectedOut, chessboard.toString());
     }
+
+    /**
+     * Ce test vérifie les pas en diagonales (manger) et les coups interdits qui y sont liés
+     */
     @Test
     public void testPlay_Eat() {
         Chessboard chessboard = new Chessboard();
@@ -128,7 +151,8 @@ public class PawnTest {
                 "a4b5", "a5b4" // là ils peuvent manger
         };
         boolean[] validity = {false, true, false, true,   true, true,   false, true, false, true,    true, true};
-        String expectedOut = "    a   b   c   d   e   f   g   h    \n" +
+        String expectedOut =
+                "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "8 | t | c | f | r | d | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -152,13 +176,16 @@ public class PawnTest {
         assertEquals(expectedOut, chessboard.toString());
     }
 
+    /**
+     * Ce test vérifie la méthode permettant de cloner les pièces
+     */
     @SuppressWarnings("ConstantConditions")
     @Test
     public void testTestClone() {
         Piece original = new Pawn(true);
         Piece hisClone = original.clone();
         assertNotSame(original,hisClone);
-        assert hisClone instanceof Pawn;
-        assert ! (hisClone instanceof Tower);
+        assert hisClone instanceof Pawn; // un pawn
+        assert ! (hisClone instanceof Tower); // mais pas une tour ou quoi que ce soit d'autre
     }
 }
