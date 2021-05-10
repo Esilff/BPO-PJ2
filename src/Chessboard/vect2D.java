@@ -46,6 +46,7 @@ public class vect2D {// TODO : renommer en vec2 (comme GLSL)
      * ou des double.
      * @param k Le nombre dont le signe doit être extrait
      * @return Retourne -1 si k est négatif, 0 si k est nul ou 1 si k est positif.
+     * @deprecated use Integer.signum()
      */
     private static int signum(int k) {
         if (k > 0) return 1;

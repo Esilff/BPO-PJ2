@@ -103,7 +103,7 @@ public class PawnTest {
                 "b2b4", "h2h4", "a7a5", "g7g5",
             // Prévention target est occupée
                 "h4h5", "g5g4",
-                "h7h5", "h7h6", "g2g4", "g2g6"
+                "g2g4", "g2g3", "h7h5", "h7h6"
         };
         boolean[] validity = {
                 true, true, // Double step habituel (v)

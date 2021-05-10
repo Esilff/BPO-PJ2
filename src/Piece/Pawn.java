@@ -75,7 +75,7 @@ public class Pawn extends Piece {
 				else break;
 
 			case DOUBLE_STEP: // avancer
-				Piece targetBis = chessboard.getPiece(originCoord.getY() + signum(relative_move.getY()), targetCoord.getX());
+				Piece targetBis = chessboard.getPiece(originCoord.getY() + signum(relative_move.getY()), originCoord.getX());
 				if (isPlayed)
 					throw new BadMoveException("Le pion a deja ete joue et ne peut plus avancer de deux cases");
 				if (!(targetBis instanceof EmptyPiece))
