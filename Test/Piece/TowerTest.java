@@ -70,11 +70,11 @@ public class TowerTest {
     public void testPlay_obstacles() {
         Chessboard chessboard = new Chessboard();
         String[] moves = {
-                "h1h3", "h2h4", "h8h6", "h7h5", // 1: tentative de saute mouton vertical et sortie de pion
+                "h1h3", "h2h4", "a8a6", "a7a5", // 1: tentative de saute mouton vertical et sortie de pion
                 "h1h3", "a8a6", "c2c3", "f7f6", // 2: haut et mise en place d'un obstacle
                 "h3b3", "h3d3", "a6g6", "a6e6" // 3: saute mouton horizontal impossible donc on avance un peu moins
         };
-        boolean[] validity = {false, true,   false, true,   false, true,   true,true,   false, true,   false, true};
+        boolean[] validity = {false, true,   false, true,   true, true,   true,true,   false, true,   false, true};
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
