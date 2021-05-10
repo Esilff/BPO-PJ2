@@ -24,11 +24,13 @@ public class PieceTest {
      */
     protected static void testBadMoves(Chessboard chessboard, String[] moves, boolean[] isMoveValid) {
         assert moves.length == isMoveValid.length : "Erreur d'écriture de test, String.length != boolean.length";
+        boolean white_plays = true;
         for (int i = 0; i < moves.length; i++) {
             String s = moves[i];
             boolean didThrow = false;
             try {
-                chessboard.play(s.substring(0, 2), s.substring(2, 4));
+                chessboard.play(s.substring(0, 2), s.substring(2, 4), white_plays);
+                white_plays = ! white_plays;
             } catch (BadMoveException e) {
                 didThrow = true;
             }
