@@ -2,6 +2,8 @@ package Piece;
 
 import Chessboard.Chessboard;
 import Chessboard.vect2D;
+import Game.Ipiece;
+
 import org.junit.Test;
 
 import static Piece.Piece.IS_WHITE;
@@ -45,7 +47,7 @@ public class TowerTest {
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "8 | t | c | f | r | d | f | c | t | 8\n" +
+                "8 | t | c | f | d | r | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "7 |   | p | p | p | p | p | p | p | 7\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -59,7 +61,7 @@ public class TowerTest {
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "2 | P | P | P | P | P | P | P |   | 2\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "1 | T | C | F | R | D | F | C | T | 1\n" +
+                "1 | T | C | F | D | R | F | C | T | 1\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "    a   b   c   d   e   f   g   h    \n";
 
@@ -78,7 +80,7 @@ public class TowerTest {
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "8 |   | c | f | r | d | f | c | t | 8\n" +
+                "8 |   | c | f | d | r | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "7 |   | p | p | p | p |   | p | p | 7\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -92,7 +94,7 @@ public class TowerTest {
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "2 | P | P |   | P | P | P | P |   | 2\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "1 | T | C | F | R | D | F | C |   | 1\n" +
+                "1 | T | C | F | D | R | F | C |   | 1\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "    a   b   c   d   e   f   g   h    \n";
 
@@ -112,7 +114,7 @@ public class TowerTest {
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "8 |   | c | f | r | d | f | c | t | 8\n" +
+                "8 |   | c | f | d | r | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "7 |   | p | p | p | p | p | p | p | 7\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -126,7 +128,7 @@ public class TowerTest {
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "2 | P | P | P | P | P | P | P |   | 2\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "1 | T | C | F | R | D | F | C |   | 1\n" +
+                "1 | T | C | F | D | R | F | C |   | 1\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "    a   b   c   d   e   f   g   h    \n";
 
@@ -137,8 +139,8 @@ public class TowerTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     public void testTestClone() {
-        Piece original = new Tower(true);
-        Piece hisClone = original.clone();
+        Ipiece original = new Tower(true);
+        Ipiece hisClone = original.clone();
         assertNotSame(original,hisClone);
         assert hisClone instanceof Tower;
         assert ! (hisClone instanceof Pawn);

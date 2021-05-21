@@ -1,18 +1,20 @@
 package Piece;
 
 import static Chessboard.Chessboard.BOARD_RECT;
-import Chessboard.Chessboard;
+
 import Chessboard.vect2D;
+import Game.Ipiece;
 
 /**
  * Piece : Il s'agit d'une classe abstraite représentant une pièce d'échec (ou un élément graphique vide).
+ * @see Game.Ipiece
  */
-public abstract class Piece {
+public abstract class Piece implements Ipiece {
 	private final String sign;
 
-	// une pièce ne peut changer subitement de forme en cours de partie...
-	protected final Boolean isWhite, isGraphical;
-	// valeurs actives plus haut
+	private final Boolean isWhite, isGraphical;
+	
+	// Constantes. permet de faire this.isWhite = ! IS_WHITE; (n'est pas blanche) par ex.
 	public final static Boolean IS_WHITE = true, IS_GRAPHICAL = true;
 
 	public Piece (String sign,Boolean isWhite, Boolean isGraphical) {
@@ -24,18 +26,6 @@ public abstract class Piece {
 		this(sign, isWhite, !IS_GRAPHICAL);
 	}
 
-	public abstract void play (Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException;
-
-	/**
-	 * Cette méthode définit la règle de déplacement du pion. Elle a été pensée statique, en prenant en compte que un
-	 * pion n'a pas besoin de connaitre sa position (c'est plutôt au plateau de le faire). Donc, cette méthode à elle-
-	 * seule ne peut déterminer si le coup est jouable, car il est nécessaire de vérifier d'autres choses (par exemple,
-	 * y a-t-il une pièce sur son chemin ?)
-	 * @param currentPos
-	 * @param target
-	 * @return
-	 */
-	public abstract boolean isValidMove(vect2D currentPos, vect2D target);
 
 	/**
 	 * Méthode statique qui retourne `vect2D.translationFrom_argA_to_argB(currentPos, target)` mais qui applique les
@@ -62,12 +52,16 @@ public abstract class Piece {
 	 * Permet de créer une nouvelle instance d'un sous-type de pièce.
 	 * @return La pièce clonée
 	 */
-	public abstract Piece clone ();
+	public abstract Ipiece clone();
 	
 	public String getSign () {
 		if (isWhite) {
 			return sign.toUpperCase();
 		}
 		return sign.toLowerCase();
+	}
+	
+	public boolean isWhite() {
+		return this.isWhite;
 	}
 }

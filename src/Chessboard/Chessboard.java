@@ -1,5 +1,6 @@
 package Chessboard;
 
+import Game.Ipiece;
 // On a besoin de toutes les pièces
 // TODO : séparation de package nécessaire ? Dépendance réciproque...
 import Piece.*;
@@ -28,7 +29,7 @@ public class Chessboard {
 	/** raw chessboard, tableau 2D 8x8 qui contient des pions
 	 * Final : Non redéfinissable mais ce qui est à l'intérieur reste modifiable
 	 */
-	private final Piece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
+	private final Ipiece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
 	public static final vect2D BOARD_RECT = new vect2D(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
 
 	//  ---------------------------------------------------------------------
@@ -109,10 +110,10 @@ public class Chessboard {
 	 * cette méthode n'a donc __pas__ pour but d'agir en tant que getter/setter d'encapsulation
 	 * @param line la ligne à intervenir
 	 * @param column la colonne à intervenir
-	 * @param piece la pièce à mettre dans la case en question
+	 * @param Ipiece la pièce à mettre dans la case en question
 	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
 	 */
-	public boolean setPiece(int line, int column, Piece piece) {
+	public boolean setPiece(int line, int column, Ipiece piece) {
 		try {
 			this.board[column][line] = piece;
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -122,13 +123,13 @@ public class Chessboard {
 	}
 
 	/**
-	 * surcharge de setPiece(int line, int column, Piece piece), mais les coordonées numériques peuvent être remplacées
+	 * surcharge de setPiece(int line, int column, Ipiece piece), mais les coordonées numériques peuvent être remplacées
 	 * par une coordonée d'échecs. Ex : B7 (= ligne 7 colonne 2) place le pion dans this.board[6][1].
 	 * @param coord Une coordonée naturelle d'échiquier : 1 lettre pour désigner la colonne, 1 chiffre désigner la ligne
-	 * @param piece La pièce à placer dans l'échiquier.
+	 * @param Ipiece La pièce à placer dans l'échiquier.
 	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
 	 */
-	public boolean setPiece(String coord, Piece piece) {
+	public boolean setPiece(String coord, Ipiece piece) {
 		vect2D converted = vect2D.createFromChessCoord(coord);
 		return this.setPiece(converted.y, converted.x, piece);
 	}
@@ -140,26 +141,13 @@ public class Chessboard {
 	 * @param column la colonne où se trouve la pièce
 	 * @return La pièce correspondante. Vu qu'on accède scénaristiquement à la pièce physique, on retourne donc la pièce
 	 * telle-quelle (par référence au lieu d'un clone)
-	 * @see this.setPiece pour définir au lieu de récupérer
+	 * @see this.setIpiece pour définir au lieu de récupérer
 	 */
-	public Piece getPiece(int line, int column) {
+	public Ipiece getPiece(int line, int column) {
 		return this.board[column][line];
 	}
-	public Piece getPiece(vect2D coord) {
+	public Ipiece getPiece(vect2D coord) {
 		return getPiece(coord.y, coord.x);
-	}
-
-	public void play(String originCoord, String newCoord,Boolean isWhite) throws BadMoveException {
-		// décodage de l'entrée
-		vect2D originCoordConv = vect2D.createFromChessCoord(originCoord);
-		vect2D newCoordConv = vect2D.createFromChessCoord(newCoord);
-		if (   vect2D.isEqual(vect2D.INVALID_VECT, originCoordConv)
-			|| vect2D.isEqual(vect2D.INVALID_VECT, newCoordConv)) {
-			throw new BadMoveException("Coordonnées invalides");
-		}
-		Piece toPlay = getPiece(originCoordConv);
-		// TODO : le joueur actuel ne peut pas bouger les pièces de l'adversaire
-		toPlay.play(this, originCoordConv, newCoordConv, isWhite);
 	}
 
 	// METHODES D'INITIALISATION ---------------------------------------------------------------------
@@ -235,11 +223,11 @@ public class Chessboard {
 	 * @param isWhite Les pièces à créer sont-elles du camp blanc, ou noir ?
 	 */
 	private void reset_firstLine(int line, boolean isWhite) {
-		setPiece(line, 0, new Tower(isWhite) );  // T
+		setPiece(line, 0, new Tower(isWhite)  );  // T
 		setPiece(line, 1, new Knight(isWhite) ); // C
 		setPiece(line, 2, new Bishop(isWhite) ); // F
-		setPiece(line, 3, new King(isWhite) );   // R
-		setPiece(line, 4, new Queen(isWhite) );  // D pour Dame
+		setPiece(line, 3, new Queen(isWhite)  );   // D pour Dame
+		setPiece(line, 4, new King(isWhite)   );  // R
 		setPiece(line, 5, new Bishop(isWhite) ); // F
 		setPiece(line, 6, new Knight(isWhite) ); // C
 		setPiece(line, 7, new Tower(isWhite) );  // T
@@ -250,7 +238,7 @@ public class Chessboard {
 	 * @param line La ligne à remplir
 	 * @param toFill La pièce à ajouter sur l'ensemble de la ligne
 	 */
-	private void fillLineWith(int line, Piece toFill) {
+	private void fillLineWith(int line, Ipiece toFill) {
 		for (int column = 0; column < BOARD_SIZE; column++) {
 			// on ne veut pas avoir la même pièce physique sur toute la ligne; il faut avoir des copies.
 			setPiece(line, column, toFill.clone());

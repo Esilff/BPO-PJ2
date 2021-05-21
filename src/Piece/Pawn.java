@@ -1,6 +1,8 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Game.BadMoveException;
+import Game.Ipiece;
 import Chessboard.*;
 
 import static java.lang.Integer.signum;
@@ -58,7 +60,7 @@ public class Pawn extends Piece {
 	 * @see
 	 */
 	public void play(Chessboard chessboard, vect2D originCoord, vect2D targetCoord, Boolean isPlayerWhite) throws BadMoveException {
-		if (isPlayerWhite != this.isWhite) {
+		if (isPlayerWhite != this.isWhite()) {
 			throw new BadMoveException("Il est interdit au joueur actuel de toucher aux pièces de l'adversaire");
 		}
 
@@ -67,15 +69,15 @@ public class Pawn extends Piece {
 		MOVE_TYPE moveType = recogniseMove(relative_move);
 
 		// J'aurais bien voulu séparer ce gros switch dans une méthode à part, mais trop de variables utilisées...
-		Piece target = chessboard.getPiece(targetCoord.y, targetCoord.x);
+		Ipiece target = chessboard.getPiece(targetCoord.y, targetCoord.x);
 		switch (moveType) {
 			case CAPTURING_STEP: // manger
-				if (target instanceof EmptyPiece || target.isWhite == this.isWhite)
+				if (target instanceof EmptyPiece || target.isWhite() == this.isWhite())
 					throw new BadMoveException("Le pion ne peut manger du vide, ou être cannibale...");
 				else break;
 
 			case DOUBLE_STEP: // avancer
-				Piece targetBis = chessboard.getPiece(originCoord.getY() + signum(relative_move.getY()), originCoord.getX());
+				Ipiece targetBis = chessboard.getPiece(originCoord.getY() + signum(relative_move.getY()), originCoord.getX());
 				if (isPlayed)
 					throw new BadMoveException("Le pion a deja ete joue et ne peut plus avancer de deux cases");
 				if (!(targetBis instanceof EmptyPiece))
@@ -101,7 +103,7 @@ public class Pawn extends Piece {
 	 * @see Piece#clone()
 	 */
 	public Pawn clone() {
-		return new Pawn(this.isWhite);
+		return new Pawn(this.isWhite());
 	}
 
 	/**
@@ -147,7 +149,7 @@ public class Pawn extends Piece {
 	 */
 	private boolean isMovingToFrontSquare(vect2D relative_move) {
 		return USUAL_STEP.x == relative_move.x
-			&& (this.isWhite ? USUAL_STEP.y : -USUAL_STEP.y) == relative_move.y;
+			&& (this.isWhite() ? USUAL_STEP.y : -USUAL_STEP.y) == relative_move.y;
 	}
 	/**
 	 * Vérifie si le déplacement entre deux points est un déplacement d'une case sur la diagonale
@@ -156,7 +158,7 @@ public class Pawn extends Piece {
 	 */
 	private boolean isPawnCaptureStep(vect2D relative_move) {
 		return CAPTURING_STEP.x == Math.abs(relative_move.x)
-				&& (this.isWhite ? USUAL_STEP.y : -USUAL_STEP.y) == relative_move.y;
+				&& (this.isWhite() ? USUAL_STEP.y : -USUAL_STEP.y) == relative_move.y;
 	}
 	/**
 	 * Vérifie si le déplacement entre deux points est un déplacement de deux cases sur l'horizontale
@@ -165,6 +167,6 @@ public class Pawn extends Piece {
 	 */
 	private boolean isMovingTo2ndFrontSquare(vect2D relative_move) {
 		return DOUBLE_STEP.x == relative_move.x
-				&& (this.isWhite ? DOUBLE_STEP.y : -DOUBLE_STEP.y) == relative_move.y;
+				&& (this.isWhite() ? DOUBLE_STEP.y : -DOUBLE_STEP.y) == relative_move.y;
 	}
 }

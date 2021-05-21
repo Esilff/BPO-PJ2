@@ -1,6 +1,8 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Game.BadMoveException;
+import Game.Ipiece;
 import Chessboard.Chessboard;
 
 public class Knight extends Piece{
@@ -10,13 +12,13 @@ public class Knight extends Piece{
 	}
 
 	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
-		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
-		if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
+		Ipiece target = chessboard.getPiece(newCoord.y, newCoord.x);
+		if (target.isWhite() == this.isWhite() && !(target instanceof EmptyPiece))
 			throw new BadMoveException("Le cavalier ne peut pas être cannibale...");
 		if (!isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
-		if (isWhite != this.isWhite) {
+		if (isWhite != this.isWhite()) {
 			throw new BadMoveException("Pion adverse");
 		}
 
@@ -28,7 +30,7 @@ public class Knight extends Piece{
 	 * @See Piece.Piece.clone()
 	 */
 	public Knight clone() {
-		return new Knight(this.isWhite);
+		return new Knight(this.isWhite());
 	}
 
 	/**
@@ -40,7 +42,7 @@ public class Knight extends Piece{
 	 */
 	@Override
 	public boolean isValidMove(vect2D currentPos, vect2D target) {
-		return isMovingExactlyWithOneStep(currentPos, target);
+		return isMoving_L_pattern(currentPos, target);
 	}
 
 	/**
@@ -49,13 +51,14 @@ public class Knight extends Piece{
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return true si le déplacement entre currentPos et target correspond au déplacement d'un cavalier
 	 */
-	public static boolean isMovingExactlyWithOneStep(vect2D currentPos, vect2D target) {
+	public static boolean isMoving_L_pattern(vect2D currentPos, vect2D target) {
 		vect2D relative_move = isValidMove_computeTranslation(currentPos, target);
-		if (vect2D.isEqual(relative_move, vect2D.INVALID_VECT)) {
+		if (relative_move.equals(vect2D.INVALID_VECT)) {
 			return false; // n'a pas pu calculer ou préconditions non résolues
 		}
+		// TODO : make obj
 		relative_move.x = Math.abs(relative_move.x);
 		relative_move.y = Math.abs(relative_move.y);
-		return vect2D.isEqual(DEFAULT_L, relative_move) || vect2D.isEqual(REVERSED_L, relative_move);
+		return relative_move.equals(DEFAULT_L) || relative_move.equals(REVERSED_L);
 	}
 }

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import Chessboard.Chessboard;
 import Chessboard.vect2D;
+import Game.Ipiece;
 
 import static Piece.Piece.IS_WHITE;
 import static Piece.PieceTest.testBadMoves; /** @see PawnTest#testPlay_simpleStep */
@@ -65,7 +66,7 @@ public class PawnTest {
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "8 | t | c | f | r | d | f | c | t | 8\n" +
+                "8 | t | c | f | d | r | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "7 |   | p | p | p | p | p | p | p | 7\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -79,7 +80,7 @@ public class PawnTest {
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "2 |   | P | P | P | P | P | P |   | 2\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "1 | T | C | F | R | D | F | C | T | 1\n" +
+                "1 | T | C | F | D | R | F | C | T | 1\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "    a   b   c   d   e   f   g   h    \n";
 
@@ -116,7 +117,7 @@ public class PawnTest {
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "8 | t | c | f | r | d | f | c | t | 8\n" +
+                "8 | t | c | f | d | r | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "7 | p |   | p | p | p | p |   |   | 7\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -130,7 +131,7 @@ public class PawnTest {
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "2 |   | P | P | P | P | P |   |   | 2\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "1 | T | C | F | R | D | F | C | T | 1\n" +
+                "1 | T | C | F | D | R | F | C | T | 1\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "    a   b   c   d   e   f   g   h    \n";
 
@@ -154,7 +155,7 @@ public class PawnTest {
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "8 | t | c | f | r | d | f | c | t | 8\n" +
+                "8 | t | c | f | d | r | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "7 |   |   | p | p | p | p | p | p | 7\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
@@ -168,7 +169,7 @@ public class PawnTest {
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "2 |   |   | P | P | P | P | P | P | 2\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "1 | T | C | F | R | D | F | C | T | 1\n" +
+                "1 | T | C | F | D | R | F | C | T | 1\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "    a   b   c   d   e   f   g   h    \n";
 
@@ -179,11 +180,11 @@ public class PawnTest {
     /**
      * Ce test vérifie la méthode permettant de cloner les pièces
      */
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings("ConstantConditions") // désactive un faux warning de IntelliJ idea 
     @Test
     public void testTestClone() {
-        Piece original = new Pawn(true);
-        Piece hisClone = original.clone();
+        Ipiece original = new Pawn(true);
+        Ipiece hisClone = original.clone();
         assertNotSame(original,hisClone);
         assert hisClone instanceof Pawn; // un pawn
         assert ! (hisClone instanceof Tower); // mais pas une tour ou quoi que ce soit d'autre

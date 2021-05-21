@@ -1,6 +1,8 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Game.BadMoveException;
+import Game.Ipiece;
 import Chessboard.Chessboard;
 
 public class Queen extends Piece{
@@ -10,13 +12,13 @@ public class Queen extends Piece{
 
 	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
 		
-		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
-		if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
+		Ipiece target = chessboard.getPiece(newCoord.y, newCoord.x);
+		if (target.isWhite() == this.isWhite() && !(target instanceof EmptyPiece))
 			throw new BadMoveException("Le fou ne peut pas être cannibale...");
 		if (!isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
-		if (isWhite != this.isWhite) {
+		if (isWhite != this.isWhite()) {
 			throw new BadMoveException("Pion adverse");
 		}
 
@@ -41,7 +43,7 @@ public class Queen extends Piece{
 	 * @See Piece.Piece.clone()
 	 */
 	public Queen clone() {
-		return new Queen(this.isWhite);
+		return new Queen(this.isWhite());
 	}
 
 	/**

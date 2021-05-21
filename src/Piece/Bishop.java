@@ -2,6 +2,8 @@ package Piece;
 
 import Chessboard.Chessboard;
 import Chessboard.vect2D;
+import Game.BadMoveException;
+import Game.Ipiece;
 
 /**
  * Bishop : classe représentant la pièce du fou. Se déplace en diagonale.
@@ -16,12 +18,12 @@ public class Bishop extends Piece{
 	 * @See Piece.Piece.clone()
 	 */
 	public Bishop clone() {
-		return new Bishop(this.isWhite);
+		return new Bishop(this.isWhite());
 	}
 
 	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
-		Piece target = chessboard.getPiece(newCoord.y, newCoord.x);
-		if (target.isWhite == this.isWhite && !(target instanceof EmptyPiece))
+		Ipiece target = chessboard.getPiece(newCoord.y, newCoord.x);
+		if (target.isWhite() == this.isWhite() && !(target instanceof EmptyPiece))
 			throw new BadMoveException("Le fou ne peut pas être cannibale...");
 		if (!isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
@@ -35,10 +37,10 @@ public class Bishop extends Piece{
 				break;
 			}
 			if(!(chessboard.getPiece(i.y,i.x) instanceof EmptyPiece)) {
-				System.out.println("Le chemin est bloqu� " + i.toString());
+				System.out.println("Le chemin est bloqu� " + i.toString());
 				throw new BadMoveException("Le chemin est bloque");
 			}
-			if (isWhite != this.isWhite) {
+			if (isWhite != this.isWhite()) {
 				throw new BadMoveException("Pion adverse");
 			}
 

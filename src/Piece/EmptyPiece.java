@@ -1,6 +1,7 @@
 package Piece;
 
 import Chessboard.vect2D;
+import Game.BadMoveException;
 import Chessboard.Chessboard;
 
 public class EmptyPiece extends Piece{

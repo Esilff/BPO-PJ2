@@ -8,6 +8,8 @@ import static Piece.Piece.IS_WHITE;
 import static org.junit.Assert.*;
 
 import Chessboard.vect2D;
+import Game.BadMoveException;
+import Game.Game;
 
 public class PieceTest {
 
@@ -23,6 +25,7 @@ public class PieceTest {
      *                    est valide (ne devrait pas throw), false sinon.
      */
     protected static void testBadMoves(Chessboard chessboard, String[] moves, boolean[] isMoveValid) {
+    	Game game = new Game(chessboard);
         assert moves.length == isMoveValid.length : "Erreur d'écriture de test, String.length != boolean.length";
         boolean white_plays = true;
         for (int i = 0; i < moves.length; i++) {
@@ -30,7 +33,7 @@ public class PieceTest {
             String throwMsg = "";
             boolean didThrow = false;
             try {
-                chessboard.play(s.substring(0, 2), s.substring(2, 4), white_plays);
+                game.play(s.substring(0, 2), s.substring(2, 4), white_plays);
                 white_plays = ! white_plays;
             } catch (BadMoveException e) {
                 didThrow = true;
