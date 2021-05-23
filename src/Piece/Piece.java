@@ -3,6 +3,7 @@ package Piece;
 import static Chessboard.Chessboard.BOARD_RECT;
 
 import Chessboard.vect2D;
+import Game.BadMoveException;
 import Game.Ipiece;
 
 /**
@@ -64,4 +65,5 @@ public abstract class Piece implements Ipiece {
 	public boolean isWhite() {
 		return this.isWhite;
 	}
+	
 }

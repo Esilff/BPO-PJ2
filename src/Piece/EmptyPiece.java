@@ -2,17 +2,14 @@ package Piece;
 
 import Chessboard.vect2D;
 import Game.BadMoveException;
+import Game.Game;
 import Chessboard.Chessboard;
 
 public class EmptyPiece extends Piece{
 	public EmptyPiece() {
 		super(" ", IS_WHITE, IS_GRAPHICAL);
 	}
-
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord,Boolean isWhite) throws BadMoveException {
-
-	}
-
+	
 	@Override
 	public boolean isValidMove(vect2D currentPos, vect2D target) {
 		return false; // indéplacable
@@ -23,5 +20,10 @@ public class EmptyPiece extends Piece{
 	 */
 	public EmptyPiece clone() {
 		return new EmptyPiece();
+	}
+
+	public void play(Game game, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+		// assume que ça a été throw dans Game.play()
+		
 	}
 }

@@ -30,6 +30,9 @@ public class Chessboard {
 	 * Final : Non redéfinissable mais ce qui est à l'intérieur reste modifiable
 	 */
 	private final Ipiece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
+	/**
+	 * Vecteur représentant la taille de l'échiquier. Si il s'agit d'un échiquier 8x8, alors BOARD_RECT = [8, 8]
+	 */
 	public static final vect2D BOARD_RECT = new vect2D(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
 
 	//  ---------------------------------------------------------------------
@@ -121,17 +124,27 @@ public class Chessboard {
 		}
 		return true;
 	}
+	
+	/**
+	 * surcharge de setPiece(int line, int column, Ipiece piece), mais les coordonées numériques peuvent être remplacées
+	 * par un vec2 (coupe d'entiers).
+	 * @param coord Un coupe d'entiers représenté par un vec2
+	 * @param Ipiece La pièce à placer dans l'échiquier.
+	 * @return false si l'opération échoue, sinon true. (attention donc au silence, pas d'erreurs violentes !!)
+	 */
+	public boolean setPiece(vect2D coord, Ipiece piece) {
+		return this.setPiece(coord.getY(), coord.getX(), piece);
+	}
 
 	/**
 	 * surcharge de setPiece(int line, int column, Ipiece piece), mais les coordonées numériques peuvent être remplacées
 	 * par une coordonée d'échecs. Ex : B7 (= ligne 7 colonne 2) place le pion dans this.board[6][1].
 	 * @param coord Une coordonée naturelle d'échiquier : 1 lettre pour désigner la colonne, 1 chiffre désigner la ligne
 	 * @param Ipiece La pièce à placer dans l'échiquier.
-	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
+	 * @return false si l'opération échoue, sinon true. (attention donc au silence, pas d'erreurs violentes !!)
 	 */
 	public boolean setPiece(String coord, Ipiece piece) {
-		vect2D converted = vect2D.createFromChessCoord(coord);
-		return this.setPiece(converted.y, converted.x, piece);
+		return this.setPiece(vect2D.createFromChessCoord(coord), piece);
 	}
 
 	/**
@@ -144,10 +157,10 @@ public class Chessboard {
 	 * @see this.setIpiece pour définir au lieu de récupérer
 	 */
 	public Ipiece getPiece(int line, int column) {
-		return this.board[column][line];
+		return this.board[column][line].clone();
 	}
-	public Ipiece getPiece(vect2D coord) {
-		return getPiece(coord.y, coord.x);
+	public Ipiece getPiece(vect2D newCoord) {
+		return getPiece(newCoord.getY(), newCoord.getX());
 	}
 
 	// METHODES D'INITIALISATION ---------------------------------------------------------------------

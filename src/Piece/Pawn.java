@@ -2,6 +2,7 @@ package Piece;
 
 import Chessboard.vect2D;
 import Game.BadMoveException;
+import Game.Game;
 import Game.Ipiece;
 import Chessboard.*;
 
@@ -28,60 +29,35 @@ public class Pawn extends Piece {
 		USUAL_STEP, DOUBLE_STEP, CAPTURING_STEP, INVALID_MOVE
 	}
 
-	// PARAMÈTRES D'OBJET
-
-	/**
-	 * Indique si la pièce a été jouée ou non (afin de déterminer si le double step est autorisé ou pas)
-	 * @see Pawn#Pawn(Boolean, Boolean)
-	 */
-	private Boolean isPlayed;
-
 	// MÉTHODES D'INTERFACE
 
 	public Pawn (Boolean isWhite) {
-		this(isWhite, false);
-	}
-
-	/**
-	 * (unused mais c'est pour la stabilité)
-	 * Constructeur permettant de modifier isPlayed lors de la création, nécessaire si ce pion est impliqué au sein
-	 * d'une config custom. cf. documentation du paramètre isPlayed ci-dessous.
-	 * @param isWhite true si le pion est de couleur blanche, false sinon.
-	 * @param isPlayed À mettre à true si le pion n'est pas dans la 2e ligne de l'échiquier en face de l'adversaire
-	 *                 (rappelons que cette classe ne stocke pas la position du pion, mais plutôt les définitions de
-	 *                 comportement)
-	 */
-	public Pawn (Boolean isWhite, Boolean isPlayed) {
 		super("P", isWhite);
-		this.isPlayed = isPlayed;
 	}
-
+	
 	/**
 	 * @see
 	 */
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D targetCoord, Boolean isPlayerWhite) throws BadMoveException {
-		if (isPlayerWhite != this.isWhite()) {
-			throw new BadMoveException("Il est interdit au joueur actuel de toucher aux pièces de l'adversaire");
-		}
 
+	public void play(Game game, vect2D originCoord, vect2D targetCoord) throws BadMoveException {
 		// Reconnaissance du déplacement
 		vect2D relative_move = isValidMove_computeTranslation(originCoord, targetCoord);
 		MOVE_TYPE moveType = recogniseMove(relative_move);
 
 		// J'aurais bien voulu séparer ce gros switch dans une méthode à part, mais trop de variables utilisées...
-		Ipiece target = chessboard.getPiece(targetCoord.y, targetCoord.x);
+		Ipiece target = game.getCloneOfPiece(targetCoord.getY(), targetCoord.getX());
 		switch (moveType) {
 			case CAPTURING_STEP: // manger
-				if (target instanceof EmptyPiece || target.isWhite() == this.isWhite())
-					throw new BadMoveException("Le pion ne peut manger du vide, ou être cannibale...");
+				if (target instanceof EmptyPiece)
+					throw new BadMoveException("Le pion ne peut manger du vide");
 				else break;
 
 			case DOUBLE_STEP: // avancer
-				Ipiece targetBis = chessboard.getPiece(originCoord.getY() + signum(relative_move.getY()), originCoord.getX());
-				if (isPlayed)
+				Ipiece targetBis = game.getCloneOfPiece(originCoord.getY() + signum(relative_move.getY()), originCoord.getX());
+				if (isPlayed(originCoord))
 					throw new BadMoveException("Le pion a deja ete joue et ne peut plus avancer de deux cases");
 				if (!(targetBis instanceof EmptyPiece))
-					throw new BadMoveException("Le pion ne peut avancer avec un obstacle sur son chemin");
+					throw new BadMoveException("La case après la case suivante est occupée");
 				// + préconditions du usual step (d'où l'absence du break)
 
 			case USUAL_STEP:
@@ -92,11 +68,14 @@ public class Pawn extends Piece {
 			default:
 				throw new BadMoveException("Coup interdit.");
 		}
-
-		// déplacement effectif
-		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
-		chessboard.setPiece(targetCoord.y, targetCoord.x, this);
-		this.isPlayed = true;
+	}
+	
+	public boolean isPlayed(vect2D originCoord) {
+		if (this.isWhite()) {
+			return originCoord.getY() != 1;
+		} else {
+			return originCoord.getY() != Chessboard.BOARD_RECT.getY() - 2;
+		}
 	}
 
 	/**
@@ -170,3 +149,5 @@ public class Pawn extends Piece {
 				&& (this.isWhite() ? DOUBLE_STEP.y : -DOUBLE_STEP.y) == relative_move.y;
 	}
 }
+
+// (I should really find a better job...)

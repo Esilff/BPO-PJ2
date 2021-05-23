@@ -2,6 +2,7 @@ package Piece;
 
 import Chessboard.vect2D;
 import Game.BadMoveException;
+import Game.Game;
 import Game.Ipiece;
 import Chessboard.Chessboard;
 
@@ -12,19 +13,10 @@ public class King extends Piece{
 		super("R", isWhite);
 	}
 
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
-		Ipiece target = chessboard.getPiece(newCoord.y, newCoord.x);
-		if (isWhite != this.isWhite()) {
-			throw new BadMoveException("Pion adverse");
-		}
-
-		if (target.isWhite() == this.isWhite() && !(target instanceof EmptyPiece))
-			throw new BadMoveException("Le roi ne peut pas être cannibale...");
-		if (!isValidMove(originCoord, newCoord)) {
+	public void play(Game game, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
-		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
-		chessboard.setPiece(newCoord.y, newCoord.x, this);
 	}
 
 	/**

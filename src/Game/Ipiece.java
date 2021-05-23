@@ -5,7 +5,7 @@ import Chessboard.vect2D;
 
 public interface Ipiece extends Cloneable {
 
-	public void play (Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException;
+	public void play (Game game, vect2D originCoord, vect2D newCoord) throws BadMoveException;
 
 
 	/**

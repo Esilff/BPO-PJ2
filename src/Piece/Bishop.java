@@ -3,6 +3,7 @@ package Piece;
 import Chessboard.Chessboard;
 import Chessboard.vect2D;
 import Game.BadMoveException;
+import Game.Game;
 import Game.Ipiece;
 
 /**
@@ -21,34 +22,13 @@ public class Bishop extends Piece{
 		return new Bishop(this.isWhite());
 	}
 
-	public void play(Chessboard chessboard, vect2D originCoord, vect2D newCoord, Boolean isWhite) throws BadMoveException {
-		Ipiece target = chessboard.getPiece(newCoord.y, newCoord.x);
-		if (target.isWhite() == this.isWhite() && !(target instanceof EmptyPiece))
-			throw new BadMoveException("Le fou ne peut pas être cannibale...");
-		if (!isValidMove(originCoord, newCoord)) {
+	public void play(Game game, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
-		vect2D relativeMove = newCoord.minus(originCoord);
-		vect2D step = relativeMove.generate_signum();
-		vect2D i = originCoord.clone();
-		while (true) {
-			i.addAndApply(step);
-			if (newCoord.equals(i) ) {
-				break;
-			}
-			if(!(chessboard.getPiece(i.y,i.x) instanceof EmptyPiece)) {
-				System.out.println("Le chemin est bloqu� " + i.toString());
-				throw new BadMoveException("Le chemin est bloque");
-			}
-			if (isWhite != this.isWhite()) {
-				throw new BadMoveException("Pion adverse");
-			}
-
-		}
-		chessboard.setPiece(originCoord.y, originCoord.x, new EmptyPiece());
-		chessboard.setPiece(newCoord.y, newCoord.x, this);
+		game.checkNoObstaclesInTheWay(originCoord, newCoord);
 	}
-
+	
 	/**
 	 * voir la doc de Piece.isValidMove.
 	 * Le fou se déplace en diagonale

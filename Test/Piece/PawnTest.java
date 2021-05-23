@@ -60,7 +60,7 @@ public class PawnTest {
         String[] moves = {
                 "a2a3", "a7a6", // Allez petit pas devant (tin tin)
                 "a3a2", "a3a4", "a6a7", "a6a5", // petit pas derrière (tin tin tin)... Allez petit pas devant (tin tin)
-                "a4a5", "h2h3", "a5a4", "h2h3"  // Toléka toléka -- coups pas valides car passage bloqué + idle moves
+                "a4a5", "h2h3", "a5a4", "h7h6"  // Toléka toléka -- coups pas valides car passage bloqué + idle moves
         };
         boolean[] validity = {true, true,    false, true, false, true,    false, true, false, true};
         String expectedOut =
@@ -68,9 +68,9 @@ public class PawnTest {
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "8 | t | c | f | d | r | f | c | t | 8\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "7 |   | p | p | p | p | p | p | p | 7\n" +
+                "7 |   | p | p | p | p | p | p |   | 7\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
-                "6 |   |   |   |   |   |   |   |   | 6\n" +
+                "6 |   |   |   |   |   |   |   | p | 6\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
                 "5 | p |   |   |   |   |   |   |   | 5\n" +
                 "   --- --- --- --- --- --- --- ---   \n" +
