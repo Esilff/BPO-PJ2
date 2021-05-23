@@ -1,7 +1,7 @@
 package Chessboard;
 
+import Game.Ipiece;
 // On a besoin de toutes les pièces
-// TODO : séparation de package nécessaire ? Dépendance réciproque...
 import Piece.*;
 
 
@@ -10,13 +10,16 @@ import Piece.*;
  * et d'un système d'affichage console.
  */
 public class Chessboard {
-	/** Définis la disposition initiale à utiliser au démarrage du programme */
+
+	/** Définis la disposition initiale à utiliser au démarrage du programme
+	 *  cf. this.defaultChess_template() et fonctions associées pour plus de compréhension
+	 */
 	public enum INIT_LAYOUT {
 		DEFAULT_CHESS,
 		EMPTY,
 		FINALE_2R1T
 	}
-	private static final INIT_LAYOUT TEMPLATE_TO_USE_AT_STARTUP = INIT_LAYOUT.FINALE_2R1T;
+	private final INIT_LAYOUT TEMPLATE_TO_USE_AT_STARTUP;
 
 	/** La taille de l'échéquier. Constante valant 8, __ne dois pas changer__ sous peine de mauvaises surprises !!*/
 	public static final int BOARD_SIZE = 8;
@@ -25,16 +28,25 @@ public class Chessboard {
 	/** raw chessboard, tableau 2D 8x8 qui contient des pions
 	 * Final : Non redéfinissable mais ce qui est à l'intérieur reste modifiable
 	 */
-	private final Piece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
-	public static final vect2D BOARD_RECT = new vect2D(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
+	private final Ipiece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
+	/**
+	 * Vecteur représentant la taille de l'échiquier. Si il s'agit d'un échiquier 8x8, alors BOARD_RECT = [8, 8]
+	 */
+	public static final vec2 BOARD_RECT = new vec2(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
 
 	//  ---------------------------------------------------------------------
 	
 	/** Constructeur du plateau */
-	public Chessboard() {
+	public Chessboard(INIT_LAYOUT template_to_use_at_startup) {
+		TEMPLATE_TO_USE_AT_STARTUP = template_to_use_at_startup;
 		this.resetBoard();
 	}
-
+	public Chessboard() {
+		this(INIT_LAYOUT.DEFAULT_CHESS);
+	}
+	
+	
+	
 	// METHODES D'AFFICHAGE ---------------------------------------------------------------------
 
 	/** Génère l'affichage du plateau de jeu
@@ -92,7 +104,7 @@ public class Chessboard {
 		}
 		sb.append(" | ").append(lineIndex).append("\n");
 	}
-
+	
 	// METHODES DE MANIPULATION  ---------------------------------------------------------------------
 	/**
 	 * Classe utilitaire pour (re-)définir une case de this.board. La config étant peu conventionnelle (line-colonne),
@@ -100,10 +112,10 @@ public class Chessboard {
 	 * cette méthode n'a donc __pas__ pour but d'agir en tant que getter/setter d'encapsulation
 	 * @param line la ligne à intervenir
 	 * @param column la colonne à intervenir
-	 * @param piece la pièce à mettre dans la case en question
+	 * @param Ipiece la pièce à mettre dans la case en question
 	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
 	 */
-	private boolean setPiece(int line, int column, Piece piece) {
+	public boolean setPiece(int line, int column, Ipiece piece) {
 		try {
 			this.board[column][line] = piece;
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -111,31 +123,27 @@ public class Chessboard {
 		}
 		return true;
 	}
-
+	
 	/**
-	 * surcharge de setPiece(int line, int column, Piece piece), mais les coordonées numériques peuvent être remplacées
-	 * par une coordonée d'échecs. Ex : B7 (= ligne 7 colonne 2) place le pion dans this.board[6][1].
-	 * @param coord Une coordonée naturelle d'échiquier : 1 lettre pour désigner la colonne, 1 chiffre désigner la ligne
-	 * @param piece La pièce à placer dans l'échiquier.
-	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
+	 * surcharge de setPiece(int line, int column, Ipiece piece), mais les coordonées numériques peuvent être remplacées
+	 * par un vec2 (coupe d'entiers).
+	 * @param coord Un coupe d'entiers représenté par un vec2
+	 * @param Ipiece La pièce à placer dans l'échiquier.
+	 * @return false si l'opération échoue, sinon true. (attention donc au silence, pas d'erreurs violentes !!)
 	 */
-	private boolean setPiece(String coord, Piece piece) {
-		vect2D converted = vect2D.createFromChessCoord(coord);
-		return this.setPiece(converted.y, converted.x, piece);
+	public boolean setPiece(vec2 coord, Ipiece piece) {
+		return this.setPiece(coord.getY(), coord.getX(), piece);
 	}
 
 	/**
-	 * Surcharge de setPiece(String coord, Piece piece), sauf que le second argument est remplacé par la désignation
-	 * 	d'une pièce existante. ATTENTION : Ce n'est pas un déplacement effectif ! La référence de la pièce est dupliquée
-	 * 	aux coordonées de destination, il faut donc penser à remplacer la coordonée de départ par une pièce vide.
-	 * @param destination La coordonée de destination à définir
-	 * @param source La position de la pièce source, dont la __référence__ sera copiée aux coords de destination
-	 * @return false si l'opération échoue, sinon true. (attention au silence, pas d'erreurs violentes !!)
+	 * surcharge de setPiece(int line, int column, Ipiece piece), mais les coordonées numériques peuvent être remplacées
+	 * par une coordonée d'échecs. Ex : B7 (= ligne 7 colonne 2) place le pion dans this.board[6][1].
+	 * @param coord Une coordonée naturelle d'échiquier : 1 lettre pour désigner la colonne, 1 chiffre désigner la ligne
+	 * @param Ipiece La pièce à placer dans l'échiquier.
+	 * @return false si l'opération échoue, sinon true. (attention donc au silence, pas d'erreurs violentes !!)
 	 */
-	private boolean setPiece(String destination, String source) {
-		// TODO : unused - à utiliser pour faire des déplacements effectifs
-		Piece piece = this.getPiece(source);
-		return this.setPiece(destination, piece);
+	public boolean setPiece(String coord, Ipiece piece) {
+		return this.setPiece(vec2.createFromChessCoord(coord), piece);
 	}
 
 	/**
@@ -145,15 +153,13 @@ public class Chessboard {
 	 * @param column la colonne où se trouve la pièce
 	 * @return La pièce correspondante. Vu qu'on accède scénaristiquement à la pièce physique, on retourne donc la pièce
 	 * telle-quelle (par référence au lieu d'un clone)
-	 * @see this.setPiece pour définir au lieu de récupérer
+	 * @see this.setIpiece pour définir au lieu de récupérer
 	 */
-	private Piece getPiece(int line, int column) {
-		return this.board[column][line];
+	public Ipiece getPiece(int line, int column) {
+		return this.board[column][line].clone();
 	}
-
-	private Piece getPiece(String coord) {
-		vect2D converted = vect2D.createFromChessCoord(coord);
-		return this.getPiece(converted.y, converted.x);
+	public Ipiece getPiece(vec2 newCoord) {
+		return getPiece(newCoord.getY(), newCoord.getX());
 	}
 
 	// METHODES D'INITIALISATION ---------------------------------------------------------------------
@@ -229,11 +235,11 @@ public class Chessboard {
 	 * @param isWhite Les pièces à créer sont-elles du camp blanc, ou noir ?
 	 */
 	private void reset_firstLine(int line, boolean isWhite) {
-		setPiece(line, 0, new Tower(isWhite) );  // T
+		setPiece(line, 0, new Tower(isWhite)  );  // T
 		setPiece(line, 1, new Knight(isWhite) ); // C
 		setPiece(line, 2, new Bishop(isWhite) ); // F
-		setPiece(line, 3, new King(isWhite) );   // R
-		setPiece(line, 4, new Queen(isWhite) );  // Q
+		setPiece(line, 3, new Queen(isWhite)  );   // D pour Dame
+		setPiece(line, 4, new King(isWhite)   );  // R
 		setPiece(line, 5, new Bishop(isWhite) ); // F
 		setPiece(line, 6, new Knight(isWhite) ); // C
 		setPiece(line, 7, new Tower(isWhite) );  // T
@@ -244,7 +250,7 @@ public class Chessboard {
 	 * @param line La ligne à remplir
 	 * @param toFill La pièce à ajouter sur l'ensemble de la ligne
 	 */
-	private void fillLineWith(int line, Piece toFill) {
+	private void fillLineWith(int line, Ipiece toFill) {
 		for (int column = 0; column < BOARD_SIZE; column++) {
 			// on ne veut pas avoir la même pièce physique sur toute la ligne; il faut avoir des copies.
 			setPiece(line, column, toFill.clone());
