@@ -1,6 +1,6 @@
 package Piece;
 
-import Chessboard.vect2D;
+import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
 import Game.Ipiece;
@@ -8,15 +8,13 @@ import Chessboard.*;
 
 import static java.lang.Integer.signum;
 
-// TODO : plus qu'à supprimer les deux warnings du deprecated, mise en place d'interface + fix getters et on est bon
-
 public class Pawn extends Piece {
 
 	// PARAMÈTRES PARTAGES
 
-	private static final vect2D USUAL_STEP = new vect2D(0, 1),
-								DOUBLE_STEP = new vect2D(0, 2),
-								CAPTURING_STEP = new vect2D(1, 1);
+	private static final vec2 USUAL_STEP = new vec2(0, 1),
+								DOUBLE_STEP = new vec2(0, 2),
+								CAPTURING_STEP = new vec2(1, 1);
 	/**
 	 * Une enum représentant le type de mouvement d'un pion
 	 * Un pion possède trois patterns de déplacements distincts :
@@ -39,9 +37,9 @@ public class Pawn extends Piece {
 	 * @see
 	 */
 
-	public void play(Game game, vect2D originCoord, vect2D targetCoord) throws BadMoveException {
+	public void play(Game game, vec2 originCoord, vec2 targetCoord) throws BadMoveException {
 		// Reconnaissance du déplacement
-		vect2D relative_move = isValidMove_computeTranslation(originCoord, targetCoord);
+		vec2 relative_move = isValidMove_computeTranslation(originCoord, targetCoord);
 		MOVE_TYPE moveType = recogniseMove(relative_move);
 
 		// J'aurais bien voulu séparer ce gros switch dans une méthode à part, mais trop de variables utilisées...
@@ -70,7 +68,7 @@ public class Pawn extends Piece {
 		}
 	}
 	
-	public boolean isPlayed(vect2D originCoord) {
+	public boolean isPlayed(vec2 originCoord) {
 		if (this.isWhite()) {
 			return originCoord.getY() != 1;
 		} else {
@@ -96,8 +94,8 @@ public class Pawn extends Piece {
 	 * @return true si le déplacement entre currentPos et target correspond au déplacement d'un pion
 	 */
 	@Override
-	public boolean isValidMove(vect2D currentPos, vect2D target) {
-		vect2D relative_move = isValidMove_computeTranslation(currentPos, target);
+	public boolean isValidMove(vec2 currentPos, vec2 target) {
+		vec2 relative_move = isValidMove_computeTranslation(currentPos, target);
 		return this.recogniseMove(relative_move) != MOVE_TYPE.INVALID_MOVE;
 	}
 
@@ -110,7 +108,7 @@ public class Pawn extends Piece {
 	 * 		   ou le vecteur d'entrée n'est pas valide
 	 * @see MOVE_TYPE
 	 */
-	private MOVE_TYPE recogniseMove(vect2D relative_move) {
+	private MOVE_TYPE recogniseMove(vec2 relative_move) {
 		if (isMovingToFrontSquare(relative_move)) {
 			return MOVE_TYPE.USUAL_STEP;
 		} else if (isPawnCaptureStep(relative_move)) {
@@ -126,28 +124,32 @@ public class Pawn extends Piece {
 	 * @param relative_move le vecteur de déplacement relatif au pion
 	 * @return true si le déplacement est sur la case en face de lui
 	 */
-	private boolean isMovingToFrontSquare(vect2D relative_move) {
-		return USUAL_STEP.x == relative_move.x
-			&& (this.isWhite() ? USUAL_STEP.y : -USUAL_STEP.y) == relative_move.y;
+	private boolean isMovingToFrontSquare(vec2 relative_move) {
+		return relative_move.equals(new vec2(
+				USUAL_STEP.getX(),
+				this.isWhite() ? USUAL_STEP.getY() : -USUAL_STEP.getY()
+		));
 	}
 	/**
 	 * Vérifie si le déplacement entre deux points est un déplacement d'une case sur la diagonale
 	 * @param relative_move le vecteur de déplacement relatif au pion
 	 * @return true si le déplacement est celui correspondant à la prise d'une pièce par un pion
 	 */
-	private boolean isPawnCaptureStep(vect2D relative_move) {
-		return CAPTURING_STEP.x == Math.abs(relative_move.x)
-				&& (this.isWhite() ? USUAL_STEP.y : -USUAL_STEP.y) == relative_move.y;
+	private boolean isPawnCaptureStep(vec2 relative_move) {
+		return CAPTURING_STEP.getX() == Math.abs(relative_move.getX())
+				&& (this.isWhite() ? USUAL_STEP.getY() : -USUAL_STEP.getY()) == relative_move.getY();
 	}
 	/**
 	 * Vérifie si le déplacement entre deux points est un déplacement de deux cases sur l'horizontale
 	 * @param relative_move le vecteur de déplacement relatif au pion
 	 * @return true si il s'agit d'un déplacement de deux cases sur l'horizontale
 	 */
-	private boolean isMovingTo2ndFrontSquare(vect2D relative_move) {
-		return DOUBLE_STEP.x == relative_move.x
-				&& (this.isWhite() ? DOUBLE_STEP.y : -DOUBLE_STEP.y) == relative_move.y;
+	private boolean isMovingTo2ndFrontSquare(vec2 relative_move) {
+		return relative_move.equals(new vec2(
+				DOUBLE_STEP.getX(),
+				this.isWhite() ? DOUBLE_STEP.getY() : -DOUBLE_STEP.getY()
+		));
 	}
 }
 
-// (I should really find a better job...)
+// (I really have to find a better job ...)

@@ -2,8 +2,7 @@ package Piece;
 
 import static Chessboard.Chessboard.BOARD_RECT;
 
-import Chessboard.vect2D;
-import Game.BadMoveException;
+import Chessboard.vec2;
 import Game.Ipiece;
 
 /**
@@ -13,7 +12,7 @@ import Game.Ipiece;
 public abstract class Piece implements Ipiece {
 	private final String sign;
 
-	private final Boolean isWhite, isGraphical;
+	private final Boolean isWhite;
 	
 	// Constantes. permet de faire this.isWhite = ! IS_WHITE; (n'est pas blanche) par ex.
 	public final static Boolean IS_WHITE = true, IS_GRAPHICAL = true;
@@ -21,7 +20,6 @@ public abstract class Piece implements Ipiece {
 	public Piece (String sign,Boolean isWhite, Boolean isGraphical) {
 		this.sign = sign;
 		this.isWhite = isWhite;
-		this.isGraphical = isGraphical;
 	}
 	public Piece (String sign,Boolean isWhite) {
 		this(sign, isWhite, !IS_GRAPHICAL);
@@ -29,7 +27,7 @@ public abstract class Piece implements Ipiece {
 
 
 	/**
-	 * Méthode statique qui retourne `vect2D.translationFrom_argA_to_argB(currentPos, target)` mais qui applique les
+	 * Méthode statique qui retourne `target.minus(currentPos)` mais qui applique les
 	 * préconditions suivantes :
 	 * - les coordonées absolues de currentPos et target sont différentes entre elles
 	 * - les coordonées absolues de currentPos et target sont bien contenues dans le plateau de jeu
@@ -37,16 +35,14 @@ public abstract class Piece implements Ipiece {
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return vect2D.INVALID_VECT si les préconditions NE SONT PAS respectées. Si elles sont respectées, cette méthode
 	 *  retourne le vecteur de déplacement entre les deux points passés en paramètres
-	 * @see vect2D#difference(vect2D B, vect2D A)
-	 * @deprecated
 	 */
-	public static vect2D isValidMove_computeTranslation(vect2D currentPos, vect2D target) {
-		if (vect2D.isOutOfBounds(BOARD_RECT, currentPos) ||
-			vect2D.isOutOfBounds(BOARD_RECT, target) ||
-			vect2D.isEqual(currentPos, target) ) {
-			return vect2D.INVALID_VECT;
+	public static vec2 isValidMove_computeTranslation(vec2 currentPos, vec2 target) {
+		if (   BOARD_RECT.isOutOfBounds(currentPos)
+			|| BOARD_RECT.isOutOfBounds(target)
+			|| currentPos.equals(target) ) {
+			return vec2.INVALID_VECT;
 		}
-		return vect2D.difference(currentPos, target);
+		return target.minus(currentPos);
 	}
 
 	/**

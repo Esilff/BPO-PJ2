@@ -1,7 +1,7 @@
 package Piece;
 
 import Chessboard.Chessboard;
-import Chessboard.vect2D;
+import Chessboard.vec2;
 import Game.Ipiece;
 
 import org.junit.Test;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertNotSame;
 public class TowerTest {
     /**
      * Cette classe teste visuellement les mouvements horizontaux ou verticaux, ie. {@link Tower#isLinearMove}
-     * @see Tower#isValidMove(vect2D, vect2D)
+     * @see Tower#isValidMove(vec2, vec2)
      */
     @Test
     public void graphical_towerMove() {
@@ -28,7 +28,7 @@ public class TowerTest {
                 "▤ □ ▤ ▣ ▤ □ ▤ □ \n" +
                 "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
                 "▤ □ ▤ ▣ ▤ □ ▤ □ \n";
-        String out = graphical_moveDefsTester(new Tower(IS_WHITE), vect2D.createFromChessCoord("d4"));
+        String out = graphical_moveDefsTester(new Tower(IS_WHITE), vec2.createFromChessCoord("d4"));
         assertEquals(expected, out);
     }
 
@@ -42,7 +42,6 @@ public class TowerTest {
                 "h1h3", "a8a6", "h3b3", "a6g6", // haut gauche
                 "b3h3", "g6a6", "h3h1", "a6a8" // droite bas
         };
-        // TODO : (logan) déplacer une pièce vide fonctionnerait ?
         boolean[] validity = {false, true, false, true,   true, true, true, true,   true, true, true, true};
         String expectedOut =
                 "    a   b   c   d   e   f   g   h    \n" +

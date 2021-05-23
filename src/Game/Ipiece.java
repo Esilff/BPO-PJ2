@@ -1,11 +1,10 @@
 package Game;
 
-import Chessboard.Chessboard;
-import Chessboard.vect2D;
+import Chessboard.vec2;
 
 public interface Ipiece extends Cloneable {
 
-	public void play (Game game, vect2D originCoord, vect2D newCoord) throws BadMoveException;
+	public void play (Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException;
 
 
 	/**
@@ -17,7 +16,7 @@ public interface Ipiece extends Cloneable {
 	 * @param target
 	 * @return
 	 */
-	public boolean isValidMove(vect2D currentPos, vect2D target);
+	public boolean isValidMove(vec2 currentPos, vec2 target);
 	
 	public boolean isWhite();
 

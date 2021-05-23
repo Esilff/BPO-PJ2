@@ -1,18 +1,16 @@
 package Piece;
 
-import Chessboard.vect2D;
+import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
-import Game.Ipiece;
-import Chessboard.Chessboard;
 
 public class Knight extends Piece{
-	public final static vect2D DEFAULT_L = new vect2D(2, 1), REVERSED_L = new vect2D(1, 2);
+	public final static vec2 DEFAULT_L = new vec2(2, 1), REVERSED_L = new vec2(1, 2);
 	public Knight(Boolean isWhite) {
 		super("C", isWhite);
 	}
 
-	public void play(Game game, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
@@ -33,7 +31,7 @@ public class Knight extends Piece{
 	 * @return true si le déplacement entre currentPos et target correspond au déplacement d'un cavalier
 	 */
 	@Override
-	public boolean isValidMove(vect2D currentPos, vect2D target) {
+	public boolean isValidMove(vec2 currentPos, vec2 target) {
 		return isMoving_L_pattern(currentPos, target);
 	}
 
@@ -43,14 +41,12 @@ public class Knight extends Piece{
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return true si le déplacement entre currentPos et target correspond au déplacement d'un cavalier
 	 */
-	public static boolean isMoving_L_pattern(vect2D currentPos, vect2D target) {
-		vect2D relative_move = isValidMove_computeTranslation(currentPos, target);
-		if (relative_move.equals(vect2D.INVALID_VECT)) {
+	public static boolean isMoving_L_pattern(vec2 currentPos, vec2 target) {
+		vec2 relative_move = isValidMove_computeTranslation(currentPos, target);
+		if (relative_move.equals(vec2.INVALID_VECT)) {
 			return false; // n'a pas pu calculer ou préconditions non résolues
 		}
-		// TODO : make obj
-		relative_move.x = Math.abs(relative_move.x);
-		relative_move.y = Math.abs(relative_move.y);
+		relative_move.makeAbs();
 		return relative_move.equals(DEFAULT_L) || relative_move.equals(REVERSED_L);
 	}
 }

@@ -1,9 +1,8 @@
 package Piece;
 
-import Chessboard.vect2D;
+import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
-import Chessboard.Chessboard;
 
 public class EmptyPiece extends Piece{
 	public EmptyPiece() {
@@ -11,7 +10,7 @@ public class EmptyPiece extends Piece{
 	}
 	
 	@Override
-	public boolean isValidMove(vect2D currentPos, vect2D target) {
+	public boolean isValidMove(vec2 currentPos, vec2 target) {
 		return false; // indéplacable
 	}
 
@@ -22,7 +21,7 @@ public class EmptyPiece extends Piece{
 		return new EmptyPiece();
 	}
 
-	public void play(Game game, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		// assume que ça a été throw dans Game.play()
 		
 	}

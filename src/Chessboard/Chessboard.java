@@ -2,7 +2,6 @@ package Chessboard;
 
 import Game.Ipiece;
 // On a besoin de toutes les pièces
-// TODO : séparation de package nécessaire ? Dépendance réciproque...
 import Piece.*;
 
 
@@ -33,7 +32,7 @@ public class Chessboard {
 	/**
 	 * Vecteur représentant la taille de l'échiquier. Si il s'agit d'un échiquier 8x8, alors BOARD_RECT = [8, 8]
 	 */
-	public static final vect2D BOARD_RECT = new vect2D(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
+	public static final vec2 BOARD_RECT = new vec2(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
 
 	//  ---------------------------------------------------------------------
 	
@@ -105,7 +104,7 @@ public class Chessboard {
 		}
 		sb.append(" | ").append(lineIndex).append("\n");
 	}
-
+	
 	// METHODES DE MANIPULATION  ---------------------------------------------------------------------
 	/**
 	 * Classe utilitaire pour (re-)définir une case de this.board. La config étant peu conventionnelle (line-colonne),
@@ -132,7 +131,7 @@ public class Chessboard {
 	 * @param Ipiece La pièce à placer dans l'échiquier.
 	 * @return false si l'opération échoue, sinon true. (attention donc au silence, pas d'erreurs violentes !!)
 	 */
-	public boolean setPiece(vect2D coord, Ipiece piece) {
+	public boolean setPiece(vec2 coord, Ipiece piece) {
 		return this.setPiece(coord.getY(), coord.getX(), piece);
 	}
 
@@ -144,7 +143,7 @@ public class Chessboard {
 	 * @return false si l'opération échoue, sinon true. (attention donc au silence, pas d'erreurs violentes !!)
 	 */
 	public boolean setPiece(String coord, Ipiece piece) {
-		return this.setPiece(vect2D.createFromChessCoord(coord), piece);
+		return this.setPiece(vec2.createFromChessCoord(coord), piece);
 	}
 
 	/**
@@ -159,7 +158,7 @@ public class Chessboard {
 	public Ipiece getPiece(int line, int column) {
 		return this.board[column][line].clone();
 	}
-	public Ipiece getPiece(vect2D newCoord) {
+	public Ipiece getPiece(vec2 newCoord) {
 		return getPiece(newCoord.getY(), newCoord.getX());
 	}
 

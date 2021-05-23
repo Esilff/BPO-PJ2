@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import Chessboard.Chessboard;
-import Chessboard.vect2D;
+import Chessboard.vec2;
 import Game.Ipiece;
 
 import static Piece.Piece.IS_WHITE;
@@ -42,8 +42,8 @@ public class PawnTest {
                 "▤ □ ▣ ▣ ▣ □ ▤ □ \n" +
                 "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
                 "▤ □ ▤ □ ▤ □ ▤ □ \n";
-        String out_w = graphical_moveDefsTester(new Pawn(IS_WHITE), vect2D.createFromChessCoord("d4"));
-        String out_b = graphical_moveDefsTester(new Pawn(! IS_WHITE), vect2D.createFromChessCoord("d4"));
+        String out_w = graphical_moveDefsTester(new Pawn(IS_WHITE), vec2.createFromChessCoord("d4"));
+        String out_b = graphical_moveDefsTester(new Pawn(! IS_WHITE), vec2.createFromChessCoord("d4"));
         assertEquals(expected_w, out_w);
         assertEquals(expected_b, out_b);
     }

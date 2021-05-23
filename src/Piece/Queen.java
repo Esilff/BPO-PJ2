@@ -1,17 +1,15 @@
 package Piece;
 
-import Chessboard.vect2D;
+import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
-import Game.Ipiece;
-import Chessboard.Chessboard;
 
 public class Queen extends Piece{
 	public Queen(Boolean isWhite) {
 		super("D",isWhite);
 	}
 
-	public void play(Game game, vect2D originCoord, vect2D newCoord) throws BadMoveException {
+	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
@@ -33,7 +31,7 @@ public class Queen extends Piece{
 	 * @return true si le déplacement entre currentPos et target est un déplacement horizontal, vertical ou diagonal
 	 */
 	@Override
-	public boolean isValidMove(vect2D currentPos, vect2D target) {
+	public boolean isValidMove(vec2 currentPos, vec2 target) {
 		return Bishop.isDiagMove(currentPos, target) || Tower.isLinearMove(currentPos, target);
 	}
 
