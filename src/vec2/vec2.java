@@ -1,14 +1,12 @@
-package Chessboard;
+package vec2; // est stable
 
-import java.util.Locale;
 import static java.lang.Integer.signum;
 
 /**
  * Un vecteur, une dimention, une coordonnée, etc. Sous ces mots barbares, ce n'est qu'un couple d'entiers
- * possédant des méthodes de manipulation usuelles de vecteurs mais aussi de coordonées d'échecs (ex : f8 ou e2)
+ * possédant des méthodes de manipulation usuelles de vecteurs et des méthodes utilitaires
  * Son utilisation est similaire au vec2 du GLSL, sauf que ça respecte l'encapsulation
  */
-
 public class vec2 implements Cloneable {
     private int x, y;
 
@@ -90,29 +88,5 @@ public class vec2 implements Cloneable {
      */
     public boolean equals(vec2 v) {
         return this.x == v.x && this.y == v.y;
-    }
-
-    /**
-     * Transforme une position d'échiquier en position vectorielle.
-     * Par exemple, donné en entrée "B7", cette fonction retourne un nouveau vect2D(1, 6)
-     * Cette fonction a été conçue pour un échiquier standard . Une coordonnée ne doit donc pas dépasser 2 caractères !
-     * @param coord une chaine de caractère de deux lettres représentant la position d'une pièce dans l'échiquier
-     * @return Le vecteur représentant la position du point généré depuis l'origine. Si l'opération échoue ou que
-     *  les valeurs dépassent Chessboard.BOARD_SIZE, cette fonction retourne le vecteur vect2D.INVALID_VECT
-     */
-    public static vec2 createFromChessCoord(String coord) {
-        coord = coord.toLowerCase(Locale.ROOT);
-
-        try {
-            int x = coord.charAt(0) - Chessboard.LOWERCASE_A; // X = 'a' -> 'z' et 'a' = 0
-            int y = coord.charAt(1) - '0'; // Y = '0' -> '9' et '0' = 0
-            vec2 retval = new vec2(x, y - 1);
-            if (Chessboard.BOARD_RECT.isOutOfBounds(retval)) {
-                return  INVALID_VECT;
-            }
-            return retval;
-        } catch (IndexOutOfBoundsException e) {
-            return INVALID_VECT;
-        }
     }
 }

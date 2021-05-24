@@ -1,8 +1,8 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 public class Queen extends Piece{
 	public Queen(Boolean isWhite) {

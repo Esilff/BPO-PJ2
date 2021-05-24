@@ -1,8 +1,8 @@
 package Piece;
 
 import Chessboard.Chessboard;
-import Chessboard.vec2;
 import Game.Ipiece;
+import vec2.vec2;
 
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class TowerTest {
                 "▤ □ ▤ ▣ ▤ □ ▤ □ \n" +
                 "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
                 "▤ □ ▤ ▣ ▤ □ ▤ □ \n";
-        String out = graphical_moveDefsTester(new Tower(IS_WHITE), vec2.createFromChessCoord("d4"));
+        String out = graphical_moveDefsTester(new Tower(IS_WHITE), Chessboard.createVectFromChessCoord("d4"));
         assertEquals(expected, out);
     }
 

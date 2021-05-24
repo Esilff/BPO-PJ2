@@ -2,8 +2,8 @@ package Piece;
 
 import static Chessboard.Chessboard.BOARD_RECT;
 
-import Chessboard.vec2;
 import Game.Ipiece;
+import vec2.vec2;
 
 /**
  * Piece : Il s'agit d'une classe abstraite représentant une pièce d'échec (ou un élément graphique vide).

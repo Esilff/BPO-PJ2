@@ -1,9 +1,9 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
 import Game.Ipiece;
+import vec2.vec2;
 import Chessboard.*;
 
 import static java.lang.Integer.signum;

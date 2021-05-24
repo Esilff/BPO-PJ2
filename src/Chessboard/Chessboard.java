@@ -1,8 +1,12 @@
-package Chessboard;
+package Chessboard; // stabilité : moyenne
+
+import java.util.Locale;
 
 import Game.Ipiece;
+
 // On a besoin de toutes les pièces
 import Piece.*;
+import vec2.vec2;
 
 
 /**
@@ -25,13 +29,11 @@ public class Chessboard {
 	public static final int BOARD_SIZE = 8;
 	public static final char LOWERCASE_A = 'a';
 
-	/** raw chessboard, tableau 2D 8x8 qui contient des pions
-	 * Final : Non redéfinissable mais ce qui est à l'intérieur reste modifiable
-	 */
-	private final Ipiece[][] board = new Piece[BOARD_SIZE][BOARD_SIZE];
-	/**
-	 * Vecteur représentant la taille de l'échiquier. Si il s'agit d'un échiquier 8x8, alors BOARD_RECT = [8, 8]
-	 */
+	/** raw chessboard, tableau 2D 8x8 qui contient des pions */
+	private final Ipiece[][] board = new Ipiece[BOARD_SIZE][BOARD_SIZE];
+	//      ^^^^^ : Non redéfinissable mais ce qui est à l'intérieur reste modifiable !
+	
+	/** Vecteur représentant la taille de l'échiquier. Si il s'agit d'un échiquier 8x8, alors BOARD_RECT = [8, 8] */
 	public static final vec2 BOARD_RECT = new vec2(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
 
 	//  ---------------------------------------------------------------------
@@ -143,7 +145,7 @@ public class Chessboard {
 	 * @return false si l'opération échoue, sinon true. (attention donc au silence, pas d'erreurs violentes !!)
 	 */
 	public boolean setPiece(String coord, Ipiece piece) {
-		return this.setPiece(vec2.createFromChessCoord(coord), piece);
+		return this.setPiece(Chessboard.createVectFromChessCoord(coord), piece);
 	}
 
 	/**
@@ -255,5 +257,29 @@ public class Chessboard {
 			// on ne veut pas avoir la même pièce physique sur toute la ligne; il faut avoir des copies.
 			setPiece(line, column, toFill.clone());
 		}
+	}
+	
+	/**
+	 * Transforme une position d'échiquier en position vectorielle.
+	 * Par exemple, donné en entrée "B7", cette fonction retourne un nouveau vec2(1, 6)
+	 * Cette fonction a été conçue pour un échiquier standard . Une coordonnée ne doit donc pas dépasser 2 caractères !
+	 * @param coord une chaine de caractère de deux lettres représentant la position d'une pièce dans l'échiquier
+	 * @return Le vecteur représentant la position du point généré depuis l'origine. Si l'opération échoue ou que
+	 *  les valeurs dépassent Chessboard.BOARD_SIZE, cette fonction retourne le vecteur vec2.INVALID_VECT
+	 */
+	public static vec2 createVectFromChessCoord(String coord) {
+	    coord = coord.toLowerCase(Locale.ROOT);
+	
+	    try {
+	        int x = coord.charAt(0) - Chessboard.LOWERCASE_A; // X = 'a' -> 'z' et 'a' = 0
+	        int y = coord.charAt(1) - '0'; // Y = '0' -> '9' et '0' = 0
+	        vec2 retval = new vec2(x, y - 1);
+	        if (Chessboard.BOARD_RECT.isOutOfBounds(retval)) {
+	            return vec2.INVALID_VECT;
+	        }
+	        return retval;
+	    } catch (IndexOutOfBoundsException e) {
+	        return vec2.INVALID_VECT;
+	    }
 	}
 }

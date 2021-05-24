@@ -1,8 +1,8 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 public class King extends Piece{
 	private static final int ALLOWED_NBR_OF_STEPS = 1;

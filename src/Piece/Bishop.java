@@ -1,8 +1,8 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 /**
  * Bishop : classe représentant la pièce du fou. Se déplace en diagonale.

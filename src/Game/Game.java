@@ -3,8 +3,8 @@ package Game;
 import java.util.Scanner;
 
 import Chessboard.Chessboard;
-import Chessboard.vec2;
 import Piece.EmptyPiece;
+import vec2.vec2;
 
 public class Game {
 	
@@ -69,8 +69,8 @@ public class Game {
 
 	public void play(String originCoord, String newCoord) throws BadMoveException {
 		// décodage de l'entrée
-		vec2 originCoordConv = vec2.createFromChessCoord(originCoord);
-		vec2 newCoordConv = vec2.createFromChessCoord(newCoord);
+		vec2 originCoordConv = Chessboard.createVectFromChessCoord(originCoord);
+		vec2 newCoordConv = Chessboard.createVectFromChessCoord(newCoord);
 		if (   originCoordConv.equals(vec2.INVALID_VECT)
 			|| newCoordConv.equals(vec2.INVALID_VECT)) {
 			throw new BadMoveException("Coordonnées invalides");

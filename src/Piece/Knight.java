@@ -1,8 +1,8 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 public class Knight extends Piece{
 	public final static vec2 DEFAULT_L = new vec2(2, 1), REVERSED_L = new vec2(1, 2);

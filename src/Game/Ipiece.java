@@ -1,6 +1,6 @@
 package Game;
 
-import Chessboard.vec2;
+import vec2.vec2;
 
 public interface Ipiece extends Cloneable {
 
