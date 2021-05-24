@@ -1,5 +1,6 @@
 package Game;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static Appli.Application.ENDL;
@@ -27,12 +28,17 @@ public class Game {
 	public Boolean blackLoosed = false;
 	
 	
+	private ArrayList<vec2> ennemy = new ArrayList<vec2>();
+	
+	
 	private static final String EMPTY_STRING = ""; // Comme si c'était une valeur qui pouvait changer ... :-(
 	private static final String REGULAR_PROMPT = "> ";
 	private static final String ERROR_PROMPT = "#> ";
 	private static final String MSG = "Joueur %s, c'est à vous !" + ENDL;
 	private static final String WHITE_NAME = "blanc";
 	private static final String BLACK_NAME = "noir";
+	private static final String CHECK_MSG = "Le joueur %s est en echec" + ENDL;
+
 
 	public Game(Chessboard chessboard) {
 		this.board = chessboard;
@@ -58,6 +64,9 @@ public class Game {
 		System.out.println(board_toString());
 		
 		System.out.println(turnTxt(isWhitePlaying));
+		if (isInCheck != null) {
+			System.out.println(checkTxt(isInCheck));
+		}
 		if (this.error.equals(EMPTY_STRING)) {
 			System.out.print(REGULAR_PROMPT);
 		} else {
@@ -101,6 +110,12 @@ public class Game {
 			BadMoveException up = new BadMoveException("Cannibalisme interdit");
 			throw up; // ha ha ha...
 		}
+		if (isInCheck != null && !(toPlay.isKing())) {
+			if (toPlay.isWhite() == isInCheck) {
+				throw new BadMoveException("Le roi est en danger");
+			}
+		}
+		
 		
 		// vérification si coup jouable
 		toPlay.canMoveTo(this, originCoordConv, newCoordConv);
@@ -112,10 +127,18 @@ public class Game {
 		
 		// marquage échec
 		lookForKingInCheck(newCoordConv);
+		checkMate();
 	}
 	
-	public void lookForKingInCheck(vec2 newCoordConv) {
-		
+	public void lookForKingInCheck(vec2 newCoordConv) throws BadMoveException{
+		vec2 kingPos;
+		if (!isWhitePlaying) kingPos = this.board.getCache().getKingPos_black(); 
+		else kingPos = this.board.getCache().getKingPos_white();
+		try {
+			this.board.getPiece(newCoordConv).canMoveTo(this, newCoordConv, kingPos);
+			if (!isWhitePlaying) isInCheck = false;
+			else isInCheck = true;
+		}catch (BadMoveException e ) {}
 	}
 
 	/**
@@ -140,6 +163,60 @@ public class Game {
 		}
 	}
 	
+	private ArrayList<vec2> getEnnemy() {
+		ArrayList<vec2> ennemy = new ArrayList<vec2>();
+		for (int i = 0; i < Chessboard.BOARD_SIZE; i++) {
+			for (int j = 0; j < Chessboard.BOARD_SIZE; j++) {
+				if (this.board.getPiece(i, j).isWhite() != isWhitePlaying) {
+					ennemy.add(new vec2(i,j));
+				}
+			}
+		}
+		return ennemy;
+	}
+	
+	private ArrayList<vec2> getKingNeighbour() {
+		ArrayList<vec2> neighbour = new ArrayList<vec2>();
+		vec2 kingPos;
+		if (!isWhitePlaying) kingPos = this.board.getCache().getKingPos_black(); 
+		else kingPos = this.board.getCache().getKingPos_white();
+		for (int i = -1; i < 2;i++) {
+			for (int j = -1; j < 2; j++) {
+				if (i == 0 && j == 0) continue;
+				neighbour.add(kingPos.minus(new vec2(i,j)));
+			}
+		}
+		return neighbour;
+	}
+	
+	private Boolean lookForCoordInCheck(vec2 coord, vec2 ennemy) {
+		try {
+			this.board.getPiece(ennemy).canMoveTo(this, ennemy, coord);
+			return true;
+		}catch (BadMoveException e ) {}
+		return false;
+	}
+	
+	private void checkMate() {
+		ArrayList<vec2> neighbour = getKingNeighbour();
+		ArrayList<vec2> ennemy = getEnnemy();
+		ArrayList<vec2> toRemove = new ArrayList<vec2>();
+		for (vec2 neighbourIndex : neighbour) {
+			for (vec2 ennemyIndex : ennemy) {
+				if (lookForCoordInCheck(neighbourIndex, ennemyIndex)) {
+					toRemove.remove(neighbourIndex);
+				}
+			}
+		}
+		neighbour.removeAll(toRemove);
+		if (neighbour.isEmpty()) {
+			if (isWhitePlaying) whiteLoosed = true;
+			else blackLoosed = true;
+		}
+	}
+	
+	
+	
 	/**
 	 * N'est utilisé que par pion. Comme quoi on aurait pas dû le coder...
 	 * @return le chessboard courant
@@ -150,6 +227,10 @@ public class Game {
 	
 	private static String turnTxt(Boolean isWhite) {
 		return String.format(MSG, (isWhite) ? WHITE_NAME : BLACK_NAME);
+	}
+	
+	private static String checkTxt(Boolean isWhite) {
+		return String.format(CHECK_MSG, (isWhite) ? WHITE_NAME : BLACK_NAME);
 	}
 
 	private String looserTxt() {
@@ -163,5 +244,6 @@ public class Game {
 	public Boolean WhoIsInCheck() {
 		return isInCheck;
 	}
+	
 	
 }

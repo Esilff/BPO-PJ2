@@ -47,7 +47,7 @@ public class Chessboard {
 		this.resetBoard();
 	}
 	public Chessboard() {
-		this(INIT_LAYOUT.DEFAULT_CHESS);
+		this(INIT_LAYOUT.FINALE_2R1T);
 	}
 	
 	

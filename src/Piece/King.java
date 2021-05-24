@@ -1,11 +1,14 @@
 package Piece;
 
+import java.util.ArrayList;
+
 import Game.BadMoveException;
 import Game.Game;
 import vec2.vec2;
 
 public class King extends Piece{
 	private static final int ALLOWED_NBR_OF_STEPS = 1;
+	private ArrayList<vec2> notAllowed = new ArrayList<vec2>();
 
 	public King(Boolean isWhite) {
 		super("R", isWhite);
