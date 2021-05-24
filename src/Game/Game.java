@@ -27,10 +27,6 @@ public class Game {
 	public Boolean whiteLoosed = false;
 	public Boolean blackLoosed = false;
 	
-	
-	private ArrayList<vec2> ennemy = new ArrayList<vec2>();
-	
-	
 	private static final String EMPTY_STRING = ""; // Comme si c'était une valeur qui pouvait changer ... :-(
 	private static final String REGULAR_PROMPT = "> ";
 	private static final String ERROR_PROMPT = "#> ";
@@ -132,6 +128,7 @@ public class Game {
 	
 	public void lookForKingInCheck(vec2 newCoordConv) throws BadMoveException{
 		vec2 kingPos;
+		// todo : factoriser ça
 		if (!isWhitePlaying) kingPos = this.board.getCache().getKingPos_black(); 
 		else kingPos = this.board.getCache().getKingPos_white();
 		try {
@@ -163,6 +160,10 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Un algorithme qui retourne une liste des positions des pièces ennemies du joueur courant
+	 * @return
+	 */
 	private ArrayList<vec2> getEnnemy() {
 		ArrayList<vec2> ennemy = new ArrayList<vec2>();
 		for (int i = 0; i < Chessboard.BOARD_SIZE; i++) {
@@ -175,21 +176,31 @@ public class Game {
 		return ennemy;
 	}
 	
+	/**
+	 * Un algorithme qui retournes les cases se trouvant autour du roi actuel
+	 * @return
+	 */
 	private ArrayList<vec2> getKingNeighbour() {
 		ArrayList<vec2> neighbour = new ArrayList<vec2>();
+		
+		// TODO : peut-être passable en paramètre ?
 		vec2 kingPos;
 		if (!isWhitePlaying) kingPos = this.board.getCache().getKingPos_black(); 
 		else kingPos = this.board.getCache().getKingPos_white();
-		for (int i = -1; i < 2;i++) {
+		
+		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
 				if (i == 0 && j == 0) continue;
-				neighbour.add(kingPos.minus(new vec2(i,j)));
+				vec2 toAdd = kingPos.plus(i, j);
+				if (! Chessboard.BOARD_RECT.isOutOfBounds(toAdd)) {
+					neighbour.add(toAdd);
+				}
 			}
 		}
 		return neighbour;
 	}
 	
-	private Boolean lookForCoordInCheck(vec2 coord, vec2 ennemy) {
+	private Boolean canBeEatenBy(vec2 coord, vec2 ennemy) {
 		try {
 			this.board.getPiece(ennemy).canMoveTo(this, ennemy, coord);
 			return true;
@@ -201,10 +212,12 @@ public class Game {
 		ArrayList<vec2> neighbour = getKingNeighbour();
 		ArrayList<vec2> ennemy = getEnnemy();
 		ArrayList<vec2> toRemove = new ArrayList<vec2>();
-		for (vec2 neighbourIndex : neighbour) {
-			for (vec2 ennemyIndex : ennemy) {
-				if (lookForCoordInCheck(neighbourIndex, ennemyIndex)) {
-					toRemove.remove(neighbourIndex);
+		for (vec2 ennemyIndex : ennemy) {
+			for (vec2 neighbourIndex : neighbour) {
+				if (canBeEatenBy(neighbourIndex, ennemyIndex)) {
+					//System.out.println(ennemyIndex.toString() + " fait retirer " + neighbourIndex.toString());
+					toRemove.add(neighbourIndex);
+					// optimisation avec des LinkedList + Iterateur si on a le temps
 				}
 			}
 		}

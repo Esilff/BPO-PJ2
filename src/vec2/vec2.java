@@ -62,6 +62,16 @@ public class vec2 implements Cloneable {
     }
     
     /**
+     * Soit A = this et B = (x, y). Cette fonction retourne le vecteur (A.x + B.x, A.y + B.y)  
+     * @param x valeur x à ajouter
+     * @param y valeur y à ajouter
+     * @return new vec2(this.x + x, this.y + y)
+     */
+    public vec2 plus(int x, int y) {
+    	return new vec2(this.x + x, this.y + y);
+    }
+    
+    /**
      * Effectue la somme entre le vecteur courant et celui passé en paramètre.
      * Le résultat se trouve dans le vecteur courant. 
      * @param vect
