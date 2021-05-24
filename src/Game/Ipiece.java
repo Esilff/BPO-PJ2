@@ -4,9 +4,6 @@ import vec2.vec2;
 
 public interface Ipiece extends Cloneable {
 
-	public void canMoveTo (Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException;
-
-
 	/**
 	 * Cette méthode définit la règle de déplacement du pion. Elle a été pensée statique, en prenant en compte que un
 	 * pion n'a pas besoin de connaitre sa position (c'est plutôt au plateau de le faire). Donc, cette méthode à elle-
@@ -18,11 +15,24 @@ public interface Ipiece extends Cloneable {
 	 */
 	public boolean isValidMove(vec2 currentPos, vec2 target);
 	
+
+	public void canMoveTo (Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException;
+	
+	public boolean isEmpty();
+	public boolean isKing();
+	
+	/**
+	 * @return true si la pièce est de couleur blanche, false sinon
+	 */
 	public boolean isWhite();
-
-	public Ipiece clone();
-
+	
+	/**
+	 * @return le caractère graphique de la pièce (s'affiche en majuscule selon la couleur de la pièce)
+	 */
 	public String getSign();
 	
-	/*implicite : méthode clone()*/
+	public Ipiece clone();
+
+
+	
 }

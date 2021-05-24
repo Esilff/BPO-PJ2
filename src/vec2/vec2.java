@@ -15,7 +15,11 @@ public class vec2 implements Cloneable {
         this.y = y;
     }
 
-    public String toString() {
+    public vec2() {
+		this(0, 0);
+	}
+
+	public String toString() {
         return "(" + x + ", " + y + ")";
     }
     
@@ -35,7 +39,11 @@ public class vec2 implements Cloneable {
 
     public int getX() { return this.x; }
     public int getY() { return this.y; }
-
+    public void set(int x, int y) {
+    	this.x = x;
+    	this.y = y;
+    }
+    
     /* CONSTANTES -------------------------------------------------------------- */
     public static final vec2 INVALID_VECT = new vec2(-255, -255);
 
@@ -59,8 +67,12 @@ public class vec2 implements Cloneable {
      * @param vect
      */
     public void addAndApply(vec2 vect) {
-    	this.x += vect.x;
-    	this.y += vect.y;
+    	addAndApply(vect.x, vect.y);
+    }
+
+    public void addAndApply(int x, int y) {
+    	this.x += x;
+    	this.y += y;
     }
     
     public void makeAbs() {

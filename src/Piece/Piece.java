@@ -25,6 +25,14 @@ public abstract class Piece implements Ipiece {
 		this(sign, isWhite, !IS_GRAPHICAL);
 	}
 
+	@Override
+	public boolean isEmpty() {
+		return false;
+	}
+	@Override
+	public boolean isKing() {
+		return false;
+	}
 
 	/**
 	 * Méthode statique qui retourne `target.minus(currentPos)` mais qui applique les

@@ -33,6 +33,9 @@ public class Chessboard {
 	private final Ipiece[][] board = new Ipiece[BOARD_SIZE][BOARD_SIZE];
 	//      ^^^^^ : Non redéfinissable mais ce qui est à l'intérieur reste modifiable !
 	
+	/** @see Chessboard.BoardCache */
+	private final BoardCache cache = new BoardCache();
+	
 	/** Vecteur représentant la taille de l'échiquier. Si il s'agit d'un échiquier 8x8, alors BOARD_RECT = [8, 8] */
 	public static final vec2 BOARD_RECT = new vec2(Chessboard.BOARD_SIZE, Chessboard.BOARD_SIZE);
 
@@ -107,6 +110,10 @@ public class Chessboard {
 		sb.append(" | ").append(lineIndex).append("\n");
 	}
 	
+	public BoardCache getCache() {
+		return this.cache;
+	}
+	
 	// METHODES DE MANIPULATION  ---------------------------------------------------------------------
 	/**
 	 * Classe utilitaire pour (re-)définir une case de this.board. La config étant peu conventionnelle (line-colonne),
@@ -119,6 +126,7 @@ public class Chessboard {
 	 */
 	public boolean setPiece(int line, int column, Ipiece piece) {
 		try {
+			this.cache.updateCache(this.board[column][line], piece, line, column);
 			this.board[column][line] = piece;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;

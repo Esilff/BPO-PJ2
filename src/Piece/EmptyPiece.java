@@ -21,6 +21,12 @@ public class EmptyPiece extends Piece{
 		return new EmptyPiece();
 	}
 
+
+	@Override
+	public boolean isEmpty() {
+		return true;
+	}
+	
 	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		// assume que ça a été throw dans Game.play()
 		

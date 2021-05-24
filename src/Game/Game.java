@@ -2,36 +2,50 @@ package Game;
 
 import java.util.Scanner;
 
+import static Appli.Application.ENDL;
 import Chessboard.Chessboard;
-import Piece.EmptyPiece;
+import Piece.EmptyPiece; // TODO : suppression dépendance
 import vec2.vec2;
 
 public class Game {
+	/** Le plateau de jeu */
+	private final Chessboard board;
 	
-	private Chessboard board;
+	/** l'entrée standard (console) */
+	private final Scanner input;
+	
+	/** indique de quel camp est le joueur du tour actuel */
 	private boolean isWhitePlaying = true;
+	
+	/** Message supplémentaire affiché avant le prompt*/
 	private String error = "";
-	public static Boolean whiteLoosed = false;
-	public static Boolean blackLoosed = false;
+	
+	/** @see Game#WhoIsInCheck() */
+	private Boolean isInCheck = null; 
+	
+	public Boolean whiteLoosed = false;
+	public Boolean blackLoosed = false;
 	
 	
 	private static final String EMPTY_STRING = ""; // Comme si c'était une valeur qui pouvait changer ... :-(
 	private static final String REGULAR_PROMPT = "> ";
 	private static final String ERROR_PROMPT = "#> ";
-	private static final String ENDL = System.lineSeparator();
 	private static final String MSG = "Joueur %s, c'est à vous !" + ENDL;
 	private static final String WHITE_NAME = "blanc";
 	private static final String BLACK_NAME = "noir";
+
+	public Game(Chessboard chessboard) {
+		this.board = chessboard;
+		this.input = new Scanner(System.in);
+	}
 	
 	public void start() {
 		while (!whiteLoosed && !blackLoosed) {
 			turnManager();
 		}
 		System.out.println(looserTxt());
-	}
-	
-	public Game(Chessboard chessboard) {
-		this.board = chessboard;
+		
+		input.close();
 	}
 	
 	// utile pour les tests unitaires
@@ -53,16 +67,15 @@ public class Game {
 		
 		String s = REGULAR_PROMPT;
 		try {
-			Scanner sc = new Scanner(System.in);
-			s = sc.next();
+			s = this.input.next();
 			
 			play(s.substring(0, 2), s.substring(2, 4));
 			
-			error = EMPTY_STRING;
+			this.error = EMPTY_STRING;
 		} catch (IndexOutOfBoundsException e) {
-			error = "Merci d'entrée une coordonnée valide d'échecs";
+			this.error = "Merci d'entrée une coordonnée valide d'échecs";
 		} catch (BadMoveException e) {
-			error = s.substring(0, 2) + " : " + e.getMessage();
+			this.error = s.substring(0, 2) + " : " + e.getMessage();
 		} 
 	}
 	
@@ -79,23 +92,31 @@ public class Game {
 		// Vérification si la pièce est manipulable
 		Ipiece toPlay = this.board.getPiece(originCoordConv);
 		Ipiece target = this.board.getPiece(newCoordConv);
-		if (toPlay instanceof EmptyPiece) {
+		if (toPlay.isEmpty()) {
 			throw new BadMoveException("Vous êtes en train de déplacer du vide");
 		} else if (toPlay.isWhite() != isWhitePlaying) {
 			throw new BadMoveException("Vous êtes en train de déplacer la pièce de l'adversaire. How dare you ?");
 		} 
-		if (! (target instanceof EmptyPiece) && target.isWhite() == isWhitePlaying) {
+		if (! target.isEmpty() && target.isWhite() == isWhitePlaying) {
 			BadMoveException up = new BadMoveException("Cannibalisme interdit");
-			throw up; // ha ha
+			throw up; // ha ha ha...
 		}
 		
+		// vérification si coup jouable
 		toPlay.canMoveTo(this, originCoordConv, newCoordConv);
 		
-		board.setPiece(originCoord, new EmptyPiece());
-		board.setPiece(newCoord, toPlay);
+		// coup effectif
+		board.setPiece(originCoordConv, new EmptyPiece());
+		board.setPiece(newCoordConv, toPlay);
 		this.isWhitePlaying = ! this.isWhitePlaying;
+		
+		// marquage échec
+		lookForKingInCheck(newCoordConv);
 	}
 	
+	public void lookForKingInCheck(vec2 newCoordConv) {
+		
+	}
 
 	/**
 	 * Un algorithme qui permet de vérifier s'il n'y a aucun obstacle lors d'un déplacement horizontal, vertical ou diagonal.
@@ -113,7 +134,7 @@ public class Game {
 			if (newCoord.equals(i) ) {
 				break;
 			}
-			if(!(this.board.getPiece(i) instanceof EmptyPiece)) {
+			if(!(this.board.getPiece(i).isEmpty())) {
 				throw new BadMoveException("Quelque chose bloque le chemin à "+ i.toString());
 			}
 		}
@@ -131,11 +152,16 @@ public class Game {
 		return String.format(MSG, (isWhite) ? WHITE_NAME : BLACK_NAME);
 	}
 
-	private static String looserTxt() {
+	private String looserTxt() {
 		String s ="";
 		if (whiteLoosed) s+= "The White side loosed";
 		else s+= "The black side loosed";
 		return s;
+	}
+
+	/** @return true si le roi blanc est en échec, false si le roi noir est en échec, null sinon */
+	public Boolean WhoIsInCheck() {
+		return isInCheck;
 	}
 	
 }

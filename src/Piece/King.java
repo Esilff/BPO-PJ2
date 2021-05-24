@@ -17,6 +17,31 @@ public class King extends Piece{
 		}
 	}
 
+	@Override
+	public boolean isKing() {
+		return true;
+	}
+	/*
+	 pour une configuration de finale 2r1t
+
+	vérif échec : 
+	Game.play() : si la pièce précédente est capable de manger le roi adverse
+				  (si une tour ou un fou ou une dame du camp de la pièce bougée est capable de manger le roi adverse)
+	
+	vérif mat :  seulement si en échec :
+	pour chaque case cible
+		si la case cible peut se faire manger par une pièce adverse
+			= bourrin : est-ce que cette case peut se faire manger par les pièces adverses
+	si le nombre de case cible = nbre case morte alors en mat
+	
+	vérif pat : 
+	(Si le nombre de pièces adverses = nombre de pièces joueur actuel)
+	code de mat mais on inverse la condition "si en échec"
+	si nombre de 
+
+	 */
+	
+	
 	/**
 	 * @See Piece.Piece.clone()
 	 */
