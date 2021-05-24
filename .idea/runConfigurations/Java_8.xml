@@ -2,7 +2,7 @@
   <configuration default="false" name="Java 8" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-    <option name="MAIN_CLASS_NAME" value="Application" />
+    <option name="MAIN_CLASS_NAME" value="Appli.Application" />
     <module name="BPO-PJ2" />
     <method v="2">
       <option name="Make" enabled="true" />

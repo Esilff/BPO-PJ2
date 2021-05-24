@@ -111,4 +111,15 @@ public class vec2 implements Cloneable {
     public boolean equals(vec2 v) {
         return this.x == v.x && this.y == v.y;
     }
+
+    // utile pour le LinkedList.contains(Object o)
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (o instanceof vec2) {
+            return equals((vec2) o);
+        } else {
+            return false;
+        }
+    }
 }

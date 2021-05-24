@@ -1,11 +1,13 @@
 package Game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 import static Appli.Application.ENDL;
 import Chessboard.Chessboard;
-import Piece.EmptyPiece; // TODO : suppression dépendance
+import Piece.EmptyPiece;
 import vec2.vec2;
 
 public class Game {
@@ -20,13 +22,23 @@ public class Game {
 	
 	/** Message supplémentaire affiché avant le prompt*/
 	private String error = "";
-	
-	/** @see Game#WhoIsInCheck() */
-	private Boolean isInCheck = null; 
-	
-	public Boolean whiteLoosed = false;
-	public Boolean blackLoosed = false;
-	
+
+	/** indique les différents états de partie */
+	private enum CHECK_STATE {
+		IN_CHECK,
+		THERE_IS_WINNER,
+		DRAW,
+		NONE
+	}
+	private CHECK_STATE checkState = CHECK_STATE.NONE;
+
+	/** Stocke la dernière liste des emplacements où le roi peut se déplacer sans se mettre en échec */
+	private LinkedList<vec2> KingSafeTargetsList = new LinkedList<>();
+	// facultatif mais sert un peu de cache. Cela évite de faire la même opération plusieurs fois
+
+	private static final int ZERO = 0, ONE = 1, TWO = 2, FOUR = 4; // Mon dieux, quatre = 4 :o
+	private static final String LOSER_MSG = "FIN DE PARTIE : Le joueur %s a perdu !";
+	private static final String DRAW_MSG = "FIN DE PARTIE : Match nul !";
 	private static final String EMPTY_STRING = ""; // Comme si c'était une valeur qui pouvait changer ... :-(
 	private static final String REGULAR_PROMPT = "> ";
 	private static final String ERROR_PROMPT = "#> ";
@@ -34,6 +46,12 @@ public class Game {
 	private static final String WHITE_NAME = "blanc";
 	private static final String BLACK_NAME = "noir";
 	private static final String CHECK_MSG = "Le joueur %s est en echec" + ENDL;
+	private static final String ERRMSG_INVALID_COORD = "Merci d'entrée une coordonnée valide d'échecs";
+	private static final String ERRMSG_MOVING_VOID = "Vous êtes en train de déplacer du vide";
+	private static final String ERRMSG_MOVING_OPPONENT_PIECE = "Vous êtes en train de déplacer la pièce de l'adversaire.";
+	private static final String ERRMSG_CANNIBALISM_FORBIDDEN = "Cannibalisme interdit";
+	private static final String ERRMSG_KING_CANNOT_MOVE_THERE = "Coup interdit, votre roi sera en situation d'échec sur la case cible.";
+	private static final String ERRMSG_KING_STILL_IN_CHECK = "Le roi est en danger, vous ne pouvez déplacer d'autres pièces";
 
 
 	public Game(Chessboard chessboard) {
@@ -42,7 +60,8 @@ public class Game {
 	}
 	
 	public void start() {
-		while (!whiteLoosed && !blackLoosed) {
+		updateKingSafeTargetsList(isWhitePlaying); // initialise le "cache" des cases safes pour le roi
+		while (checkState == CHECK_STATE.NONE || checkState == CHECK_STATE.IN_CHECK) {
 			turnManager();
 		}
 		System.out.println(looserTxt());
@@ -59,9 +78,9 @@ public class Game {
 		System.out.println(EMPTY_STRING); // saut de ligne
 		System.out.println(board_toString());
 		
-		System.out.println(turnTxt(isWhitePlaying));
-		if (isInCheck != null) {
-			System.out.println(checkTxt(isInCheck));
+		System.out.println(String.format(MSG, (isWhitePlaying) ? WHITE_NAME : BLACK_NAME));
+		if (this.checkState != CHECK_STATE.NONE) {
+			System.out.println(String.format(CHECK_MSG, (isWhitePlaying) ? WHITE_NAME : BLACK_NAME));
 		}
 		if (this.error.equals(EMPTY_STRING)) {
 			System.out.print(REGULAR_PROMPT);
@@ -74,13 +93,13 @@ public class Game {
 		try {
 			s = this.input.next();
 			
-			play(s.substring(0, 2), s.substring(2, 4));
+			play(s.substring(ZERO, TWO), s.substring(TWO, FOUR));
 			
 			this.error = EMPTY_STRING;
 		} catch (IndexOutOfBoundsException e) {
-			this.error = "Merci d'entrée une coordonnée valide d'échecs";
+			this.error = ERRMSG_INVALID_COORD;
 		} catch (BadMoveException e) {
-			this.error = s.substring(0, 2) + " : " + e.getMessage();
+			this.error = s.substring(ZERO, FOUR) + " : " + e.getMessage();
 		} 
 	}
 	
@@ -91,56 +110,66 @@ public class Game {
 		vec2 newCoordConv = Chessboard.createVectFromChessCoord(newCoord);
 		if (   originCoordConv.equals(vec2.INVALID_VECT)
 			|| newCoordConv.equals(vec2.INVALID_VECT)) {
-			throw new BadMoveException("Coordonnées invalides");
+			throw new BadMoveException(ERRMSG_INVALID_COORD);
 		}
 		
 		// Vérification si la pièce est manipulable
 		Ipiece toPlay = this.board.getPiece(originCoordConv);
 		Ipiece target = this.board.getPiece(newCoordConv);
 		if (toPlay.isEmpty()) {
-			throw new BadMoveException("Vous êtes en train de déplacer du vide");
+			throw new BadMoveException(ERRMSG_MOVING_VOID);
 		} else if (toPlay.isWhite() != isWhitePlaying) {
-			throw new BadMoveException("Vous êtes en train de déplacer la pièce de l'adversaire. How dare you ?");
+			throw new BadMoveException(ERRMSG_MOVING_OPPONENT_PIECE);
 		} 
 		if (! target.isEmpty() && target.isWhite() == isWhitePlaying) {
-			BadMoveException up = new BadMoveException("Cannibalisme interdit");
+			BadMoveException up = new BadMoveException(ERRMSG_CANNIBALISM_FORBIDDEN);
 			throw up; // ha ha ha...
 		}
-		if (isInCheck != null && !(toPlay.isKing())) {
-			if (toPlay.isWhite() == isInCheck) {
-				throw new BadMoveException("Le roi est en danger");
+
+		// Règles supplémentaires très basiques pour gérer le cas de l'échec.
+		if (toPlay.isKing()) {
+			if (this.KingSafeTargetsList.contains(newCoordConv)) {
+				this.checkState = CHECK_STATE.NONE; // des fois c'est en none, des fois non.
+			} else {
+				throw new BadMoveException(ERRMSG_KING_CANNOT_MOVE_THERE);
 			}
+		} else if (this.checkState == CHECK_STATE.IN_CHECK) {
+			throw new BadMoveException(ERRMSG_KING_STILL_IN_CHECK);
 		}
-		
 		
 		// vérification si coup jouable
 		toPlay.canMoveTo(this, originCoordConv, newCoordConv);
 		
-		// coup effectif
-		board.setPiece(originCoordConv, new EmptyPiece());
-		board.setPiece(newCoordConv, toPlay);
+		// application du coup et changement du joueur actuel
+		this.board.setPiece(originCoordConv, new EmptyPiece());
+		this.board.setPiece(newCoordConv, toPlay);
 		this.isWhitePlaying = ! this.isWhitePlaying;
-		
-		// marquage échec
-		lookForKingInCheck(newCoordConv);
-		checkMate();
+
+		prepareNextTurn(newCoordConv);
 	}
-	
-	public void lookForKingInCheck(vec2 newCoordConv) throws BadMoveException{
-		vec2 kingPos;
-		// todo : factoriser ça
-		if (!isWhitePlaying) kingPos = this.board.getCache().getKingPos_black(); 
-		else kingPos = this.board.getCache().getKingPos_white();
-		try {
-			this.board.getPiece(newCoordConv).canMoveTo(this, newCoordConv, kingPos);
-			if (!isWhitePlaying) isInCheck = false;
-			else isInCheck = true;
-		}catch (BadMoveException e ) {}
+
+	private void prepareNextTurn(vec2 newCoordConv) {
+		// marquage échec au besoin
+		markOppositeKingInCheckIfNeeded(newCoordConv);
+		updateKingSafeTargetsList(this.isWhitePlaying);
+		// marquage pat/mat très basique
+		if (this.KingSafeTargetsList.isEmpty()) {
+			if (this.checkState == CHECK_STATE.IN_CHECK) {
+				this.checkState = CHECK_STATE.THERE_IS_WINNER;
+			} else {
+				this.checkState = CHECK_STATE.DRAW;
+			}
+		}
+		// dernier cas de pat où il reste que deux rois (la tour a été mangée)
+		if (   this.board.getCache().getPieceCounterOf(false) == ONE
+			&& this.board.getCache().getPieceCounterOf(true) == ONE) {
+			this.checkState = CHECK_STATE.DRAW;
+		}
 	}
 
 	/**
-	 * Un algorithme qui permet de vérifier s'il n'y a aucun obstacle lors d'un déplacement horizontal, vertical ou diagonal.
-	 * Assume qu'une vérification de corresponsance de déplacement a été effectuée au préalable !!! 
+	 * Un algorithme qui permet de vérifier s'il n'y a aucun obstacle lors d'un déplacement horizontal, vertical ou
+	 * diagonal. Assume qu'une vérification de corresponsance de déplacement a été effectuée au préalable !!!
 	 * @param originCoord
 	 * @param newCoord
 	 * @throws BadMoveException
@@ -159,72 +188,80 @@ public class Game {
 			}
 		}
 	}
-	
+
+
+
 	/**
-	 * Un algorithme qui retourne une liste des positions des pièces ennemies du joueur courant
-	 * @return
+	 * Vérifie si la pièce passée en paramètre est capable de manger le roi; le cas échéant, mets en situation d'échecs
+	 * @param newCoordConv la position de la pièce s'apprêtant à attaquer le roi
 	 */
-	private ArrayList<vec2> getEnnemy() {
-		ArrayList<vec2> ennemy = new ArrayList<vec2>();
-		for (int i = 0; i < Chessboard.BOARD_SIZE; i++) {
-			for (int j = 0; j < Chessboard.BOARD_SIZE; j++) {
-				if (this.board.getPiece(i, j).isWhite() != isWhitePlaying) {
-					ennemy.add(new vec2(i,j));
-				}
-			}
+	private void markOppositeKingInCheckIfNeeded(vec2 newCoordConv) {
+		vec2 kingPos = this.board.getCache().getKingPosOfColor(isWhitePlaying);
+		if (canBeEatenBy(kingPos, newCoordConv)) {
+			this.checkState = CHECK_STATE.IN_CHECK;
 		}
-		return ennemy;
 	}
-	
-	/**
-	 * Un algorithme qui retournes les cases se trouvant autour du roi actuel
-	 * @return
-	 */
-	private ArrayList<vec2> getKingNeighbour() {
-		ArrayList<vec2> neighbour = new ArrayList<vec2>();
-		
-		// TODO : peut-être passable en paramètre ?
-		vec2 kingPos;
-		if (!isWhitePlaying) kingPos = this.board.getCache().getKingPos_black(); 
-		else kingPos = this.board.getCache().getKingPos_white();
-		
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				if (i == 0 && j == 0) continue;
-				vec2 toAdd = kingPos.plus(i, j);
-				if (! Chessboard.BOARD_RECT.isOutOfBounds(toAdd)) {
-					neighbour.add(toAdd);
-				}
-			}
-		}
-		return neighbour;
-	}
-	
 	private Boolean canBeEatenBy(vec2 coord, vec2 ennemy) {
 		try {
 			this.board.getPiece(ennemy).canMoveTo(this, ennemy, coord);
 			return true;
-		}catch (BadMoveException e ) {}
+		} catch (BadMoveException e) {}
 		return false;
 	}
-	
-	private void checkMate() {
-		ArrayList<vec2> neighbour = getKingNeighbour();
-		ArrayList<vec2> ennemy = getEnnemy();
-		ArrayList<vec2> toRemove = new ArrayList<vec2>();
-		for (vec2 ennemyIndex : ennemy) {
-			for (vec2 neighbourIndex : neighbour) {
-				if (canBeEatenBy(neighbourIndex, ennemyIndex)) {
-					//System.out.println(ennemyIndex.toString() + " fait retirer " + neighbourIndex.toString());
-					toRemove.add(neighbourIndex);
-					// optimisation avec des LinkedList + Iterateur si on a le temps
+	/**
+	 * Un algorithme qui retourne une liste des positions des pièces ennemies du joueur courant
+	 * @return
+	 */
+	private ArrayList<vec2> getPiecesOfColor(boolean isWhite) {
+		ArrayList<vec2> ennemy = new ArrayList<vec2>();
+		for (int column = ZERO; column < Chessboard.BOARD_SIZE; column++) {
+			for (int line = ZERO; line < Chessboard.BOARD_SIZE; line++) {
+				Ipiece piece = this.board.getPiece(line, column);
+				if (!piece.isEmpty() && piece.isWhite() == isWhite) {
+					ennemy.add(new vec2(column, line));
 				}
 			}
 		}
-		neighbour.removeAll(toRemove);
-		if (neighbour.isEmpty()) {
-			if (isWhitePlaying) whiteLoosed = true;
-			else blackLoosed = true;
+
+		return ennemy;
+	}
+	/**
+	 * Un algorithme qui retourne les cases se trouvant autour du roi en prenant en compte les limites du plateau
+	 * @param isWhite true si on cherche les cases environnantes du roi de couleur blanche, false sinon
+	 * @return une LinkedList contenant les positions absolues des cases aux alentours du roi
+	 */
+	private LinkedList<vec2> getKingNeighbour(boolean isWhite) {
+		LinkedList<vec2> retval = new LinkedList<vec2>();
+		vec2 kingPos = this.board.getCache().getKingPosOfColor(isWhite);
+		for (int i = -ONE; i <= ONE; i++) {
+			for (int j = -ONE; j <= ONE; j++) {
+				if (i == ZERO && j == ZERO) continue;
+				vec2 toAdd = kingPos.plus(i, j);
+				if (! Chessboard.BOARD_RECT.isOutOfBounds(toAdd)) {
+					retval.add(toAdd);
+				}
+			}
+		}
+		return retval;
+	}
+	/**
+	 * Retourne la liste des mouvements possibles du roi en prenant en compte les cas d'échec dans la variable
+	 * {@link this#KingSafeTargetsList}
+	 * @param isWhite true si on cherche les cases environnantes du roi de couleur blanche, false sinon
+	 */
+	private void updateKingSafeTargetsList(boolean isWhite) {
+		// vérification mat pour le moment
+		this.KingSafeTargetsList = getKingNeighbour(isWhite);
+		ArrayList<vec2> ennemy = getPiecesOfColor(!isWhite);
+
+		for (vec2 ennemyIndex : ennemy) {
+			// l'interateur permet de remove un element de la linkedList alors qu'elle est parcourue dans le for
+			for (Iterator<vec2> it = this.KingSafeTargetsList.iterator(); it.hasNext(); ) {
+				vec2 machin = it.next();
+				if (canBeEatenBy(machin, ennemyIndex)) {
+					it.remove();
+				}
+			}
 		}
 	}
 	
@@ -237,26 +274,11 @@ public class Game {
 	public Ipiece getCloneOfPiece(int line, int column) {
 		return this.board.getPiece(line, column); // getPiece retourne déjà un clone...
 	}
-	
-	private static String turnTxt(Boolean isWhite) {
-		return String.format(MSG, (isWhite) ? WHITE_NAME : BLACK_NAME);
-	}
-	
-	private static String checkTxt(Boolean isWhite) {
-		return String.format(CHECK_MSG, (isWhite) ? WHITE_NAME : BLACK_NAME);
-	}
 
 	private String looserTxt() {
-		String s ="";
-		if (whiteLoosed) s+= "The White side loosed";
-		else s+= "The black side loosed";
-		return s;
+		if (checkState == CHECK_STATE.DRAW) {
+			return DRAW_MSG;
+		}
+		return LOSER_MSG.format((isWhitePlaying) ? WHITE_NAME : BLACK_NAME);
 	}
-
-	/** @return true si le roi blanc est en échec, false si le roi noir est en échec, null sinon */
-	public Boolean WhoIsInCheck() {
-		return isInCheck;
-	}
-	
-	
 }

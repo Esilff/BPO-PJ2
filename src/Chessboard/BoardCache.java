@@ -20,11 +20,9 @@ public class BoardCache {
 	public int getPieceCounterOf(boolean isWhite) {
 		return (isWhite) ? pieceCounter.getX() : pieceCounter.getY();
 	}
-	public vec2 getKingPos_black() {
-		return kingPos_black;
-	}
-	public vec2 getKingPos_white() {
-		return kingPos_white;
+
+	public vec2 getKingPosOfColor(boolean isWhite) {
+		return (isWhite) ? kingPos_white : kingPos_black;
 	}
 	
 	public String toString() {
@@ -67,8 +65,7 @@ public class BoardCache {
 		}
 	}
 	
-	
-	// Seul le chessboard modifie les valeurs. C'est sympa car pas besoin de .clone au getter
+	// Par encapsulation, seul le chessboard peut modifier les valeurs. C'est sympa car pas besoin de .clone au getter
 	private void addToPieceCounterOf(int value, boolean isWhite) {
 		if (isWhite) {
 			pieceCounter.addAndApply(value, 0);
