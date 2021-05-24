@@ -4,7 +4,7 @@ import vec2.vec2;
 
 public interface Ipiece extends Cloneable {
 
-	public void play (Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException;
+	public void canMoveTo (Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException;
 
 
 	/**

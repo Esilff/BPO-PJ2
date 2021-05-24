@@ -9,7 +9,7 @@ public class Queen extends Piece{
 		super("D",isWhite);
 	}
 
-	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}

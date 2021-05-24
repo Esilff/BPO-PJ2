@@ -37,7 +37,7 @@ public class Pawn extends Piece {
 	 * @see
 	 */
 
-	public void play(Game game, vec2 originCoord, vec2 targetCoord) throws BadMoveException {
+	public void canMoveTo(Game game, vec2 originCoord, vec2 targetCoord) throws BadMoveException {
 		// Reconnaissance du déplacement
 		vec2 relative_move = isValidMove_computeTranslation(originCoord, targetCoord);
 		MOVE_TYPE moveType = recogniseMove(relative_move);

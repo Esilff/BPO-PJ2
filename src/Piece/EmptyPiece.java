@@ -21,7 +21,7 @@ public class EmptyPiece extends Piece{
 		return new EmptyPiece();
 	}
 
-	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		// assume que ça a été throw dans Game.play()
 		
 	}

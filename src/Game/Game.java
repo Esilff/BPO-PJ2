@@ -89,7 +89,7 @@ public class Game {
 			throw up; // ha ha
 		}
 		
-		toPlay.play(this, originCoordConv, newCoordConv);
+		toPlay.canMoveTo(this, originCoordConv, newCoordConv);
 		
 		board.setPiece(originCoord, new EmptyPiece());
 		board.setPiece(newCoord, toPlay);
