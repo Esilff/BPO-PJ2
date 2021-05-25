@@ -63,6 +63,7 @@ public class Game {
 	public Game(Chessboard chessboard) {
 		this.board = chessboard;
 		this.input = new Scanner(System.in);
+		updateKingSafeTargetsList(isWhitePlaying); // initialise le "cache" des cases safes pour le roi
 	}
 
 	/**
@@ -70,7 +71,6 @@ public class Game {
 	 * principalement l'affichage et l'automatise d'un déroulement de partie.
 	 */
 	public void start() {
-		updateKingSafeTargetsList(isWhitePlaying); // initialise le "cache" des cases safes pour le roi
 		while (checkState == CHECK_STATE.NONE || checkState == CHECK_STATE.IN_CHECK) {
 			turnManager();
 		}
@@ -193,14 +193,13 @@ public class Game {
 		if (this.KingSafeTargetsList.contains(newCoordConv)) {
 			this.checkState = CHECK_STATE.NONE; // des fois c'est en none, des fois non.
 		} else {
-			vec2 oppositeKingPos = this.board.getCache().getKingPosOfColor(!this.isWhitePlaying);
 			boolean kingIsProtected = false;
 			boolean onlyKingOppositeCanEat = false;
 			for (int cols = 0; cols < Chessboard.BOARD_SIZE; cols++) {
 				for (int lines = 0; lines < Chessboard.BOARD_SIZE; lines++) {
-					Ipiece currentPiece = this.board.getPiece(lines, cols);
-					boolean canEatTarget = canBeEatenBy(new vec2(cols, lines), newCoordConv);
+					Ipiece currentPiece = this.board.getPiece(new vec2(cols, lines));
 					if (currentPiece.isEmpty()) continue;
+					boolean canEatTarget = canBeEatenBy(newCoordConv, new vec2(cols, lines));
 					if (currentPiece.isWhite() == this.isWhitePlaying) {
 						if (!currentPiece.isKing() && canEatTarget) {
 							kingIsProtected = true;

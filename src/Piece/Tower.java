@@ -43,7 +43,7 @@ public class Tower extends Piece{
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return true si le déplacement entre currentPos et target est un déplacement horizontal ou vertical
 	 */
-	protected static boolean isLinearMove(vec2 currentPos, vec2 target) {
+	public static boolean isLinearMove(vec2 currentPos, vec2 target) {
 		vec2 relative_move = isValidMove_computeTranslation(currentPos, target);
 		if (relative_move.equals(vec2.INVALID_VECT)) {
 			return false; // n'a pas pu calculer ou préconditions non résolues
