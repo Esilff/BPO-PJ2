@@ -42,7 +42,7 @@ public class Game {
 	private static final String EMPTY_STRING = ""; // Comme si c'était une valeur qui pouvait changer ... :-(
 	private static final String REGULAR_PROMPT = "> ";
 	private static final String ERROR_PROMPT = "#> ";
-	private static final String MSG = "Joueur %s, c'est à vous !" + ENDL;
+	private static final String MSG_CURRPLAYER = "Joueur %s, c'est à vous !" + ENDL;
 	private static final String WHITE_NAME = "blanc";
 	private static final String BLACK_NAME = "noir";
 	private static final String CHECK_MSG = "Le joueur %s est en echec" + ENDL;
@@ -78,9 +78,9 @@ public class Game {
 		System.out.println(EMPTY_STRING); // saut de ligne
 		System.out.println(board_toString());
 		
-		System.out.println(String.format(MSG, (isWhitePlaying) ? WHITE_NAME : BLACK_NAME));
+		System.out.format(MSG_CURRPLAYER, (isWhitePlaying) ? WHITE_NAME : BLACK_NAME);
 		if (this.checkState != CHECK_STATE.NONE) {
-			System.out.println(String.format(CHECK_MSG, (isWhitePlaying) ? WHITE_NAME : BLACK_NAME));
+			System.out.format(CHECK_MSG, (isWhitePlaying) ? WHITE_NAME : BLACK_NAME);
 		}
 		if (this.error.equals(EMPTY_STRING)) {
 			System.out.print(REGULAR_PROMPT);
@@ -170,9 +170,9 @@ public class Game {
 	/**
 	 * Un algorithme qui permet de vérifier s'il n'y a aucun obstacle lors d'un déplacement horizontal, vertical ou
 	 * diagonal. Assume qu'une vérification de corresponsance de déplacement a été effectuée au préalable !!!
-	 * @param originCoord
-	 * @param newCoord
-	 * @throws BadMoveException
+	 * @param originCoord la coordonnée actuelle de la pièce (tour, fou ou dame)
+	 * @param newCoord la coordonnée cible
+	 * @throws BadMoveException si le chemin est bloqué
 	 */
 	public void checkNoObstaclesInTheWay(vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		vec2 relativeMove = newCoord.minus(originCoord);
@@ -205,15 +205,17 @@ public class Game {
 		try {
 			this.board.getPiece(ennemy).canMoveTo(this, ennemy, coord);
 			return true;
-		} catch (BadMoveException e) {}
-		return false;
+		} catch (BadMoveException e) {
+			return false;
+		}
 	}
 	/**
-	 * Un algorithme qui retourne une liste des positions des pièces ennemies du joueur courant
-	 * @return
+	 * Un algorithme qui retourne une liste des positions des pièces correspondant à la couleur passée en paramètre
+	 * @param isWhite true si on souhaite récupérer des pièces blanches, false sinon
+	 * @return une ArrayList contenant la liste des positions des pièces de la couleur passée en paramètre
 	 */
 	private ArrayList<vec2> getPiecesOfColor(boolean isWhite) {
-		ArrayList<vec2> ennemy = new ArrayList<vec2>();
+		ArrayList<vec2> ennemy = new ArrayList<>();
 		for (int column = ZERO; column < Chessboard.BOARD_SIZE; column++) {
 			for (int line = ZERO; line < Chessboard.BOARD_SIZE; line++) {
 				Ipiece piece = this.board.getPiece(line, column);
@@ -231,7 +233,7 @@ public class Game {
 	 * @return une LinkedList contenant les positions absolues des cases aux alentours du roi
 	 */
 	private LinkedList<vec2> getKingNeighbour(boolean isWhite) {
-		LinkedList<vec2> retval = new LinkedList<vec2>();
+		LinkedList<vec2> retval = new LinkedList<>();
 		vec2 kingPos = this.board.getCache().getKingPosOfColor(isWhite);
 		for (int i = -ONE; i <= ONE; i++) {
 			for (int j = -ONE; j <= ONE; j++) {
@@ -256,6 +258,7 @@ public class Game {
 
 		for (vec2 ennemyIndex : ennemy) {
 			// l'interateur permet de remove un element de la linkedList alors qu'elle est parcourue dans le for
+			// on aurait pu utiliser removeIf comme me propose intelliJ, mais cette méthode est moins magique
 			for (Iterator<vec2> it = this.KingSafeTargetsList.iterator(); it.hasNext(); ) {
 				vec2 machin = it.next();
 				if (canBeEatenBy(machin, ennemyIndex)) {
@@ -279,6 +282,6 @@ public class Game {
 		if (checkState == CHECK_STATE.DRAW) {
 			return DRAW_MSG;
 		}
-		return LOSER_MSG.format((isWhitePlaying) ? WHITE_NAME : BLACK_NAME);
+		return String.format(LOSER_MSG, isWhitePlaying ? WHITE_NAME : BLACK_NAME);
 	}
 }
