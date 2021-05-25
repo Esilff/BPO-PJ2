@@ -25,6 +25,33 @@ public abstract class Piece implements Ipiece {
 		this(sign, isWhite, !IS_GRAPHICAL);
 	}
 
+	/**
+	 * Permet de créer une nouvelle instance d'un sous-type de pièce.
+	 * @return La pièce clonée
+	 */
+	@Override
+	public abstract Ipiece clone();
+
+	@Override
+	public String getSign () {
+		if (isWhite) {
+			return sign.toUpperCase();
+		}
+		return sign.toLowerCase();
+	}
+
+	@Override
+	public boolean isWhite() {
+		return this.isWhite;
+	}
+	@Override
+	public boolean isEmpty() {
+		return false;
+	}
+	@Override
+	public boolean isKing() {
+		return false;
+	}
 
 	/**
 	 * Méthode statique qui retourne `target.minus(currentPos)` mais qui applique les
@@ -36,7 +63,7 @@ public abstract class Piece implements Ipiece {
 	 * @return vect2D.INVALID_VECT si les préconditions NE SONT PAS respectées. Si elles sont respectées, cette méthode
 	 *  retourne le vecteur de déplacement entre les deux points passés en paramètres
 	 */
-	public static vec2 isValidMove_computeTranslation(vec2 currentPos, vec2 target) {
+	protected static vec2 isValidMove_computeTranslation(vec2 currentPos, vec2 target) {
 		if (   BOARD_RECT.isOutOfBounds(currentPos)
 			|| BOARD_RECT.isOutOfBounds(target)
 			|| currentPos.equals(target) ) {
@@ -45,21 +72,4 @@ public abstract class Piece implements Ipiece {
 		return target.minus(currentPos);
 	}
 
-	/**
-	 * Permet de créer une nouvelle instance d'un sous-type de pièce.
-	 * @return La pièce clonée
-	 */
-	public abstract Ipiece clone();
-	
-	public String getSign () {
-		if (isWhite) {
-			return sign.toUpperCase();
-		}
-		return sign.toLowerCase();
-	}
-	
-	public boolean isWhite() {
-		return this.isWhite;
-	}
-	
 }

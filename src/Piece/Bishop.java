@@ -41,11 +41,12 @@ public class Bishop extends Piece{
 
 	/**
 	 * Vérifie si le déplacement entre deux points est un déplacement en diagonale
+	 * Visibilité package
 	 * @param currentPos la coordonée absolue (sous forme de vecteur) du point source
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return true si le déplacement entre currentPos et target est un déplacement en diagonale
 	 */
-    public static boolean isDiagMove(vec2 currentPos, vec2 target) {
+    protected static boolean isDiagMove(vec2 currentPos, vec2 target) {
 		vec2 relative_move = isValidMove_computeTranslation(currentPos, target);
 		if (relative_move.equals(vec2.INVALID_VECT)) {
 			return false; // n'a pas pu calculer ou préconditions non résolues
