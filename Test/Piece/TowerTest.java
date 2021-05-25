@@ -1,8 +1,9 @@
 package Piece;
 
 import Chessboard.Chessboard;
-import Chessboard.vec2;
+import Chessboard.Chessboard.INIT_LAYOUT;
 import Game.Ipiece;
+import vec2.vec2;
 
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class TowerTest {
                 "▤ □ ▤ ▣ ▤ □ ▤ □ \n" +
                 "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
                 "▤ □ ▤ ▣ ▤ □ ▤ □ \n";
-        String out = graphical_moveDefsTester(new Tower(IS_WHITE), vec2.createFromChessCoord("d4"));
+        String out = graphical_moveDefsTester(new Tower(IS_WHITE), Chessboard.createVectFromChessCoord("d4"));
         assertEquals(expected, out);
     }
 
@@ -36,7 +37,7 @@ public class TowerTest {
 
     @Test
     public void testPlay_SortieBasique() {
-        Chessboard chessboard = new Chessboard();
+        Chessboard chessboard = new Chessboard(INIT_LAYOUT.DEFAULT_CHESS);
         String[] moves = {
                 "h1h2", "h2h4", "a8a7", "a7a5", // tentative de cannibalisme et sortie de pion
                 "h1h3", "a8a6", "h3b3", "a6g6", // haut gauche
@@ -69,7 +70,7 @@ public class TowerTest {
     }
     @Test
     public void testPlay_obstacles() {
-        Chessboard chessboard = new Chessboard();
+        Chessboard chessboard = new Chessboard(INIT_LAYOUT.DEFAULT_CHESS);
         String[] moves = {
                 "h1h3", "h2h4", "a8a6", "a7a5", // 1: tentative de saute mouton vertical et sortie de pion
                 "h1h3", "a8a6", "c2c3", "f7f6", // 2: haut et mise en place d'un obstacle
@@ -103,7 +104,7 @@ public class TowerTest {
     @Test
     public void testPlay_Eat() {
         // A3H4 valide ?
-        Chessboard chessboard = new Chessboard();
+        Chessboard chessboard = new Chessboard(INIT_LAYOUT.DEFAULT_CHESS);
         String[] moves = {
                 "h2h4", "a7a5", "h1h3", "a8a6", // sortie de tour
                 "h3a3", "a6h6", // Gauche

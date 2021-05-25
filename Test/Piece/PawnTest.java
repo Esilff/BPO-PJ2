@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import Chessboard.Chessboard;
-import Chessboard.vec2;
+import Chessboard.Chessboard.INIT_LAYOUT;
 import Game.Ipiece;
 
 import static Piece.Piece.IS_WHITE;
@@ -42,8 +42,8 @@ public class PawnTest {
                 "▤ □ ▣ ▣ ▣ □ ▤ □ \n" +
                 "□ ▤ □ ▣ □ ▤ □ ▤ \n" +
                 "▤ □ ▤ □ ▤ □ ▤ □ \n";
-        String out_w = graphical_moveDefsTester(new Pawn(IS_WHITE), vec2.createFromChessCoord("d4"));
-        String out_b = graphical_moveDefsTester(new Pawn(! IS_WHITE), vec2.createFromChessCoord("d4"));
+        String out_w = graphical_moveDefsTester(new Pawn(IS_WHITE), Chessboard.createVectFromChessCoord("d4"));
+        String out_b = graphical_moveDefsTester(new Pawn(! IS_WHITE), Chessboard.createVectFromChessCoord("d4"));
         assertEquals(expected_w, out_w);
         assertEquals(expected_b, out_b);
     }
@@ -56,7 +56,7 @@ public class PawnTest {
     @Test
     public void testPlay_simpleStep() {
         
-        Chessboard chessboard = new Chessboard();
+        Chessboard chessboard = new Chessboard(INIT_LAYOUT.DEFAULT_CHESS);
         String[] moves = {
                 "a2a3", "a7a6", // Allez petit pas devant (tin tin)
                 "a3a2", "a3a4", "a6a7", "a6a5", // petit pas derrière (tin tin tin)... Allez petit pas devant (tin tin)
@@ -93,7 +93,7 @@ public class PawnTest {
      */
     @Test
     public void testPlay_doubleStep() {
-        Chessboard chessboard = new Chessboard();
+        Chessboard chessboard = new Chessboard(INIT_LAYOUT.DEFAULT_CHESS);
         String[] moves = {
             // double step
                 "a2a4", "b7b5",
@@ -144,7 +144,7 @@ public class PawnTest {
      */
     @Test
     public void testPlay_Eat() {
-        Chessboard chessboard = new Chessboard();
+        Chessboard chessboard = new Chessboard(INIT_LAYOUT.DEFAULT_CHESS);
         String[] moves = {
                 "a2b3", "a2a3", "a7b6", "a7a6", // manger du vide
                 "b2b4", "b7b5", // placement pour tenter de ...

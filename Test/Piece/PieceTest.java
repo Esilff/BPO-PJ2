@@ -7,9 +7,9 @@ import static Chessboard.Chessboard.BOARD_SIZE;
 import static Piece.Piece.IS_WHITE;
 import static org.junit.Assert.*;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 public class PieceTest {
 
@@ -111,8 +111,8 @@ public class PieceTest {
                         "▤ ▣ ▤ □ ▤ ▣ ▤ □ \n" +
                         "▣ ▤ □ ▤ □ ▤ ▣ ▤ \n" +
                         "▤ □ ▤ □ ▤ □ ▤ ▣ \n";
-        String out_w = graphical_moveDefsTester(new Bishop(IS_WHITE), vec2.createFromChessCoord("d4"));
-        String out_b = graphical_moveDefsTester(new Bishop(! IS_WHITE), vec2.createFromChessCoord("d5"));
+        String out_w = graphical_moveDefsTester(new Bishop(IS_WHITE), Chessboard.createVectFromChessCoord("d4"));
+        String out_b = graphical_moveDefsTester(new Bishop(! IS_WHITE), Chessboard.createVectFromChessCoord("d5"));
         assertEquals(expected_w, out_w);
         assertEquals(expected_b, out_b);
     }
@@ -127,7 +127,7 @@ public class PieceTest {
                         "▤ ▣ ▤ □ ▤ ▣ ▤ □ \n" +
                         "□ ▤ ▣ ▤ ▣ ▤ □ ▤ \n" +
                         "▤ □ ▤ □ ▤ □ ▤ □ \n";
-        String out = graphical_moveDefsTester(new Knight(IS_WHITE), vec2.createFromChessCoord("d4"));
+        String out = graphical_moveDefsTester(new Knight(IS_WHITE), Chessboard.createVectFromChessCoord("d4"));
         assertEquals(expected, out);
     }
     @Test
@@ -141,7 +141,7 @@ public class PieceTest {
                         "▤ □ ▣ ▣ ▣ □ ▤ □ \n" +
                         "□ ▣ □ ▣ □ ▣ □ ▤ \n" +
                         "▣ □ ▤ ▣ ▤ □ ▣ □ \n";
-        String out = graphical_moveDefsTester(new Queen(IS_WHITE), vec2.createFromChessCoord("d4"));
+        String out = graphical_moveDefsTester(new Queen(IS_WHITE), Chessboard.createVectFromChessCoord("d4"));
         assertEquals(expected, out);
     }
     @Test
@@ -155,7 +155,7 @@ public class PieceTest {
                         "▤ □ ▣ ▣ ▣ □ ▤ □ \n" +
                         "□ ▤ □ ▤ □ ▤ □ ▤ \n" +
                         "▤ □ ▤ □ ▤ □ ▤ □ \n";
-        String out = graphical_moveDefsTester(new King(IS_WHITE), vec2.createFromChessCoord("d4"));
+        String out = graphical_moveDefsTester(new King(IS_WHITE), Chessboard.createVectFromChessCoord("d4"));
         assertEquals(expected, out);
     }
 }

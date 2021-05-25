@@ -1,9 +1,11 @@
 package Chessboard;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import static Chessboard.vec2.INVALID_VECT;
+import vec2.vec2;
+
+import static org.junit.Assert.*;
+import static vec2.vec2.INVALID_VECT;
 
 public class vect2DTest {
 
@@ -63,22 +65,22 @@ public class vect2DTest {
         testTestToString();
         testIsEqual();
 
-        vec2 a0 = vec2.createFromChessCoord("a1");
-        vec2 h8 = vec2.createFromChessCoord("h8");
-        vec2 e8 = vec2.createFromChessCoord("e8");
-        vec2 b7 = vec2.createFromChessCoord("B7");
+        vec2 a0 = Chessboard.createVectFromChessCoord("a1");
+        vec2 h8 = Chessboard.createVectFromChessCoord("h8");
+        vec2 e8 = Chessboard.createVectFromChessCoord("e8");
+        vec2 b7 = Chessboard.createVectFromChessCoord("B7");
 
         assertEquals("(0, 0)", a0.toString());
         assertEquals("(7, 7)", h8.toString());
         assertEquals("(4, 7)", e8.toString());
         assertEquals("(1, 6)", b7.toString());
 
-        vec2 letterOutOfBounds = vec2.createFromChessCoord("i7");
-        vec2 numberOutOfBounds = vec2.createFromChessCoord("e9");
-        vec2 youForgotTheNumber = vec2.createFromChessCoord("a");
-        vec2 youForgotYourBrain = vec2.createFromChessCoord("");
-        vec2 satanicCoord = vec2.createFromChessCoord("666");
-        vec2 justAstring = vec2.createFromChessCoord("Un test est aussi ennuyant à lire qu'à écrire");
+        vec2 letterOutOfBounds = Chessboard.createVectFromChessCoord("i7");
+        vec2 numberOutOfBounds = Chessboard.createVectFromChessCoord("e9");
+        vec2 youForgotTheNumber = Chessboard.createVectFromChessCoord("a");
+        vec2 youForgotYourBrain = Chessboard.createVectFromChessCoord("");
+        vec2 satanicCoord = Chessboard.createVectFromChessCoord("666");
+        vec2 justAstring = Chessboard.createVectFromChessCoord("Un test est aussi ennuyant à lire qu'à écrire");
 
         assert letterOutOfBounds.equals(INVALID_VECT);
         assert numberOutOfBounds.equals(INVALID_VECT);

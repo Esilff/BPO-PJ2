@@ -1,16 +1,17 @@
  package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 public class Tower extends Piece{
 	public Tower (Boolean isWhite) {
 		super("T", isWhite);
 	}
-	
-	
-	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
+
+
+	@Override
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
@@ -18,6 +19,7 @@ public class Tower extends Piece{
 	}
 
 
+	@Override
 	public Tower clone() {
 		return new Tower(this.isWhite());
 	}
@@ -36,6 +38,7 @@ public class Tower extends Piece{
 
 	/**
 	 * Vérifie si le déplacement entre deux points est un déplacement le long des colones ou des rangées
+	 * Visibilité package
 	 * @param currentPos la coordonée absolue (sous forme de vecteur) du point source
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return true si le déplacement entre currentPos et target est un déplacement horizontal ou vertical

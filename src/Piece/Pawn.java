@@ -1,9 +1,9 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
 import Game.Ipiece;
+import vec2.vec2;
 import Chessboard.*;
 
 import static java.lang.Integer.signum;
@@ -28,16 +28,13 @@ public class Pawn extends Piece {
 	}
 
 	// MÉTHODES D'INTERFACE
-
 	public Pawn (Boolean isWhite) {
 		super("P", isWhite);
 	}
-	
-	/**
-	 * @see
-	 */
 
-	public void play(Game game, vec2 originCoord, vec2 targetCoord) throws BadMoveException {
+
+	@Override
+	public void canMoveTo(Game game, vec2 originCoord, vec2 targetCoord) throws BadMoveException {
 		// Reconnaissance du déplacement
 		vec2 relative_move = isValidMove_computeTranslation(originCoord, targetCoord);
 		MOVE_TYPE moveType = recogniseMove(relative_move);
@@ -67,18 +64,8 @@ public class Pawn extends Piece {
 				throw new BadMoveException("Coup interdit.");
 		}
 	}
-	
-	public boolean isPlayed(vec2 originCoord) {
-		if (this.isWhite()) {
-			return originCoord.getY() != 1;
-		} else {
-			return originCoord.getY() != Chessboard.BOARD_RECT.getY() - 2;
-		}
-	}
 
-	/**
-	 * @see Piece#clone()
-	 */
+	@Override
 	public Pawn clone() {
 		return new Pawn(this.isWhite());
 	}
@@ -100,6 +87,14 @@ public class Pawn extends Piece {
 	}
 
 	// MÉTHODES INTERNES
+
+	private boolean isPlayed(vec2 originCoord) {
+		if (this.isWhite()) {
+			return originCoord.getY() != 1;
+		} else {
+			return originCoord.getY() != Chessboard.BOARD_RECT.getY() - 2;
+		}
+	}
 
 	/**
 	 * Donné un déplacement relatif, vérifie de quel type de déplacement il s'agit.

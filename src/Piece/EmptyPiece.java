@@ -1,8 +1,8 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 public class EmptyPiece extends Piece{
 	public EmptyPiece() {
@@ -14,15 +14,20 @@ public class EmptyPiece extends Piece{
 		return false; // indéplacable
 	}
 
-	/**
-	 * @See Piece.Piece.clone()
-	 */
+	@Override
 	public EmptyPiece clone() {
 		return new EmptyPiece();
 	}
 
-	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
-		// assume que ça a été throw dans Game.play()
-		
+	@Override
+	public boolean isEmpty() {
+		return true;
 	}
+
+	@Override
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
+		// (assume que ça a été throw dans Game.play())
+		throw new BadMoveException("If you thought you were screwed before, boy have I news for you!!!");
+	}
+
 }

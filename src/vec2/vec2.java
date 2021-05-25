@@ -1,43 +1,53 @@
-package Chessboard;
+package vec2; // est stable
 
-import java.util.Locale;
 import static java.lang.Integer.signum;
 
 /**
  * Un vecteur, une dimention, une coordonnée, etc. Sous ces mots barbares, ce n'est qu'un couple d'entiers
- * possédant des méthodes de manipulation usuelles de vecteurs mais aussi de coordonées d'échecs (ex : f8 ou e2)
+ * possédant des méthodes de manipulation usuelles de vecteurs et des méthodes utilitaires
  * Son utilisation est similaire au vec2 du GLSL, sauf que ça respecte l'encapsulation
  */
-
 public class vec2 implements Cloneable {
     private int x, y;
 
+    /**
+     * Crée un vecteur à partir de ses coordonnées X et Y
+     * @param x la coordonnée d'abcisse
+     * @param y la coordonnée d'ordonnée
+     */
     public vec2(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public String toString() {
+    public vec2() {
+		this(0, 0);
+	}
+
+	public String toString() {
         return "(" + x + ", " + y + ")";
     }
     
     @Override
     public vec2 clone() {
-    	return new vec2(this.x, this.y);
+        return new vec2(this.x, this.y);
     }
     
     /**
-     * Applique
+     * applique la fonction signum sur les coordonnées d'une copie du vecteur courant qui sera retournée
      * @return new vec2( this.signum(this.x), this.signum(signe de this.y) )
      */
     public vec2 generate_signum() {
         return new vec2(signum(this.x), signum(this.y));
     }
 
-
     public int getX() { return this.x; }
     public int getY() { return this.y; }
-
+    public void set(int x, int y) {
+    	this.x = x;
+    	this.y = y;
+    }
+    
     /* CONSTANTES -------------------------------------------------------------- */
     public static final vec2 INVALID_VECT = new vec2(-255, -255);
 
@@ -56,15 +66,32 @@ public class vec2 implements Cloneable {
     }
     
     /**
-     * Effectue la somme entre le vecteur courant et celui passé en paramètre.
-     * Le résultat se trouve dans le vecteur courant. 
-     * @param vect
+     * Soit A = this et B = (x, y). Cette fonction retourne le vecteur (A.x + B.x, A.y + B.y)  
+     * @param x valeur x à ajouter
+     * @param y valeur y à ajouter
+     * @return new vec2(this.x + x, this.y + y)
      */
-    public void addAndApply(vec2 vect) {
-    	this.x += vect.x;
-    	this.y += vect.y;
+    public vec2 plus(int x, int y) {
+    	return new vec2(this.x + x, this.y + y);
     }
     
+    /**
+     * Effectue la somme entre le vecteur courant et celui passé en paramètre.
+     * Le résultat se trouve dans le vecteur courant. 
+     * @param vect un vecteur qui sera additionné à this
+     */
+    public void addAndApply(vec2 vect) {
+    	addAndApply(vect.x, vect.y);
+    }
+
+    public void addAndApply(int x, int y) {
+    	this.x += x;
+    	this.y += y;
+    }
+
+    /**
+     * Rends les coordonnées du vecteur absolues (supprime leur signe)
+     */
     public void makeAbs() {
     	this.x = Math.abs(this.x);
     	this.y = Math.abs(this.y);
@@ -92,27 +119,14 @@ public class vec2 implements Cloneable {
         return this.x == v.x && this.y == v.y;
     }
 
-    /**
-     * Transforme une position d'échiquier en position vectorielle.
-     * Par exemple, donné en entrée "B7", cette fonction retourne un nouveau vect2D(1, 6)
-     * Cette fonction a été conçue pour un échiquier standard . Une coordonnée ne doit donc pas dépasser 2 caractères !
-     * @param coord une chaine de caractère de deux lettres représentant la position d'une pièce dans l'échiquier
-     * @return Le vecteur représentant la position du point généré depuis l'origine. Si l'opération échoue ou que
-     *  les valeurs dépassent Chessboard.BOARD_SIZE, cette fonction retourne le vecteur vect2D.INVALID_VECT
-     */
-    public static vec2 createFromChessCoord(String coord) {
-        coord = coord.toLowerCase(Locale.ROOT);
-
-        try {
-            int x = coord.charAt(0) - Chessboard.LOWERCASE_A; // X = 'a' -> 'z' et 'a' = 0
-            int y = coord.charAt(1) - '0'; // Y = '0' -> '9' et '0' = 0
-            vec2 retval = new vec2(x, y - 1);
-            if (Chessboard.BOARD_RECT.isOutOfBounds(retval)) {
-                return  INVALID_VECT;
-            }
-            return retval;
-        } catch (IndexOutOfBoundsException e) {
-            return INVALID_VECT;
+    // utile pour le LinkedList.contains(Object o)
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (o instanceof vec2) {
+            return equals((vec2) o);
+        } else {
+            return false;
         }
     }
 }

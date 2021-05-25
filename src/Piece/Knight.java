@@ -1,8 +1,8 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 public class Knight extends Piece{
 	public final static vec2 DEFAULT_L = new vec2(2, 1), REVERSED_L = new vec2(1, 2);
@@ -10,21 +10,20 @@ public class Knight extends Piece{
 		super("C", isWhite);
 	}
 
-	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
+	@Override
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
 	}
 
-	/**
-	 * @See Piece.Piece.clone()
-	 */
+	@Override
 	public Knight clone() {
 		return new Knight(this.isWhite());
 	}
 
 	/**
-	 * voir la doc de Piece.isValidMove.
+	 * voir la doc de Piece#isValidMove.
 	 * Le cavalier fait un bond de trois cases en formant un L
 	 * @param currentPos le point source
 	 * @param target le point destination

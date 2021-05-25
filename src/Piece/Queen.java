@@ -1,24 +1,23 @@
 package Piece;
 
-import Chessboard.vec2;
 import Game.BadMoveException;
 import Game.Game;
+import vec2.vec2;
 
 public class Queen extends Piece{
 	public Queen(Boolean isWhite) {
 		super("D",isWhite);
 	}
 
-	public void play(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
+	@Override
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
 		game.checkNoObstaclesInTheWay(originCoord, newCoord);
 	}
 
-	/**
-	 * @See Piece.Piece.clone()
-	 */
+	@Override
 	public Queen clone() {
 		return new Queen(this.isWhite());
 	}
