@@ -193,6 +193,7 @@ public class Game {
 		if (this.KingSafeTargetsList.contains(newCoordConv)) {
 			this.checkState = CHECK_STATE.NONE; // des fois c'est en none, des fois non.
 		} else {
+			/* ->>> CF Test Unitaire CheckMatDrawTest
 			boolean kingIsProtected = false;
 			boolean onlyKingOppositeCanEat = false;
 			for (int cols = 0; cols < Chessboard.BOARD_SIZE; cols++) {
@@ -213,7 +214,8 @@ public class Game {
 			} // tout ça pour faire e6e7 sans problème ...
 			if (!(kingIsProtected && onlyKingOppositeCanEat)) {
 				throw new BadMoveException(ERRMSG_KING_CANNOT_MOVE_THERE);
-			}
+			}*/
+			throw new BadMoveException(ERRMSG_KING_CANNOT_MOVE_THERE);
 		}
 	}
 

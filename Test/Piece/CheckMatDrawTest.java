@@ -90,6 +90,16 @@ public class CheckMatDrawTest {
 
         assertEquals(expectedOut, game.board_toString());
     }
+    /*
+
+    Le code suivant a été mis en commentaire. Pourquoi ?
+    17:43 : je demande à la promo si quelqu'un a réussi à implémenter un coup de type coup e6f6 (roi en danger mais protégé)
+    18:00 : pas de réponses
+    20:47 : j'ai fini de coder cette fichue fonction
+    20:48 : je lis sur le tchat que le sacrifice du roi n'est pas un coup légal ...
+            (content que ça fonctionne mais pleure intérieurement)
+
+
     // attaquer de manière safe un roi avec un roi : e6f6 e8f8 f6g7 (noir échec) f8e7 (fail) f8g7 (fail) f8e8 (ok)
     @Test
     public void test_AttackKingWithKing() {
@@ -153,6 +163,6 @@ public class CheckMatDrawTest {
                 "    a   b   c   d   e   f   g   h    \n";
 
         assertEquals(expectedOut, game.board_toString());
-    }
+    }*/
 
 }
