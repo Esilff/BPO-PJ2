@@ -15,23 +15,36 @@ public class BoardCache {
 	private vec2 pieceCounter = new vec2();
 	private vec2 kingPos_black = new vec2();
 	private vec2 kingPos_white = new vec2();
-	
-	// pas très conventionnel comme getter, mais c'est plus pratique à utiliser.
+
+	/**
+	 * Permet de récupérer le nombre de pièces de l'adversaire
+	 * @param isWhite true si c'est un roi de couleur blanche, false sinon
+	 * @return les coordonnées du roi sous forme d'un vec2
+	 */
 	public int getPieceCounterOf(boolean isWhite) {
 		return (isWhite) ? pieceCounter.getX() : pieceCounter.getY();
 	}
 
+	/**
+	 * Permet de récupérer la positon d'un roi de la couleur donnée
+	 * @param isWhite true si c'est un roi de couleur blanche, false sinon
+	 * @return les coordonnées du roi sous forme d'un vec2
+	 */
 	public vec2 getKingPosOfColor(boolean isWhite) {
 		return (isWhite) ? kingPos_white : kingPos_black;
 	}
-	
+
+	/**
+	 * Unused
+	 * @return l'affichage
+	 */
 	public String toString() {
 		return "~ joueur blanc : "+ pieceCounter.getX() +" pièces, roi en 1+"+ kingPos_white.toString() + ENDL +
 				"~ joueur noir : "+ pieceCounter.getY() +" pièces, roi en 1+"+ kingPos_black.toString();
 	}
 	
 	/**
-	 * Mets à jour le cache. Visibilité package.
+	 * Mets à jour le cache. Visibilité paquetage car seul le plateau de jeu peut mettre à jour le cache.
 	 * @param old la pièce se trouvant dans la case actuelle
 	 * @param target la pièce allant remplacer celle qui se trouve dans la case actuelle
 	 * @param line la ligne où se trouve la case concernée

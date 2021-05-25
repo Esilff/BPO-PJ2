@@ -9,6 +9,7 @@ public class Queen extends Piece{
 		super("D",isWhite);
 	}
 
+	@Override
 	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
@@ -16,16 +17,7 @@ public class Queen extends Piece{
 		game.checkNoObstaclesInTheWay(originCoord, newCoord);
 	}
 
-	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord, boolean forCheckMate) throws BadMoveException {
-		if (!this.isValidMove(originCoord, newCoord)) {
-			throw new BadMoveException("Mouvement impossible");
-		}
-		if (forCheckMate) {game.checkNoObstaclesInTheWay(originCoord, newCoord, forCheckMate); return;} 
-		game.checkNoObstaclesInTheWay(originCoord, newCoord);
-	}
-	/**
-	 * @See Piece.Piece.clone()
-	 */
+	@Override
 	public Queen clone() {
 		return new Queen(this.isWhite());
 	}

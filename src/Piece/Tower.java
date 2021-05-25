@@ -8,23 +8,18 @@ public class Tower extends Piece{
 	public Tower (Boolean isWhite) {
 		super("T", isWhite);
 	}
-	
-	
+
+
+	@Override
 	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
 		game.checkNoObstaclesInTheWay(originCoord, newCoord);
 	}
-	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord, boolean forCheckMate) throws BadMoveException {
-		if (!this.isValidMove(originCoord, newCoord)) {
-			throw new BadMoveException("Mouvement impossible");
-		}
-		if (forCheckMate) {game.checkNoObstaclesInTheWay(originCoord, newCoord, forCheckMate); return;} 
-		game.checkNoObstaclesInTheWay(originCoord, newCoord);
-	}
 
 
+	@Override
 	public Tower clone() {
 		return new Tower(this.isWhite());
 	}
@@ -43,11 +38,12 @@ public class Tower extends Piece{
 
 	/**
 	 * Vérifie si le déplacement entre deux points est un déplacement le long des colones ou des rangées
+	 * Visibilité package
 	 * @param currentPos la coordonée absolue (sous forme de vecteur) du point source
 	 * @param target la coordonée absolue (sous forme de vecteur) du point de destination
 	 * @return true si le déplacement entre currentPos et target est un déplacement horizontal ou vertical
 	 */
-	public static boolean isLinearMove(vec2 currentPos, vec2 target) {
+	protected static boolean isLinearMove(vec2 currentPos, vec2 target) {
 		vec2 relative_move = isValidMove_computeTranslation(currentPos, target);
 		if (relative_move.equals(vec2.INVALID_VECT)) {
 			return false; // n'a pas pu calculer ou préconditions non résolues

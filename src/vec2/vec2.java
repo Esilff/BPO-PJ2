@@ -10,6 +10,11 @@ import static java.lang.Integer.signum;
 public class vec2 implements Cloneable {
     private int x, y;
 
+    /**
+     * Crée un vecteur à partir de ses coordonnées X et Y
+     * @param x la coordonnée d'abcisse
+     * @param y la coordonnée d'ordonnée
+     */
     public vec2(int x, int y) {
         this.x = x;
         this.y = y;
@@ -25,17 +30,16 @@ public class vec2 implements Cloneable {
     
     @Override
     public vec2 clone() {
-    	return new vec2(this.x, this.y);
+        return new vec2(this.x, this.y);
     }
     
     /**
-     * Applique
+     * applique la fonction signum sur les coordonnées d'une copie du vecteur courant qui sera retournée
      * @return new vec2( this.signum(this.x), this.signum(signe de this.y) )
      */
     public vec2 generate_signum() {
         return new vec2(signum(this.x), signum(this.y));
     }
-
 
     public int getX() { return this.x; }
     public int getY() { return this.y; }
@@ -74,7 +78,7 @@ public class vec2 implements Cloneable {
     /**
      * Effectue la somme entre le vecteur courant et celui passé en paramètre.
      * Le résultat se trouve dans le vecteur courant. 
-     * @param vect
+     * @param vect un vecteur qui sera additionné à this
      */
     public void addAndApply(vec2 vect) {
     	addAndApply(vect.x, vect.y);
@@ -84,7 +88,10 @@ public class vec2 implements Cloneable {
     	this.x += x;
     	this.y += y;
     }
-    
+
+    /**
+     * Rends les coordonnées du vecteur absolues (supprime leur signe)
+     */
     public void makeAbs() {
     	this.x = Math.abs(this.x);
     	this.y = Math.abs(this.y);

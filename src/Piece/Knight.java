@@ -10,27 +10,20 @@ public class Knight extends Piece{
 		super("C", isWhite);
 	}
 
+	@Override
 	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
 	}
-	
-	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord, boolean forCheckMate) throws BadMoveException {
-		if (!this.isValidMove(originCoord, newCoord)) {
-			throw new BadMoveException("Mouvement impossible");
-		}
-	}
 
-	/**
-	 * @See Piece.Piece.clone()
-	 */
+	@Override
 	public Knight clone() {
 		return new Knight(this.isWhite());
 	}
 
 	/**
-	 * voir la doc de Piece.isValidMove.
+	 * voir la doc de Piece#isValidMove.
 	 * Le cavalier fait un bond de trois cases en formant un L
 	 * @param currentPos le point source
 	 * @param target le point destination
