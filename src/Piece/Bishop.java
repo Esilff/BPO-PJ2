@@ -20,10 +20,11 @@ public class Bishop extends Piece{
 		return new Bishop(this.isWhite());
 	}
 
-	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord, boolean forCheckMate) throws BadMoveException {
 		if (!this.isValidMove(originCoord, newCoord)) {
 			throw new BadMoveException("Mouvement impossible");
 		}
+		if (forCheckMate) {game.checkNoObstaclesInTheWay(originCoord, newCoord, forCheckMate); return;} 
 		game.checkNoObstaclesInTheWay(originCoord, newCoord);
 	}
 	

@@ -19,6 +19,12 @@ public class King extends Piece{
 			throw new BadMoveException("Mouvement impossible");
 		}
 	}
+	
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord, boolean forCheckMate) throws BadMoveException {
+		if (!this.isValidMove(originCoord, newCoord)) {
+			throw new BadMoveException("Mouvement impossible");
+		}
+	}
 
 	@Override
 	public boolean isKing() {

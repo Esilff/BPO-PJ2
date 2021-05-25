@@ -13,6 +13,8 @@ public class EmptyPiece extends Piece{
 	public boolean isValidMove(vec2 currentPos, vec2 target) {
 		return false; // indéplacable
 	}
+	
+	
 
 	/**
 	 * @See Piece.Piece.clone()
@@ -28,6 +30,11 @@ public class EmptyPiece extends Piece{
 	}
 	
 	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException {
+		// assume que ça a été throw dans Game.play()
+		
+	}
+	
+	public void canMoveTo(Game game, vec2 originCoord, vec2 newCoord, boolean forCheckMate) throws BadMoveException {
 		// assume que ça a été throw dans Game.play()
 		
 	}

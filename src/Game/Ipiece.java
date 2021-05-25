@@ -16,7 +16,7 @@ public interface Ipiece extends Cloneable {
 	public boolean isValidMove(vec2 currentPos, vec2 target);
 	
 
-	public void canMoveTo (Game game, vec2 originCoord, vec2 newCoord) throws BadMoveException;
+	public void canMoveTo (Game game, vec2 originCoord, vec2 newCoord, boolean forCheckMate) throws BadMoveException;
 	
 	public boolean isEmpty();
 	public boolean isKing();

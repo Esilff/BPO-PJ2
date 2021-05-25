@@ -68,6 +68,37 @@ public class Pawn extends Piece {
 		}
 	}
 	
+	public void canMoveTo(Game game, vec2 originCoord, vec2 targetCoord, boolean forCheckMate) throws BadMoveException {
+		// Reconnaissance du déplacement
+		vec2 relative_move = isValidMove_computeTranslation(originCoord, targetCoord);
+		MOVE_TYPE moveType = recogniseMove(relative_move);
+
+		// J'aurais bien voulu séparer ce gros switch dans une méthode à part, mais trop de variables utilisées...
+		Ipiece target = game.getCloneOfPiece(targetCoord.getY(), targetCoord.getX());
+		switch (moveType) {
+			case CAPTURING_STEP: // manger
+				if (target instanceof EmptyPiece)
+					throw new BadMoveException("Le pion ne peut manger du vide");
+				else break;
+
+			case DOUBLE_STEP: // avancer
+				Ipiece targetBis = game.getCloneOfPiece(originCoord.getY() + signum(relative_move.getY()), originCoord.getX());
+				if (isPlayed(originCoord))
+					throw new BadMoveException("Le pion a deja ete joue et ne peut plus avancer de deux cases");
+				if (!(targetBis instanceof EmptyPiece))
+					throw new BadMoveException("La case après la case suivante est occupée");
+				// + préconditions du usual step (d'où l'absence du break)
+
+			case USUAL_STEP:
+				if (target instanceof EmptyPiece) break;
+				else throw new BadMoveException("Le pion ne peut se déplacer de l'avant sur une case occupée.");
+
+			case INVALID_MOVE:
+			default:
+				throw new BadMoveException("Coup interdit.");
+		}
+	}
+	
 	public boolean isPlayed(vec2 originCoord) {
 		if (this.isWhite()) {
 			return originCoord.getY() != 1;

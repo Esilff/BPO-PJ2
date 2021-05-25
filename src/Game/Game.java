@@ -138,7 +138,7 @@ public class Game {
 		}
 		
 		// vérification si coup jouable
-		toPlay.canMoveTo(this, originCoordConv, newCoordConv);
+		toPlay.canMoveTo(this, originCoordConv, newCoordConv, false);
 		
 		// application du coup et changement du joueur actuel
 		this.board.setPiece(originCoordConv, new EmptyPiece());
@@ -188,6 +188,22 @@ public class Game {
 			}
 		}
 	}
+	
+	public void checkNoObstaclesInTheWay(vec2 originCoord, vec2 newCoord, boolean forCheckMate) throws BadMoveException {
+		vec2 relativeMove = newCoord.minus(originCoord);
+		vec2 step = relativeMove.generate_signum();
+		vec2 i = originCoord.clone();
+		while (true) {
+			i.addAndApply(step);
+			if (newCoord.equals(i) ) {
+				break;
+			}
+			if(!(this.board.getPiece(i).isEmpty()) && !forCheckMate) {
+				throw new BadMoveException("Quelque chose bloque le chemin à "+ i.toString());
+			}
+		}
+	}
+	
 
 
 
@@ -197,13 +213,13 @@ public class Game {
 	 */
 	private void markOppositeKingInCheckIfNeeded(vec2 newCoordConv) {
 		vec2 kingPos = this.board.getCache().getKingPosOfColor(isWhitePlaying);
-		if (canBeEatenBy(kingPos, newCoordConv)) {
+		if (canBeEatenBy(kingPos, newCoordConv, false)) {
 			this.checkState = CHECK_STATE.IN_CHECK;
 		}
 	}
-	private Boolean canBeEatenBy(vec2 coord, vec2 ennemy) {
+	private Boolean canBeEatenBy(vec2 coord, vec2 ennemy, boolean forCheckMate) {
 		try {
-			this.board.getPiece(ennemy).canMoveTo(this, ennemy, coord);
+			this.board.getPiece(ennemy).canMoveTo(this, ennemy, coord, forCheckMate);
 			return true;
 		} catch (BadMoveException e) {
 			return false;
@@ -261,7 +277,7 @@ public class Game {
 			// on aurait pu utiliser removeIf comme me propose intelliJ, mais cette méthode est moins magique
 			for (Iterator<vec2> it = this.KingSafeTargetsList.iterator(); it.hasNext(); ) {
 				vec2 machin = it.next();
-				if (canBeEatenBy(machin, ennemyIndex)) {
+				if (canBeEatenBy(machin, ennemyIndex, true)) {
 					it.remove();
 				}
 			}
